@@ -7,9 +7,15 @@ export async function onRequestGet({ request, env }) {
 
   try {
     const { results } = await db.prepare(`
-      SELECT b.*, cp.full_name as client_name
+      SELECT 
+        b.*,
+        cp.full_name as client_name,
+        GROUP_CONCAT(p.name, ', ') as pet_names
       FROM bookings b
       JOIN client_profiles cp ON b.client_id = cp.user_id
+      LEFT JOIN booking_pets bp ON b.id = bp.booking_id
+      LEFT JOIN pets p ON bp.pet_id = p.id
+      GROUP BY b.id
       ORDER BY b.datetime_start DESC
     `).all();
 
@@ -34,17 +40,22 @@ export async function onRequestPost({ request, env }) {
   try {
     const { results } = await db.prepare(`
       INSERT INTO bookings (
-        client_id, datetime_start, datetime_end, service_type, walker_name, notes, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        client_id, datetime_start, datetime_end, service_type, status,
+        walker_name, notes, admin_comment, time_window_start, time_window_end, recurrence
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING id
     `).bind(
       body.client_id,
       body.datetime_start,
       body.datetime_end,
       body.service_type,
+      body.status || 'approved',
       body.walker_name || null,
       body.notes || null,
-      body.status || 'scheduled'
+      body.admin_comment || null,
+      body.time_window_start || null,
+      body.time_window_end || null,
+      body.recurrence || 'One-off'
     ).all();
 
     const bookingId = results[0].id;
