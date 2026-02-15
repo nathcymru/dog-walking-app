@@ -1,5 +1,3 @@
-// API utility for backend communication
-
 const API_BASE = '/api';
 
 async function request(endpoint, options = {}) {
@@ -40,23 +38,34 @@ export const api = {
   },
   admin: {
     getDashboard: () => request('/admin/dashboard'),
+    
+    // Clients
     getClients: () => request('/admin/clients'),
+    getClient: (id) => request(`/admin/clients/${id}`),
     createClient: (data) => request('/admin/clients', { method: 'POST', body: data }),
     updateClient: (id, data) => request(`/admin/clients/${id}`, { method: 'PUT', body: data }),
     deleteClient: (id) => request(`/admin/clients/${id}`, { method: 'DELETE' }),
+    
+    // Pets
     getPets: () => request('/admin/pets'),
+    getPet: (id) => request(`/admin/pets/${id}`),
     createPet: (data) => request('/admin/pets', { method: 'POST', body: data }),
     updatePet: (id, data) => request(`/admin/pets/${id}`, { method: 'PUT', body: data }),
     deletePet: (id) => request(`/admin/pets/${id}`, { method: 'DELETE' }),
+    
+    // Bookings
     getBookings: () => request('/admin/bookings'),
+    getBooking: (id) => request(`/admin/bookings/${id}`),
     createBooking: (data) => request('/admin/bookings', { method: 'POST', body: data }),
     updateBooking: (id, data) => request(`/admin/bookings/${id}`, { method: 'PUT', body: data }),
     deleteBooking: (id) => request(`/admin/bookings/${id}`, { method: 'DELETE' }),
-    getInvoices: () => request('/admin/invoices'),
-    createInvoice: (data) => request('/admin/invoices', { method: 'POST', body: data }),
-    updateInvoice: (id, data) => request(`/admin/invoices/${id}`, { method: 'PUT', body: data }),
-    deleteInvoice: (id) => request(`/admin/invoices/${id}`, { method: 'DELETE' }),
-    markInvoicePaid: (id, paymentData) => request(`/admin/invoices/${id}/mark-paid`, { method: 'POST', body: paymentData }),
+    
+    // Incidents
+    getIncidents: () => request('/admin/incidents'),
+    getIncident: (id) => request(`/admin/incidents/${id}`),
+    createIncident: (data) => request('/admin/incidents', { method: 'POST', body: data }),
+    updateIncident: (id, data) => request(`/admin/incidents/${id}`, { method: 'PUT', body: data }),
+    deleteIncident: (id) => request(`/admin/incidents/${id}`, { method: 'DELETE' }),
   },
 };
 
