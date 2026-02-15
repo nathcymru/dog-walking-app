@@ -11,7 +11,12 @@ import ClientDashboard from './pages/client/Dashboard';
 import ClientBookings from './pages/client/Bookings';
 import ClientPets from './pages/client/Pets';
 import ClientBilling from './pages/client/Billing';
+import AdminLayout from './pages/admin/Layout';
 import AdminDashboard from './pages/admin/Dashboard';
+import AdminClients from './pages/admin/Clients';
+import AdminPets from './pages/admin/Pets';
+import AdminBookings from './pages/admin/Bookings';
+import AdminIncidents from './pages/admin/Incidents';
 
 function ProtectedRoute({ children, requiredRole }) {
   const { user, loading } = useAuth();
@@ -61,10 +66,16 @@ function AppRoutes() {
         path="/admin"
         element={
           <ProtectedRoute requiredRole="admin">
-            <AdminDashboard />
+            <AdminLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="clients" element={<AdminClients />} />
+        <Route path="pets" element={<AdminPets />} />
+        <Route path="bookings" element={<AdminBookings />} />
+        <Route path="incidents" element={<AdminIncidents />} />
+      </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
