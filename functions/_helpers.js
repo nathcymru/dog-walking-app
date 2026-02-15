@@ -1,5 +1,3 @@
-// Backend helper utilities for Cloudflare Pages Functions
-
 export async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
