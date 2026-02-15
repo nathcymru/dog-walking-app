@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './utils/auth';
 import './styles/main.css';
 
-// Import pages
 import HomePage from './pages/Home';
 import ServicesPage from './pages/Services';
 import ContactPage from './pages/Contact';
@@ -10,6 +9,8 @@ import LoginPage from './pages/Login';
 import ClientLayout from './pages/client/Layout';
 import ClientDashboard from './pages/client/Dashboard';
 import ClientBookings from './pages/client/Bookings';
+import ClientPets from './pages/client/Pets';
+import ClientBilling from './pages/client/Billing';
 import AdminDashboard from './pages/admin/Dashboard';
 
 function ProtectedRoute({ children, requiredRole }) {
@@ -52,6 +53,8 @@ function AppRoutes() {
       >
         <Route index element={<ClientDashboard />} />
         <Route path="bookings" element={<ClientBookings />} />
+        <Route path="pets" element={<ClientPets />} />
+        <Route path="billing" element={<ClientBilling />} />
       </Route>
 
       <Route
