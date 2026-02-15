@@ -1,0 +1,11 @@
+name = "dog-walking-app"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dog-walking-db"
+database_id = "32c74325-4652-4c2a-9026-0a2464d722f0"
+
+[vars]
+ENVIRONMENT = "production"
