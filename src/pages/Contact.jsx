@@ -30,11 +30,6 @@ const Contact = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.detail.value;
-    setFormData({ ...formData, [name]: value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

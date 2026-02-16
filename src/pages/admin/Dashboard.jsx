@@ -256,9 +256,10 @@ const Dashboard = () => {
                   <IonCardTitle>Recent Activity</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <p>New booking: Max - Solo Walk at 10:00 AM</p>
-                  <p>Client registered: Sarah Johnson</p>
-                  <p>Walk completed: Bella - Group Walk</p>
+                  <p>✅ New booking: Max - Solo Walk at 10:00 AM (Feb 18, 2026)</p>
+                  <p>👤 Client registered: Sarah Johnson (Feb 16, 2026)</p>
+                  <p>🐾 Walk completed: Bella - Group Walk (Feb 15, 2026)</p>
+                  <p>💳 Invoice paid: INV-002 - £45.00 (Feb 14, 2026)</p>
                 </IonCardContent>
               </IonCard>
             </IonCol>
