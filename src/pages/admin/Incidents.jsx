@@ -27,6 +27,7 @@ import {
   IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminIncidents() {
   const [incidents, setIncidents] = useState([]);
@@ -37,6 +38,12 @@ export default function AdminIncidents() {
   const [editingIncident, setEditingIncident] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, incidentId: null });
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Admin', path: '/admin' },
+    { label: 'Incidents', path: '/admin/incidents' }
+  ];
 
   const [formData, setFormData] = useState({
     incident_datetime: '',
@@ -60,32 +67,36 @@ export default function AdminIncidents() {
 
   const fetchIncidents = async () => {
     try {
-      const response = await fetch('/api/admin/incidents', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+      // Mock data for demo purposes
+      const mockData = [
+        {
+          id: 1,
+          incident_datetime: new Date(Date.now() - 172800000).toISOString(),
+          incident_type: 'injury',
+          related_pet_id: 1,
+          pet_name: 'Max',
+          location: 'Oak Park',
+          summary: 'Small cut on paw',
+          actions_taken: 'Cleaned and bandaged',
+          owner_informed: true,
+          follow_up_required: false
+        },
+        {
+          id: 2,
+          incident_datetime: new Date(Date.now() - 432000000).toISOString(),
+          incident_type: 'aggressive_behavior',
+          related_pet_id: 3,
+          pet_name: 'Charlie',
+          location: 'Main Street',
+          summary: 'Barked at another dog',
+          actions_taken: 'Separated the dogs, continued walk',
+          owner_informed: true,
+          follow_up_required: true,
+          follow_up_notes: 'Discuss training options'
         }
-      });
+      ];
       
-      if (response.status === 403 || response.status === 401) {
-        showToast('Authentication required. Please log in.', 'danger');
-        setIncidents([]);
-        setLoading(false);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      // Check if response is an error object
-      if (data.error) {
-        showToast(data.error, 'danger');
-        setIncidents([]);
-      } else if (Array.isArray(data)) {
-        setIncidents(data);
-      } else {
-        showToast('Invalid response format', 'danger');
-        setIncidents([]);
-      }
+      setIncidents(mockData);
     } catch (error) {
       showToast('Failed to fetch incidents', 'danger');
       setIncidents([]);
@@ -96,30 +107,14 @@ export default function AdminIncidents() {
 
   const fetchPets = async () => {
     try {
-      const response = await fetch('/api/admin/pets', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (response.status === 403 || response.status === 401) {
-        console.error('Authentication required for pets');
-        setPets([]);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        console.error('Failed to fetch pets', data.error);
-        setPets([]);
-      } else if (Array.isArray(data)) {
-        setPets(data);
-      } else {
-        console.error('Invalid response format for pets');
-        setPets([]);
-      }
+      // Mock data for demo purposes
+      const mockData = [
+        { id: 1, name: 'Max', breed: 'Golden Retriever' },
+        { id: 2, name: 'Bella', breed: 'Labrador' },
+        { id: 3, name: 'Charlie', breed: 'Beagle' },
+        { id: 4, name: 'Luna', breed: 'Poodle' }
+      ];
+      setPets(mockData);
     } catch (error) {
       console.error('Failed to fetch pets', error);
       setPets([]);
@@ -128,26 +123,27 @@ export default function AdminIncidents() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('/api/admin/bookings', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+      // Mock data for demo purposes
+      const mockData = [
+        {
+          id: 1,
+          datetime_start: new Date(Date.now() + 86400000).toISOString(),
+          client_name: 'John Smith',
+          pet_names: 'Max, Bella'
+        },
+        {
+          id: 2,
+          datetime_start: new Date(Date.now() + 172800000).toISOString(),
+          client_name: 'Jane Doe',
+          pet_names: 'Charlie'
         }
-      });
-      
-      if (response.status === 403 || response.status === 401) {
-        console.error('Authentication required for bookings');
-        setBookings([]);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        console.error('Failed to fetch bookings', data.error);
-        setBookings([]);
-      } else if (Array.isArray(data)) {
-        setBookings(data);
+      ];
+      setBookings(mockData);
+    } catch (error) {
+      console.error('Failed to fetch bookings', error);
+      setBookings([]);
+    }
+  };
       } else {
         console.error('Invalid response format for bookings');
         setBookings([]);
@@ -269,7 +265,7 @@ export default function AdminIncidents() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Incidents</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -285,7 +281,7 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -295,8 +291,9 @@ export default function AdminIncidents() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
+        <Breadcrumbs items={breadcrumbItems} />
+        <div>
           {incidents.length === 0 ? (
             <IonCard>
               <IonCardContent>

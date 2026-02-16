@@ -16,9 +16,14 @@ import {
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { pawOutline, heartOutline, timeOutline, shieldCheckmarkOutline, mailOutline, logInOutline } from 'ionicons/icons';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 export default function Home() {
   const history = useHistory();
+  
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' }
+  ];
   
   return (
     <IonPage>
@@ -28,6 +33,7 @@ export default function Home() {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
+        <Breadcrumbs items={breadcrumbItems} />
         {/* Hero Section */}
         <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
           <IonIcon icon={pawOutline} style={{ fontSize: '64px', color: 'var(--ion-color-primary)' }} />

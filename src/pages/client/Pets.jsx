@@ -1,29 +1,55 @@
 import React from 'react';
-import { IonPage, IonHeader, IonContent, IonList, IonItem, IonButton, IonTitle, IonToolbar } from '@ionic/react';
+import { 
+  IonPage, 
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent, 
+  IonList, 
+  IonItem, 
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonLabel
+} from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Pets = () => {
     const petsData = [
-        { id: 1, name: "Rex", breed: "Golden Retriever" },
+        { id: 1, name: "Max", breed: "Golden Retriever" },
         { id: 2, name: "Bella", breed: "Labrador" },
-        // Add more pet data as needed
+    ];
+
+    const breadcrumbItems = [
+        { label: 'Home', path: '/' },
+        { label: 'Client', path: '/client' },
+        { label: 'Pets', path: '/client/pets' }
     ];
 
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar>
+                <IonToolbar color="primary">
                     <IonTitle>My Pets</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
+            <IonContent className="ion-padding">
+                <Breadcrumbs items={breadcrumbItems} />
+                <IonCard>
+                    <IonCardContent>
+                        <IonButton expand="block">Add Pet</IonButton>
+                    </IonCardContent>
+                </IonCard>
                 <IonList>
                     {petsData.map(pet => (
                         <IonItem key={pet.id}>
-                            {pet.name} - {pet.breed}
+                            <IonLabel>
+                                <h2>{pet.name}</h2>
+                                <p>{pet.breed}</p>
+                            </IonLabel>
                         </IonItem>
                     ))}
                 </IonList>
-                <IonButton expand="full">Add Pet</IonButton>
             </IonContent>
         </IonPage>
     );

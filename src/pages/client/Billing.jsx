@@ -19,6 +19,7 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { chevronDown, chevronUp } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBilling() {
   const [invoices, setInvoices] = useState([]);
@@ -27,39 +28,53 @@ export default function ClientBilling() {
   const [expandedInvoices, setExpandedInvoices] = useState(new Set());
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
 
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Client', path: '/client' },
+    { label: 'Billing', path: '/client/billing' }
+  ];
+
   useEffect(() => {
     fetchInvoices();
   }, []);
 
   const fetchInvoices = async () => {
     try {
-      const response = await fetch('/api/client/invoices', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+      // Mock data for demo purposes
+      const mockData = [
+        {
+          id: 1,
+          invoice_number: 'INV-2026-001',
+          issue_date: new Date(Date.now() - 2592000000).toISOString(), // 30 days ago
+          due_date: new Date(Date.now() - 1296000000).toISOString(), // 15 days ago
+          status: 'paid',
+          total_amount: 150.00,
+          period: 'January 2026',
+          payment_method: 'Credit Card',
+          payment_date: new Date(Date.now() - 1728000000).toISOString(), // 20 days ago
+          line_items: [
+            { description: 'Dog Walking - 5 sessions', quantity: 5, unit_price: 25.00, amount: 125.00 },
+            { description: 'Pet Sitting - 1 session', quantity: 1, unit_price: 25.00, amount: 25.00 }
+          ]
+        },
+        {
+          id: 2,
+          invoice_number: 'INV-2026-002',
+          issue_date: new Date(Date.now() - 864000000).toISOString(), // 10 days ago
+          due_date: new Date(Date.now() + 432000000).toISOString(), // 5 days from now
+          status: 'unpaid',
+          total_amount: 200.00,
+          period: 'February 2026',
+          payment_method: null,
+          payment_date: null,
+          line_items: [
+            { description: 'Dog Walking - 8 sessions', quantity: 8, unit_price: 25.00, amount: 200.00 }
+          ]
         }
-      });
+      ];
       
-      if (response.status === 403 || response.status === 401) {
-        setError('Authentication required. Please log in.');
-        setInvoices([]);
-        setLoading(false);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      // Check if response is an error object
-      if (data.error) {
-        setError(data.error);
-        setInvoices([]);
-      } else if (Array.isArray(data)) {
-        setInvoices(data);
-        setError(null);
-      } else {
-        setError('Invalid response format');
-        setInvoices([]);
-      }
+      setInvoices(mockData);
+      setError(null);
     } catch (error) {
       setError(error.message || 'Failed to fetch invoices');
       setInvoices([]);
@@ -99,7 +114,7 @@ export default function ClientBilling() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Billing</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -115,12 +130,13 @@ export default function ClientBilling() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Billing</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
+        <Breadcrumbs items={breadcrumbItems} />
+        <div>
           {error ? (
             <IonCard>
               <IonCardContent>

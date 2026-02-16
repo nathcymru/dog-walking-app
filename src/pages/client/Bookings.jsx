@@ -18,6 +18,7 @@ import {
   IonToast,
   IonItem,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBookings() {
   const [bookings, setBookings] = useState([]);
@@ -26,6 +27,12 @@ export default function ClientBookings() {
   const [error, setError] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Client', path: '/client' },
+    { label: 'Bookings', path: '/client/bookings' }
+  ];
 
   useEffect(() => {
     fetchBookings();
@@ -37,33 +44,45 @@ export default function ClientBookings() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('/api/client/bookings', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+      // Mock data for demo purposes
+      const mockData = [
+        {
+          id: 1,
+          service_type: 'walk',
+          status: 'approved',
+          datetime_start: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
+          datetime_end: new Date(Date.now() + 90000000).toISOString(),
+          pet_names: 'Max, Bella',
+          walker_name: 'Sarah Johnson',
+          notes: 'Max needs his leash',
+          recurrence: 'One-off'
+        },
+        {
+          id: 2,
+          service_type: 'walk',
+          status: 'completed',
+          datetime_start: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+          datetime_end: new Date(Date.now() - 82800000).toISOString(),
+          pet_names: 'Charlie',
+          walker_name: 'Mike Davis',
+          notes: null,
+          recurrence: 'Weekly'
+        },
+        {
+          id: 3,
+          service_type: 'sitting',
+          status: 'pending',
+          datetime_start: new Date(Date.now() + 172800000).toISOString(), // In 2 days
+          datetime_end: new Date(Date.now() + 176400000).toISOString(),
+          pet_names: 'Luna',
+          walker_name: null,
+          notes: 'Luna loves treats',
+          recurrence: 'One-off'
         }
-      });
+      ];
       
-      if (response.status === 403 || response.status === 401) {
-        setError('Authentication required. Please log in.');
-        setBookings([]);
-        setLoading(false);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      // Check if response is an error object
-      if (data.error) {
-        setError(data.error);
-        setBookings([]);
-      } else if (Array.isArray(data)) {
-        setBookings(data);
-        setError(null);
-      } else {
-        setError('Invalid response format');
-        setBookings([]);
-      }
+      setBookings(mockData);
+      setError(null);
     } catch (error) {
       setError(error.message || 'Failed to fetch bookings');
       setBookings([]);
@@ -110,7 +129,7 @@ export default function ClientBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -126,12 +145,13 @@ export default function ClientBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
+        <Breadcrumbs items={breadcrumbItems} />
+        <div>
           <IonSegment value={selectedStatus} onIonChange={(e) => setSelectedStatus(e.detail.value)}>
             <IonSegmentButton value="all">
               <IonLabel>All</IonLabel>

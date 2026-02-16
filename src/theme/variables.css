@@ -6,38 +6,51 @@
 @import url('https://cdn.jsdelivr.net/npm/@ionic/react@7.6.4/css/display.css');
 
 :root {
-  --ion-color-primary: #7dd3fc;
-  --ion-color-primary-rgb: 125,211,252;
-  --ion-color-primary-contrast: #1e3a8a;
-  --ion-color-primary-shade: #6ebade;
-  --ion-color-primary-tint: #8ad7fc;
+  --ion-color-primary: #3880ff;
+  --ion-color-primary-rgb: 56,128,255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-shade: #3171e0;
+  --ion-color-primary-tint: #4c8dff;
 
-  --ion-color-secondary: #fca5a5;
-  --ion-color-secondary-rgb: 252,165,165;
-  --ion-color-secondary-contrast: #7f1d1d;
-  --ion-color-secondary-shade: #de9191;
-  --ion-color-secondary-tint: #fcaeae;
+  --ion-color-secondary: #3dc2ff;
+  --ion-color-secondary-rgb: 61,194,255;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-shade: #36abe0;
+  --ion-color-secondary-tint: #50c8ff;
 
-  --ion-color-tertiary: #e9d5ff;
-  --ion-color-success: #86efac;
-  --ion-color-warning: #fcd34d;
-  --ion-color-danger: #fca5a5;
+  --ion-color-tertiary: #5260ff;
+  --ion-color-tertiary-rgb: 82,96,255;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-shade: #4854e0;
+  --ion-color-tertiary-tint: #6370ff;
 
-  --ion-background-color: #f9fafb;
-  --ion-text-color: #1f2937;
-}
+  --ion-color-success: #2dd36f;
+  --ion-color-success-rgb: 45,211,111;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-shade: #28ba62;
+  --ion-color-success-tint: #42d77d;
 
-.pastel-header {
-  --background: linear-gradient(135deg, #bae6fd 0%, #e9d5ff 100%);
-}
+  --ion-color-warning: #ffc409;
+  --ion-color-warning-rgb: 255,196,9;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-shade: #e0ac08;
+  --ion-color-warning-tint: #ffca22;
 
-ion-tab-bar {
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  border-radius: 16px 16px 0 0;
-}
+  --ion-color-danger: #eb445a;
+  --ion-color-danger-rgb: 235,68,90;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-shade: #cf3c4f;
+  --ion-color-danger-tint: #ed576b;
 
-ion-button {
-  --border-radius: 12px;
-  text-transform: none;
-  font-weight: 600;
+  --ion-color-medium: #92949c;
+  --ion-color-medium-rgb: 146,148,156;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-shade: #808289;
+  --ion-color-medium-tint: #9d9fa6;
+
+  --ion-color-light: #f4f5f8;
+  --ion-color-light-rgb: 244,245,248;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-shade: #d7d8da;
+  --ion-color-light-tint: #f5f6f9;
 }

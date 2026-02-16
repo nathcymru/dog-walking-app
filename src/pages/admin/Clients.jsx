@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonContent,
   IonList,
   IonItem,
@@ -8,12 +11,21 @@ import {
   IonSearchbar,
   IonInput,
   IonLabel,
+  IonCard,
+  IonCardContent,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [newClient, setNewClient] = useState('');
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Admin', path: '/admin' },
+    { label: 'Clients', path: '/admin/clients' }
+  ];
 
   useEffect(() => {
     // Initially fetch clients from a data source
@@ -21,9 +33,11 @@ const Clients = () => {
   }, []);
 
   const fetchClients = () => {
-    // Fetch clients from an API or local storage
-    // Example:
-    // setClients([{ id: 1, name: 'John Doe' }, { id: 2, name: 'Jane Smith' }]);
+    // Mock data for demo purposes
+    setClients([
+      { id: 1, name: 'John Smith', email: 'client@example.com' },
+      { id: 2, name: 'Jane Doe', email: 'jane@example.com' }
+    ]);
   };
 
   const addClient = () => {
@@ -45,10 +59,20 @@ const Clients = () => {
 
   return (
     <IonPage>
-      <IonContent>
-        <IonSearchbar value={searchText} onIonInput={handleSearch} placeholder='Search Clients' />
-        <IonInput value={newClient} onIonChange={e => setNewClient(e.target.value)} placeholder='Add Client' />
-        <IonButton onClick={addClient}>Add Client</IonButton>
+      <IonHeader>
+        <IonToolbar color="primary">
+          <IonTitle>Clients</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <Breadcrumbs items={breadcrumbItems} />
+        <IonCard>
+          <IonCardContent>
+            <IonSearchbar value={searchText} onIonInput={handleSearch} placeholder='Search Clients' />
+            <IonInput value={newClient} onIonChange={e => setNewClient(e.detail.value)} placeholder='Add Client' />
+            <IonButton onClick={addClient} expand="block" style={{ marginTop: '1rem' }}>Add Client</IonButton>
+          </IonCardContent>
+        </IonCard>
         <IonList>
           {filteredClients.map(client => (
             <IonItem key={client.id}>

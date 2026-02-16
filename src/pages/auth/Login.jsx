@@ -20,6 +20,7 @@ import {
 import { useHistory } from 'react-router-dom';
 import { mailOutline, lockClosedOutline, pawOutline, alertCircleOutline } from 'ionicons/icons';
 import { useAuth } from '../../utils/auth';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -28,6 +29,11 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const history = useHistory();
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Login', path: '/login' }
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,6 +75,7 @@ export default function Login() {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
+        <Breadcrumbs items={breadcrumbItems} />
         <div style={{ maxWidth: '500px', margin: '0 auto', paddingTop: '2rem' }}>
           {/* Logo/Header */}
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>

@@ -26,6 +26,7 @@ import {
   IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -36,6 +37,12 @@ export default function AdminBookings() {
   const [editingBooking, setEditingBooking] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, bookingId: null });
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Admin', path: '/admin' },
+    { label: 'Bookings', path: '/admin/bookings' }
+  ];
 
   const [formData, setFormData] = useState({
     client_id: '',
@@ -60,32 +67,37 @@ export default function AdminBookings() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('/api/admin/bookings', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+      // Mock data for demo purposes
+      const mockData = [
+        {
+          id: 1,
+          client_id: 2,
+          client_name: 'John Smith',
+          service_type: 'walk',
+          status: 'approved',
+          datetime_start: new Date(Date.now() + 86400000).toISOString(),
+          datetime_end: new Date(Date.now() + 90000000).toISOString(),
+          walker_name: 'Sarah Johnson',
+          notes: 'Client requested morning walk',
+          pet_names: 'Max, Bella',
+          recurrence: 'One-off'
+        },
+        {
+          id: 2,
+          client_id: 2,
+          client_name: 'John Smith',
+          service_type: 'walk',
+          status: 'pending',
+          datetime_start: new Date(Date.now() + 172800000).toISOString(),
+          datetime_end: new Date(Date.now() + 176400000).toISOString(),
+          walker_name: null,
+          notes: null,
+          pet_names: 'Charlie',
+          recurrence: 'Weekly'
         }
-      });
+      ];
       
-      if (response.status === 403 || response.status === 401) {
-        showToast('Authentication required. Please log in.', 'danger');
-        setBookings([]);
-        setLoading(false);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      // Check if response is an error object
-      if (data.error) {
-        showToast(data.error, 'danger');
-        setBookings([]);
-      } else if (Array.isArray(data)) {
-        setBookings(data);
-      } else {
-        showToast('Invalid response format', 'danger');
-        setBookings([]);
-      }
+      setBookings(mockData);
     } catch (error) {
       showToast('Failed to fetch bookings', 'danger');
       setBookings([]);
@@ -96,30 +108,13 @@ export default function AdminBookings() {
 
   const fetchClients = async () => {
     try {
-      const response = await fetch('/api/admin/clients', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (response.status === 403 || response.status === 401) {
-        console.error('Authentication required for clients');
-        setClients([]);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        console.error('Failed to fetch clients', data.error);
-        setClients([]);
-      } else if (Array.isArray(data)) {
-        setClients(data);
-      } else {
-        console.error('Invalid response format for clients');
-        setClients([]);
-      }
+      // Mock data for demo purposes
+      const mockData = [
+        { id: 2, name: 'John Smith', email: 'client@example.com' },
+        { id: 3, name: 'Jane Doe', email: 'jane@example.com' },
+        { id: 4, name: 'Bob Wilson', email: 'bob@example.com' }
+      ];
+      setClients(mockData);
     } catch (error) {
       console.error('Failed to fetch clients', error);
       setClients([]);
@@ -128,30 +123,14 @@ export default function AdminBookings() {
 
   const fetchPets = async () => {
     try {
-      const response = await fetch('/api/admin/pets', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (response.status === 403 || response.status === 401) {
-        console.error('Authentication required for pets');
-        setPets([]);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        console.error('Failed to fetch pets', data.error);
-        setPets([]);
-      } else if (Array.isArray(data)) {
-        setPets(data);
-      } else {
-        console.error('Invalid response format for pets');
-        setPets([]);
-      }
+      // Mock data for demo purposes
+      const mockData = [
+        { id: 1, name: 'Max', breed: 'Golden Retriever', owner_id: 2 },
+        { id: 2, name: 'Bella', breed: 'Labrador', owner_id: 2 },
+        { id: 3, name: 'Charlie', breed: 'Beagle', owner_id: 3 },
+        { id: 4, name: 'Luna', breed: 'Poodle', owner_id: 4 }
+      ];
+      setPets(mockData);
     } catch (error) {
       console.error('Failed to fetch pets', error);
       setPets([]);
@@ -277,7 +256,7 @@ export default function AdminBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -293,7 +272,7 @@ export default function AdminBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -303,8 +282,9 @@ export default function AdminBookings() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
+        <Breadcrumbs items={breadcrumbItems} />
+        <div>
           {bookings.length === 0 ? (
             <IonCard>
               <IonCardContent>

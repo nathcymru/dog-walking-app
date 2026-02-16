@@ -2,6 +2,7 @@ import { IonApp, IonRouterOutlet, IonPage, IonContent, IonSpinner, setupIonicRea
 import { IonReactRouter } from '@ionic/react-router';
 import { Route, Redirect } from 'react-router-dom';
 import './theme/variables.css';
+import './styles/main.css';
 
 import HomePage from './pages/Home';
 import ContactPage from './pages/Contact';
