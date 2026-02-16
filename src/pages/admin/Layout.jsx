@@ -1,10 +1,9 @@
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/auth';
-import { DogIcon, UsersIcon, PawIcon, CalendarIcon, AlertIcon, LogOutIcon, LayoutDashboardIcon } from '../../components/Icons';
+import { AdminBottomNav } from '../../components/BottomNav';
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -12,53 +11,41 @@ export default function AdminLayout() {
     navigate('/');
   };
 
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
-
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', display: 'flex' }}>
-      {/* Sidebar */}
-      <div style={{ width: '250px', backgroundColor: '#111827', color: 'white', padding: '1.5rem', position: 'fixed', height: '100vh', overflowY: 'auto' }}>
-        <div className="flex items-center gap-2 mb-8">
-          <DogIcon size={32} />
-          <span className="text-xl font-bold">PawWalkers Admin</span>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--gray-50)', paddingBottom: '5rem' }}>
+      {/* Header */}
+      <header style={{
+        background: 'linear-gradient(135deg, var(--pastel-sky) 0%, var(--pastel-lavender) 100%)',
+        borderBottom: '1px solid var(--pastel-sky-dark)',
+        padding: 'var(--space-lg)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        boxShadow: 'var(--shadow-md)'
+      }}>
+        <div className="container">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-md">
+              <span style={{fontSize: '2rem'}}>🐕</span>
+              <div>
+                <h1 style={{fontSize: '1.5rem', fontWeight: 700, color: 'var(--gray-900)'}}>PawWalkers Admin</h1>
+                <p style={{fontSize: '0.875rem', color: 'var(--gray-700)'}}>Logged in as {user?.full_name}</p>
+              </div>
+            </div>
+            <button onClick={handleLogout} className="btn btn-secondary btn-sm">
+              Logout
+            </button>
+          </div>
         </div>
-
-        <nav className="space-y-2">
-          <Link to="/admin" className={`flex items-center gap-3 p-3 rounded ${isActive('/admin') && location.pathname === '/admin' ? 'bg-blue-600' : 'hover:bg-gray-700'}`}>
-            <LayoutDashboardIcon size={20} />
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/admin/clients" className={`flex items-center gap-3 p-3 rounded ${isActive('/admin/clients') ? 'bg-blue-600' : 'hover:bg-gray-700'}`}>
-            <UsersIcon size={20} />
-            <span>Clients</span>
-          </Link>
-          <Link to="/admin/pets" className={`flex items-center gap-3 p-3 rounded ${isActive('/admin/pets') ? 'bg-blue-600' : 'hover:bg-gray-700'}`}>
-            <PawIcon size={20} />
-            <span>Pets</span>
-          </Link>
-          <Link to="/admin/bookings" className={`flex items-center gap-3 p-3 rounded ${isActive('/admin/bookings') ? 'bg-blue-600' : 'hover:bg-gray-700'}`}>
-            <CalendarIcon size={20} />
-            <span>Bookings</span>
-          </Link>
-          <Link to="/admin/incidents" className={`flex items-center gap-3 p-3 rounded ${isActive('/admin/incidents') ? 'bg-blue-600' : 'hover:bg-gray-700'}`}>
-            <AlertIcon size={20} />
-            <span>Incidents</span>
-          </Link>
-        </nav>
-
-        <div style={{ marginTop: 'auto', paddingTop: '2rem', borderTop: '1px solid #374151' }}>
-          <p className="text-sm text-gray-400 mb-2">{user?.full_name}</p>
-          <button onClick={handleLogout} className="flex items-center gap-2 text-gray-300 hover:text-white">
-            <LogOutIcon size={18} />
-            <span>Logout</span>
-          </button>
-        </div>
-      </div>
+      </header>
 
       {/* Main Content */}
-      <div style={{ marginLeft: '250px', flex: 1, padding: '2rem' }}>
+      <main>
         <Outlet />
-      </div>
+      </main>
+
+      {/* Bottom Navigation */}
+      <AdminBottomNav />
     </div>
   );
 }
