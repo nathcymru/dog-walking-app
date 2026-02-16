@@ -204,25 +204,3 @@ const Contact = () => {
 };
 
 export default Contact;
-          <IonLabel position="floating">Message</IonLabel>
-          <IonTextarea name="message" onIonChange={handleChange} required></IonTextarea>
-        </IonItem>
-        <IonButton expand="full" type="submit">Submit</IonButton>
-      </form>
-
-      <IonToast
-        isOpen={showToast}
-        onClose={() => setShowToast(false)}
-        message="Your message has been sent!"
-        duration={2000}
-      />
-
-      <div>Contact Information:</div>
-      <div>Email: info@pawwalkers.co.uk</div>
-      <div>Phone: 07123 456789</div>
-      <div>Hours: Monday-Sunday 7am-7pm</div>
-    </IonContent>
-  );
-};
-
-export default Contact;
