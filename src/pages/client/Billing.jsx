@@ -17,8 +17,13 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
+  IonButtons,
+  IonBreadcrumbs,
+  IonBreadcrumb,
 } from '@ionic/react';
 import { chevronDown, chevronUp } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from '../../utils/auth';
 
 export default function ClientBilling() {
   const [invoices, setInvoices] = useState([]);
@@ -26,10 +31,17 @@ export default function ClientBilling() {
   const [error, setError] = useState(null);
   const [expandedInvoices, setExpandedInvoices] = useState(new Set());
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
+  const history = useHistory();
+  const { logout } = useAuth();
 
   useEffect(() => {
     fetchInvoices();
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    history.push('/');
+  };
 
   const fetchInvoices = async () => {
     try {
@@ -99,8 +111,18 @@ export default function ClientBilling() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Billing</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={handleLogout}>Logout</IonButton>
+            </IonButtons>
+          </IonToolbar>
+          <IonToolbar>
+            <IonBreadcrumbs>
+              <IonBreadcrumb href="/">Home</IonBreadcrumb>
+              <IonBreadcrumb>Client</IonBreadcrumb>
+              <IonBreadcrumb>Billing</IonBreadcrumb>
+            </IonBreadcrumbs>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -115,8 +137,18 @@ export default function ClientBilling() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Billing</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={handleLogout}>Logout</IonButton>
+          </IonButtons>
+        </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbs>
+            <IonBreadcrumb href="/">Home</IonBreadcrumb>
+            <IonBreadcrumb>Client</IonBreadcrumb>
+            <IonBreadcrumb>Billing</IonBreadcrumb>
+          </IonBreadcrumbs>
         </IonToolbar>
       </IonHeader>
       <IonContent>

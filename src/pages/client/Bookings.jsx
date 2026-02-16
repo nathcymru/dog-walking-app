@@ -17,7 +17,13 @@ import {
   IonSpinner,
   IonToast,
   IonItem,
+  IonButtons,
+  IonButton,
+  IonBreadcrumbs,
+  IonBreadcrumb,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from '../../utils/auth';
 
 export default function ClientBookings() {
   const [bookings, setBookings] = useState([]);
@@ -26,6 +32,8 @@ export default function ClientBookings() {
   const [error, setError] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
+  const history = useHistory();
+  const { logout } = useAuth();
 
   useEffect(() => {
     fetchBookings();
@@ -34,6 +42,11 @@ export default function ClientBookings() {
   useEffect(() => {
     filterBookings();
   }, [bookings, selectedStatus]);
+
+  const handleLogout = () => {
+    logout();
+    history.push('/');
+  };
 
   const fetchBookings = async () => {
     try {
@@ -110,8 +123,18 @@ export default function ClientBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={handleLogout}>Logout</IonButton>
+            </IonButtons>
+          </IonToolbar>
+          <IonToolbar>
+            <IonBreadcrumbs>
+              <IonBreadcrumb href="/">Home</IonBreadcrumb>
+              <IonBreadcrumb>Client</IonBreadcrumb>
+              <IonBreadcrumb>Bookings</IonBreadcrumb>
+            </IonBreadcrumbs>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -126,8 +149,18 @@ export default function ClientBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={handleLogout}>Logout</IonButton>
+          </IonButtons>
+        </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbs>
+            <IonBreadcrumb href="/">Home</IonBreadcrumb>
+            <IonBreadcrumb>Client</IonBreadcrumb>
+            <IonBreadcrumb>Bookings</IonBreadcrumb>
+          </IonBreadcrumbs>
         </IonToolbar>
       </IonHeader>
       <IonContent>

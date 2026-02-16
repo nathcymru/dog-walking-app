@@ -25,8 +25,12 @@ import {
   IonIcon,
   IonBadge,
   IonAlert,
+  IonBreadcrumbs,
+  IonBreadcrumb,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from '../../utils/auth';
 
 export default function AdminIncidents() {
   const [incidents, setIncidents] = useState([]);
@@ -37,6 +41,8 @@ export default function AdminIncidents() {
   const [editingIncident, setEditingIncident] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, incidentId: null });
+  const history = useHistory();
+  const { logout } = useAuth();
 
   const [formData, setFormData] = useState({
     incident_datetime: '',
@@ -57,6 +63,11 @@ export default function AdminIncidents() {
     fetchPets();
     fetchBookings();
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    history.push('/');
+  };
 
   const fetchIncidents = async () => {
     try {
@@ -269,8 +280,18 @@ export default function AdminIncidents() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Incidents</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={handleLogout}>Logout</IonButton>
+            </IonButtons>
+          </IonToolbar>
+          <IonToolbar>
+            <IonBreadcrumbs>
+              <IonBreadcrumb href="/">Home</IonBreadcrumb>
+              <IonBreadcrumb>Admin</IonBreadcrumb>
+              <IonBreadcrumb>Incidents</IonBreadcrumb>
+            </IonBreadcrumbs>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -285,14 +306,22 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
               <IonIcon icon={add} slot="start" />
               Log Incident
             </IonButton>
+            <IonButton onClick={handleLogout}>Logout</IonButton>
           </IonButtons>
+        </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbs>
+            <IonBreadcrumb href="/">Home</IonBreadcrumb>
+            <IonBreadcrumb>Admin</IonBreadcrumb>
+            <IonBreadcrumb>Incidents</IonBreadcrumb>
+          </IonBreadcrumbs>
         </IonToolbar>
       </IonHeader>
       <IonContent>

@@ -24,8 +24,12 @@ import {
   IonIcon,
   IonBadge,
   IonAlert,
+  IonBreadcrumbs,
+  IonBreadcrumb,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from '../../utils/auth';
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -36,6 +40,8 @@ export default function AdminBookings() {
   const [editingBooking, setEditingBooking] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, bookingId: null });
+  const history = useHistory();
+  const { logout } = useAuth();
 
   const [formData, setFormData] = useState({
     client_id: '',
@@ -57,6 +63,11 @@ export default function AdminBookings() {
     fetchClients();
     fetchPets();
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    history.push('/');
+  };
 
   const fetchBookings = async () => {
     try {
@@ -277,8 +288,18 @@ export default function AdminBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={handleLogout}>Logout</IonButton>
+            </IonButtons>
+          </IonToolbar>
+          <IonToolbar>
+            <IonBreadcrumbs>
+              <IonBreadcrumb href="/">Home</IonBreadcrumb>
+              <IonBreadcrumb>Admin</IonBreadcrumb>
+              <IonBreadcrumb>Bookings</IonBreadcrumb>
+            </IonBreadcrumbs>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -293,14 +314,22 @@ export default function AdminBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
               <IonIcon icon={add} slot="start" />
               New Booking
             </IonButton>
+            <IonButton onClick={handleLogout}>Logout</IonButton>
           </IonButtons>
+        </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbs>
+            <IonBreadcrumb href="/">Home</IonBreadcrumb>
+            <IonBreadcrumb>Admin</IonBreadcrumb>
+            <IonBreadcrumb>Bookings</IonBreadcrumb>
+          </IonBreadcrumbs>
         </IonToolbar>
       </IonHeader>
       <IonContent>
