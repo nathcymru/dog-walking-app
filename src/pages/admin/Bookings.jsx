@@ -189,8 +189,10 @@ export default function AdminBookings() {
   };
 
   // Memoize filtered pets to avoid recalculating on every render
+  // Only show pets for the selected client, or empty list if no client selected
   const filteredPets = useMemo(() => {
-    return pets.filter(pet => !formData.client_id || pet.client_id === formData.client_id);
+    if (!formData.client_id) return [];
+    return pets.filter(pet => pet.client_id === formData.client_id);
   }, [pets, formData.client_id]);
 
   const getStatusColor = (status) => {

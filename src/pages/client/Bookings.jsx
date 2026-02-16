@@ -59,10 +59,10 @@ export default function ClientBookings() {
         )
       );
     } else if (selectedStatus === 'past') {
-      // Show completed bookings or those with past start times (excluding cancelled)
+      // Show bookings where the end time has passed or status is completed
       setFilteredBookings(
         bookings.filter(
-          (b) => b.status === 'completed' || (new Date(b.datetime_start) <= now && b.status !== 'cancelled')
+          (b) => b.status === 'completed' || new Date(b.datetime_end) < now
         )
       );
     } else {
