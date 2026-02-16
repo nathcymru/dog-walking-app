@@ -6,12 +6,21 @@ import {
   IonTitle,
   IonContent,
   IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
   IonGrid,
   IonRow,
   IonCol,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
+  const breadcrumbs = [
+    { path: '/client', label: 'Client' },
+    { path: '/client/dashboard', label: 'Dashboard' }
+  ];
+
   return (
     <IonPage>
       <IonHeader>
@@ -20,24 +29,53 @@ const Dashboard = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonGrid>
+        <Breadcrumbs items={breadcrumbs} />
+        <IonGrid className="ion-padding">
           <IonRow>
-            <IonCol size='12' sizeMd='6' sizeLg='4'>
+            <IonCol size="12" sizeMd="6" sizeLg="4">
               <IonCard>
-                <h2>Card 1</h2>
-                <p>Content for Card 1</p>
+                <IonCardHeader>
+                  <IonCardTitle>Upcoming Walks</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <h2 style={{ fontSize: '2rem', margin: 0 }}>3</h2>
+                  <p>Scheduled this week</p>
+                </IonCardContent>
               </IonCard>
             </IonCol>
-            <IonCol size='12' sizeMd='6' sizeLg='4'>
+            <IonCol size="12" sizeMd="6" sizeLg="4">
               <IonCard>
-                <h2>Card 2</h2>
-                <p>Content for Card 2</p>
+                <IonCardHeader>
+                  <IonCardTitle>Active Pets</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <h2 style={{ fontSize: '2rem', margin: 0 }}>2</h2>
+                  <p>Registered pets</p>
+                </IonCardContent>
               </IonCard>
             </IonCol>
-            <IonCol size='12' sizeMd='6' sizeLg='4'>
+            <IonCol size="12" sizeMd="6" sizeLg="4">
               <IonCard>
-                <h2>Card 3</h2>
-                <p>Content for Card 3</p>
+                <IonCardHeader>
+                  <IonCardTitle>Total Walks</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <h2 style={{ fontSize: '2rem', margin: 0 }}>45</h2>
+                  <p>This month</p>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol size="12">
+              <IonCard>
+                <IonCardHeader>
+                  <IonCardTitle>Recent Activity</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <p>Last walk: Buddy - February 14, 2026</p>
+                  <p>Next walk: Max - February 17, 2026</p>
+                </IonCardContent>
               </IonCard>
             </IonCol>
           </IonRow>

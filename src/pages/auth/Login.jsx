@@ -61,7 +61,7 @@ export default function Login() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="primary">
+        <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/" />
           </IonButtons>
@@ -135,11 +135,9 @@ export default function Login() {
           </IonCard>
 
           {/* Demo Credentials Card */}
-          <IonCard style={{ marginTop: '2rem', backgroundColor: '#e0f2fe' }}>
+          <IonCard style={{ marginTop: '2rem' }}>
             <IonCardContent>
-              <IonText color="primary">
-                <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>Demo Accounts</h3>
-              </IonText>
+              <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>Demo Accounts</h3>
               
               <div style={{ marginBottom: '1rem' }}>
                 <IonNote>

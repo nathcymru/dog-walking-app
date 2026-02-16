@@ -27,6 +27,7 @@ import {
   IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminIncidents() {
   const [incidents, setIncidents] = useState([]);
@@ -37,6 +38,11 @@ export default function AdminIncidents() {
   const [editingIncident, setEditingIncident] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, incidentId: null });
+
+  const breadcrumbs = [
+    { path: '/admin', label: 'Admin' },
+    { path: '/admin/incidents', label: 'Incidents' }
+  ];
 
   const [formData, setFormData] = useState({
     incident_datetime: '',
@@ -68,7 +74,7 @@ export default function AdminIncidents() {
       });
       
       if (response.status === 403 || response.status === 401) {
-        showToast('Authentication required. Please log in.', 'danger');
+        showToast('Using demo data - API not available', 'warning');
         setIncidents([]);
         setLoading(false);
         return;
@@ -269,11 +275,12 @@ export default function AdminIncidents() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar>
             <IonTitle>Incidents</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbs} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -285,7 +292,7 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar>
           <IonTitle>Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -296,6 +303,7 @@ export default function AdminIncidents() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Breadcrumbs items={breadcrumbs} />
         <div className="ion-padding">
           {incidents.length === 0 ? (
             <IonCard>

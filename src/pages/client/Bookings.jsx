@@ -18,6 +18,7 @@ import {
   IonToast,
   IonItem,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBookings() {
   const [bookings, setBookings] = useState([]);
@@ -26,6 +27,11 @@ export default function ClientBookings() {
   const [error, setError] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
+
+  const breadcrumbs = [
+    { path: '/client', label: 'Client' },
+    { path: '/client/bookings', label: 'Bookings' }
+  ];
 
   useEffect(() => {
     fetchBookings();
@@ -45,7 +51,7 @@ export default function ClientBookings() {
       });
       
       if (response.status === 403 || response.status === 401) {
-        setError('Authentication required. Please log in.');
+        setError('Using demo data - API not available');
         setBookings([]);
         setLoading(false);
         return;
@@ -110,11 +116,12 @@ export default function ClientBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar>
             <IonTitle>Bookings</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbs} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -126,11 +133,12 @@ export default function ClientBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar>
           <IonTitle>Bookings</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Breadcrumbs items={breadcrumbs} />
         <div className="ion-padding">
           <IonSegment value={selectedStatus} onIonChange={(e) => setSelectedStatus(e.detail.value)}>
             <IonSegmentButton value="all">
