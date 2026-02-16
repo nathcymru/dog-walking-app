@@ -24,7 +24,8 @@ const Contact = () => {
   const [showToast, setShowToast] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.detail.value !== undefined ? { name: e.target.getAttribute('name'), value: e.detail.value } : e.target;
+    const name = e.target.name;
+    const value = e.detail?.value !== undefined ? e.detail.value : e.target.value;
     setFormData({ ...formData, [name]: value });
   };
 

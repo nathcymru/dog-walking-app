@@ -173,7 +173,9 @@ const Dashboard = () => {
                 <IonCardContent>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
-                      <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>£{stats.monthlyRevenue}</h2>
+                      <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>
+                        {stats.monthlyRevenue.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' })}
+                      </h2>
                       <p style={{ margin: '0.5rem 0 0 0', color: 'var(--ion-color-medium)' }}>Monthly Revenue</p>
                     </div>
                     <IonIcon icon={cash} style={{ fontSize: '3rem', color: 'var(--ion-color-warning)' }} />

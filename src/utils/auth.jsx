@@ -20,6 +20,19 @@ const DEMO_USERS = {
   }
 };
 
+// Helper function for demo authentication
+function authenticateDemo(email, password) {
+  const demoUser = DEMO_USERS[email];
+  
+  if (!demoUser || demoUser.password !== password) {
+    throw new Error('Invalid email or password');
+  }
+
+  // Remove password from user object
+  const { password: _, ...userWithoutPassword } = demoUser;
+  return userWithoutPassword;
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -58,15 +71,7 @@ export function AuthProvider({ children }) {
       
       // Fallback to demo auth if API is not available
       await new Promise(resolve => setTimeout(resolve, 500));
-
-      const demoUser = DEMO_USERS[email];
-      
-      if (!demoUser || demoUser.password !== password) {
-        throw new Error('Invalid email or password');
-      }
-
-      // Remove password from user object
-      const { password: _, ...userWithoutPassword } = demoUser;
+      const userWithoutPassword = authenticateDemo(email, password);
       
       // Store user in state and localStorage
       setUser(userWithoutPassword);
@@ -75,13 +80,7 @@ export function AuthProvider({ children }) {
       return userWithoutPassword;
     } catch (error) {
       // If API call fails, try demo authentication
-      const demoUser = DEMO_USERS[email];
-      
-      if (!demoUser || demoUser.password !== password) {
-        throw new Error('Invalid email or password');
-      }
-
-      const { password: _, ...userWithoutPassword } = demoUser;
+      const userWithoutPassword = authenticateDemo(email, password);
       setUser(userWithoutPassword);
       localStorage.setItem('pawwalkers_user', JSON.stringify(userWithoutPassword));
       

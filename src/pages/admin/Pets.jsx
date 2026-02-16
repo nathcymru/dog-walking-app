@@ -145,7 +145,7 @@ const Pets = () => {
                       {pet.breed && <p><strong>Breed:</strong> {pet.breed}</p>}
                       {pet.color && <p><strong>Color:</strong> {pet.color}</p>}
                       {pet.date_of_birth && (
-                        <p><strong>Age:</strong> {new Date(pet.date_of_birth).toLocaleDateString()}</p>
+                        <p><strong>Birth Date:</strong> {new Date(pet.date_of_birth).toLocaleDateString()}</p>
                       )}
                       {pet.weight && <p><strong>Weight:</strong> {pet.weight} kg</p>}
                       {pet.size_category && <p><strong>Size:</strong> {pet.size_category}</p>}
