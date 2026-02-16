@@ -1,95 +1,60 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './utils/auth';
-import './styles/main.css';
+import { IonApp, IonRouterOutlet, IonPage, IonContent, IonSpinner, setupIonicReact } from '@ionic/react';
+import { IonReactRouter } from '@ionic/react-router';
+import { Route, Redirect } from 'react-router-dom';
+import './theme/variables.css';
 
 import HomePage from './pages/Home';
-import ServicesPage from './pages/Services';
-import ContactPage from './pages/Contact';
-import LoginPage from './pages/Login';
-import ClientLayout from './pages/client/Layout';
-import ClientDashboard from './pages/client/Dashboard';
-import ClientBookings from './pages/client/Bookings';
-import ClientPets from './pages/client/Pets';
-import ClientBilling from './pages/client/Billing';
-import AdminLayout from './pages/admin/Layout';
-import AdminDashboard from './pages/admin/Dashboard';
-import AdminClients from './pages/admin/Clients';
-import AdminPets from './pages/admin/Pets';
-import AdminBookings from './pages/admin/Bookings';
-import AdminIncidents from './pages/admin/Incidents';
+import LoginPage from './pages/auth/Login';
+import ClientTabs from './pages/client/Tabs';
+import AdminTabs from './pages/admin/Tabs';
+import { AuthProvider, useAuth } from './utils/auth';
+
+setupIonicReact({ mode: 'ios' });
 
 function ProtectedRoute({ children, requiredRole }) {
   const { user, loading } = useAuth();
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center" style={{ minHeight: '100vh' }}>
-        <div className="spinner"></div>
-      </div>
+      <IonPage>
+        <IonContent className="ion-text-center">
+          <div style={{ marginTop: '50%' }}>
+            <IonSpinner color="primary" />
+          </div>
+        </IonContent>
+      </IonPage>
     );
   }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
+  if (!user) return <Redirect to="/login" />;
   if (requiredRole && user.role !== requiredRole) {
-    return <Navigate to={user.role === 'admin' ? '/admin' : '/client'} replace />;
+    return <Redirect to={user.role === 'admin' ? '/admin' : '/client'} />;
   }
-
   return children;
 }
 
 function AppRoutes() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/services" element={<ServicesPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/login" element={<LoginPage />} />
-
-      <Route
-        path="/client"
-        element={
-          <ProtectedRoute requiredRole="client">
-            <ClientLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<ClientDashboard />} />
-        <Route path="bookings" element={<ClientBookings />} />
-        <Route path="pets" element={<ClientPets />} />
-        <Route path="billing" element={<ClientBilling />} />
+    <IonRouterOutlet>
+      <Route exact path="/" component={HomePage} />
+      <Route exact path="/login" component={LoginPage} />
+      <Route path="/client">
+        <ProtectedRoute requiredRole="client"><ClientTabs /></ProtectedRoute>
       </Route>
-
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute requiredRole="admin">
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<AdminDashboard />} />
-        <Route path="clients" element={<AdminClients />} />
-        <Route path="pets" element={<AdminPets />} />
-        <Route path="bookings" element={<AdminBookings />} />
-        <Route path="incidents" element={<AdminIncidents />} />
+      <Route path="/admin">
+        <ProtectedRoute requiredRole="admin"><AdminTabs /></ProtectedRoute>
       </Route>
-
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      <Route render={() => <Redirect to="/" />} />
+    </IonRouterOutlet>
   );
 }
 
-function App() {
+export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AuthProvider>
+    <IonApp>
+      <AuthProvider>
+        <IonReactRouter>
+          <AppRoutes />
+        </IonReactRouter>
+      </AuthProvider>
+    </IonApp>
   );
 }
-
-export default App;

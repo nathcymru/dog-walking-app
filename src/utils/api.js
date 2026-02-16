@@ -1,72 +1,19 @@
+// USE YOUR EXISTING api.js FILE
+// This is just a template - replace with your actual API client
 const API_BASE = '/api';
 
-async function request(endpoint, options = {}) {
-  const url = `${API_BASE}${endpoint}`;
-  const config = {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    credentials: 'same-origin',
-    ...options,
-  };
-
-  if (options.body && typeof options.body === 'object') {
-    config.body = JSON.stringify(options.body);
-  }
-
-  const response = await fetch(url, config);
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.error || 'Request failed');
-  }
-
-  return data;
-}
-
-export const api = {
-  auth: {
-    login: (email, password) => request('/auth/login', { method: 'POST', body: { email, password } }),
-    logout: () => request('/auth/logout', { method: 'POST' }),
-    getSession: () => request('/auth/session'),
-  },
-  contact: {
-    submit: (data) => request('/contact', { method: 'POST', body: data }),
-  },
+const api = {
   client: {
-    getBookings: () => request('/client/bookings'),
-    getPets: () => request('/client/pets'),
-    getInvoices: () => request('/client/invoices'),
+    getDashboard: () => fetch(\`\${API_BASE}/client/dashboard\`).then(r => r.json()),
+    getPets: () => fetch(\`\${API_BASE}/client/pets\`).then(r => r.json()),
+    getBookings: () => fetch(\`\${API_BASE}/client/bookings\`).then(r => r.json()),
+    getInvoices: () => fetch(\`\${API_BASE}/client/invoices\`).then(r => r.json()),
   },
   admin: {
-    getDashboard: () => request('/admin/dashboard'),
-    
-    // Clients
-    getClients: () => request('/admin/clients'),
-    getClient: (id) => request(`/admin/clients/${id}`),
-    createClient: (data) => request('/admin/clients', { method: 'POST', body: data }),
-    updateClient: (id, data) => request(`/admin/clients/${id}`, { method: 'PUT', body: data }),
-    deleteClient: (id) => request(`/admin/clients/${id}`, { method: 'DELETE' }),
-    
-    // Pets
-    getPets: () => request('/admin/pets'),
-    getPet: (id) => request(`/admin/pets/${id}`),
-    createPet: (data) => request('/admin/pets', { method: 'POST', body: data }),
-    updatePet: (id, data) => request(`/admin/pets/${id}`, { method: 'PUT', body: data }),
-    deletePet: (id) => request(`/admin/pets/${id}`, { method: 'DELETE' }),
-    
-    // Bookings
-    getBookings: () => request('/admin/bookings'),
-    getBooking: (id) => request(`/admin/bookings/${id}`),
-    createBooking: (data) => request('/admin/bookings', { method: 'POST', body: data }),
-    updateBooking: (id, data) => request(`/admin/bookings/${id}`, { method: 'PUT', body: data }),
-    deleteBooking: (id) => request(`/admin/bookings/${id}`, { method: 'DELETE' }),
-    
-    // Incidents
-    getIncidents: () => request('/admin/incidents'),
-    getIncident: (id) => request(`/admin/incidents/${id}`),
-    createIncident: (data) => request('/admin/incidents', { method: 'POST', body: data }),
-    updateIncident: (id, data) => request(`/admin/incidents/${id}`, { method: 'PUT', body: data }),
-    deleteIncident: (id) => request(`/admin/incidents/${id}`, { method: 'DELETE' }),
-  },
+    getClients: () => fetch(\`\${API_BASE}/admin/clients\`).then(r => r.json()),
+    getPets: () => fetch(\`\${API_BASE}/admin/pets\`).then(r => r.json()),
+    getBookings: () => fetch(\`\${API_BASE}/admin/bookings\`).then(r => r.json()),
+  }
 };
 
 export default api;

@@ -1,17 +1,15 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
 
-export default function AdminDashboard() {
+export default function Login() {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar className="pastel-header">
-          <IonTitle>Dashboard</IonTitle>
+          <IonTitle>Login</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
-          <p>Convert your existing Dashboard component to use Ionic components.</p>
-        </div>
+      <IonContent className="ion-padding">
+        <p>Use your existing login form here with Ionic components.</p>
       </IonContent>
     </IonPage>
   );
