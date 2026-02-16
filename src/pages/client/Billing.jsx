@@ -19,6 +19,7 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { chevronDown, chevronUp } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBilling() {
   const [invoices, setInvoices] = useState([]);
@@ -99,7 +100,7 @@ export default function ClientBilling() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Billing</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -115,11 +116,16 @@ export default function ClientBilling() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Billing</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Breadcrumbs items={[
+          { label: 'Home', path: '/client/dashboard' },
+          { label: 'Client', path: '/client/dashboard' },
+          { label: 'Billing', path: '/client/billing' }
+        ]} />
         <div className="ion-padding">
           {error ? (
             <IonCard>

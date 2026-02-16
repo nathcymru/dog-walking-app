@@ -18,6 +18,7 @@ import {
   IonToast,
   IonItem,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBookings() {
   const [bookings, setBookings] = useState([]);
@@ -110,7 +111,7 @@ export default function ClientBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -126,11 +127,16 @@ export default function ClientBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Breadcrumbs items={[
+          { label: 'Home', path: '/client/dashboard' },
+          { label: 'Client', path: '/client/dashboard' },
+          { label: 'Bookings', path: '/client/bookings' }
+        ]} />
         <div className="ion-padding">
           <IonSegment value={selectedStatus} onIonChange={(e) => setSelectedStatus(e.detail.value)}>
             <IonSegmentButton value="all">
