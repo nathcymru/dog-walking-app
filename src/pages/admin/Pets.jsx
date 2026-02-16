@@ -865,7 +865,7 @@ export default function AdminPets() {
                     <IonInput
                       type="number"
                       value={formData.max_group_size}
-                      onIonInput={(e) => setFormData({ ...formData, max_group_size: parseInt(e.detail.value) || 4 })}
+                      onIonInput={(e) => setFormData({ ...formData, max_group_size: parseInt(e.detail.value, 10) || 4 })}
                     />
                   </IonItem>
 
@@ -1056,7 +1056,7 @@ export default function AdminPets() {
                     <IonInput
                       type="number"
                       value={formData.preferred_duration}
-                      onIonInput={(e) => setFormData({ ...formData, preferred_duration: parseInt(e.detail.value) || 30 })}
+                      onIonInput={(e) => setFormData({ ...formData, preferred_duration: parseInt(e.detail.value, 10) || 30 })}
                     />
                   </IonItem>
 

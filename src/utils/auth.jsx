@@ -20,6 +20,19 @@ const DEMO_USERS = {
   }
 };
 
+// Helper function to get user from localStorage
+const getUserFromLocalStorage = () => {
+  const storedUser = localStorage.getItem('pawwalkers_user');
+  if (storedUser) {
+    try {
+      return JSON.parse(storedUser);
+    } catch (e) {
+      localStorage.removeItem('pawwalkers_user');
+    }
+  }
+  return null;
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,35 +57,23 @@ export function AuthProvider({ children }) {
           setUser(data.user);
         } else {
           // Fallback to localStorage for demo mode
-          const storedUser = localStorage.getItem('pawwalkers_user');
-          if (storedUser) {
-            try {
-              setUser(JSON.parse(storedUser));
-            } catch (e) {
-              localStorage.removeItem('pawwalkers_user');
-            }
+          const localUser = getUserFromLocalStorage();
+          if (localUser) {
+            setUser(localUser);
           }
         }
       } else {
         // API not available, try localStorage for demo mode
-        const storedUser = localStorage.getItem('pawwalkers_user');
-        if (storedUser) {
-          try {
-            setUser(JSON.parse(storedUser));
-          } catch (e) {
-            localStorage.removeItem('pawwalkers_user');
-          }
+        const localUser = getUserFromLocalStorage();
+        if (localUser) {
+          setUser(localUser);
         }
       }
     } catch (error) {
       // API not available, try localStorage for demo mode
-      const storedUser = localStorage.getItem('pawwalkers_user');
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-        } catch (e) {
-          localStorage.removeItem('pawwalkers_user');
-        }
+      const localUser = getUserFromLocalStorage();
+      if (localUser) {
+        setUser(localUser);
       }
     } finally {
       setLoading(false);
