@@ -5,6 +5,7 @@ import './theme/variables.css';
 
 import HomePage from './pages/Home';
 import ContactPage from './pages/Contact';
+import ServicesPage from './pages/Services';
 import LoginPage from './pages/auth/Login';
 import ClientTabs from './pages/client/Tabs';
 import AdminTabs from './pages/admin/Tabs';
@@ -37,6 +38,7 @@ function AppRoutes() {
     <IonRouterOutlet>
       <Route exact path="/" component={HomePage} />
       <Route exact path="/contact" component={ContactPage} />
+      <Route exact path="/services" component={ServicesPage} />
       <Route exact path="/login" component={LoginPage} />
       <Route path="/client">
         <ProtectedRoute requiredRole="client"><ClientTabs /></ProtectedRoute>
