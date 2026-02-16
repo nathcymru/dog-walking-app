@@ -1,5 +1,5 @@
 import ContactPage from './pages/Contact';
 
-// ...other imports
+// ... other imports
 
-<Route exact path="/contact" component={ContactPage} />
+<Route path="/contact" component={ContactPage} />
