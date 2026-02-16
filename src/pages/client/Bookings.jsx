@@ -67,7 +67,6 @@ export default function ClientBookings() {
     } catch (error) {
       setError(error.message || 'Failed to fetch bookings');
       setBookings([]);
-      setToast({ show: true, message: 'Failed to fetch bookings', color: 'danger' });
     } finally {
       setLoading(false);
     }

@@ -103,6 +103,12 @@ export default function AdminBookings() {
         }
       });
       
+      if (response.status === 403 || response.status === 401) {
+        console.error('Authentication required for clients');
+        setClients([]);
+        return;
+      }
+      
       const data = await response.json();
       
       if (data.error) {
@@ -128,6 +134,12 @@ export default function AdminBookings() {
           'Content-Type': 'application/json'
         }
       });
+      
+      if (response.status === 403 || response.status === 401) {
+        console.error('Authentication required for pets');
+        setPets([]);
+        return;
+      }
       
       const data = await response.json();
       

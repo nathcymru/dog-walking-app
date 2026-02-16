@@ -63,7 +63,6 @@ export default function ClientBilling() {
     } catch (error) {
       setError(error.message || 'Failed to fetch invoices');
       setInvoices([]);
-      setToast({ show: true, message: 'Failed to fetch invoices', color: 'danger' });
     } finally {
       setLoading(false);
     }
