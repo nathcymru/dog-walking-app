@@ -1,5 +1,10 @@
 import ContactPage from './pages/Contact';
 
-// ... other imports
-
-<Route path="/contact" component={ContactPage} />
+function AppRoutes() {
+  return (
+    <Router>
+      <Route exact path="/" component={HomePage} />
+      <Route exact path="/contact" component={ContactPage} />
+    </Router>
+  );
+}
