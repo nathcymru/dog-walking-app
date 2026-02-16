@@ -17,7 +17,10 @@ import {
   IonSpinner,
   IonToast,
   IonItem,
+  IonButtons,
+  IonMenuButton,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBookings() {
   const [bookings, setBookings] = useState([]);
@@ -106,17 +109,28 @@ export default function ClientBookings() {
     return colors[status] || 'medium';
   };
 
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'My Bookings', path: '/client/bookings' }
+  ];
+
   if (loading) {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
-            <IonTitle>Bookings</IonTitle>
+          <IonToolbar color="primary">
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>My Bookings</IonTitle>
+          </IonToolbar>
+          <IonToolbar>
+            <Breadcrumbs items={breadcrumbItems} />
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-            <IonSpinner />
+            <IonSpinner color="primary" />
           </div>
         </IonContent>
       </IonPage>
@@ -126,8 +140,14 @@ export default function ClientBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
-          <IonTitle>Bookings</IonTitle>
+        <IonToolbar color="primary">
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <IonTitle>My Bookings</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
         </IonToolbar>
       </IonHeader>
       <IonContent>

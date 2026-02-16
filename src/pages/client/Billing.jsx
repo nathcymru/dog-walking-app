@@ -17,8 +17,11 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
+  IonButtons,
+  IonMenuButton,
 } from '@ionic/react';
 import { chevronDown, chevronUp } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBilling() {
   const [invoices, setInvoices] = useState([]);
@@ -95,17 +98,28 @@ export default function ClientBilling() {
     }).format(amount);
   };
 
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'Billing', path: '/client/billing' }
+  ];
+
   if (loading) {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
-            <IonTitle>Billing</IonTitle>
+          <IonToolbar color="primary">
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>Billing & Invoices</IonTitle>
+          </IonToolbar>
+          <IonToolbar>
+            <Breadcrumbs items={breadcrumbItems} />
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-            <IonSpinner />
+            <IonSpinner color="primary" />
           </div>
         </IonContent>
       </IonPage>
@@ -115,8 +129,14 @@ export default function ClientBilling() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
-          <IonTitle>Billing</IonTitle>
+        <IonToolbar color="primary">
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <IonTitle>Billing & Invoices</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
         </IonToolbar>
       </IonHeader>
       <IonContent>
