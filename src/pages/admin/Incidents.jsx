@@ -24,6 +24,7 @@ import {
   IonButtons,
   IonIcon,
   IonBadge,
+  IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
 
@@ -35,6 +36,7 @@ export default function AdminIncidents() {
   const [showModal, setShowModal] = useState(false);
   const [editingIncident, setEditingIncident] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
+  const [deleteAlert, setDeleteAlert] = useState({ show: false, incidentId: null });
 
   const [formData, setFormData] = useState({
     incident_datetime: '',
@@ -168,10 +170,6 @@ export default function AdminIncidents() {
   };
 
   const handleDelete = async (incidentId) => {
-    if (!window.confirm('Are you sure you want to delete this incident?')) {
-      return;
-    }
-
     try {
       const response = await fetch(`/api/admin/incidents/${incidentId}`, {
         method: 'DELETE',
@@ -270,7 +268,7 @@ export default function AdminIncidents() {
                         <IonIcon icon={create} slot="start" />
                         Edit
                       </IonButton>
-                      <IonButton size="small" fill="outline" color="danger" onClick={() => handleDelete(incident.id)}>
+                      <IonButton size="small" fill="outline" color="danger" onClick={() => setDeleteAlert({ show: true, incidentId: incident.id })}>
                         <IonIcon icon={trash} slot="start" />
                         Delete
                       </IonButton>
@@ -433,6 +431,28 @@ export default function AdminIncidents() {
           duration={3000}
           color={toast.color}
           onDidDismiss={() => setToast({ ...toast, show: false })}
+        />
+
+        <IonAlert
+          isOpen={deleteAlert.show}
+          header="Confirm Delete"
+          message="Are you sure you want to delete this incident?"
+          buttons={[
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => setDeleteAlert({ show: false, incidentId: null }),
+            },
+            {
+              text: 'Delete',
+              role: 'destructive',
+              handler: () => {
+                handleDelete(deleteAlert.incidentId);
+                setDeleteAlert({ show: false, incidentId: null });
+              },
+            },
+          ]}
+          onDidDismiss={() => setDeleteAlert({ show: false, incidentId: null })}
         />
       </IonContent>
     </IonPage>

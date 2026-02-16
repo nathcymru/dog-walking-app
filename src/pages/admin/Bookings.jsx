@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -23,6 +23,7 @@ import {
   IonButtons,
   IonIcon,
   IonBadge,
+  IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
 
@@ -34,6 +35,7 @@ export default function AdminBookings() {
   const [showModal, setShowModal] = useState(false);
   const [editingBooking, setEditingBooking] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
+  const [deleteAlert, setDeleteAlert] = useState({ show: false, bookingId: null });
 
   const [formData, setFormData] = useState({
     client_id: '',
@@ -170,10 +172,6 @@ export default function AdminBookings() {
   };
 
   const handleDelete = async (bookingId) => {
-    if (!window.confirm('Are you sure you want to delete this booking?')) {
-      return;
-    }
-
     try {
       const response = await fetch(`/api/admin/bookings/${bookingId}`, {
         method: 'DELETE',
@@ -189,6 +187,11 @@ export default function AdminBookings() {
       showToast('Error deleting booking', 'danger');
     }
   };
+
+  // Memoize filtered pets to avoid recalculating on every render
+  const filteredPets = useMemo(() => {
+    return pets.filter(pet => !formData.client_id || pet.client_id === formData.client_id);
+  }, [pets, formData.client_id]);
 
   const getStatusColor = (status) => {
     const colors = {
@@ -266,7 +269,7 @@ export default function AdminBookings() {
                         <IonIcon icon={create} slot="start" />
                         Edit
                       </IonButton>
-                      <IonButton size="small" fill="outline" color="danger" onClick={() => handleDelete(booking.id)}>
+                      <IonButton size="small" fill="outline" color="danger" onClick={() => setDeleteAlert({ show: true, bookingId: booking.id })}>
                         <IonIcon icon={trash} slot="start" />
                         Delete
                       </IonButton>
@@ -297,7 +300,6 @@ export default function AdminBookings() {
                 <IonSelect
                   value={formData.client_id}
                   onIonChange={(e) => setFormData({ ...formData, client_id: e.detail.value })}
-                  disabled={editingBooking !== null}
                 >
                   <IonSelectOption value="">Select Client</IonSelectOption>
                   {clients.map((client) => (
@@ -315,7 +317,7 @@ export default function AdminBookings() {
                   value={formData.pet_ids}
                   onIonChange={(e) => setFormData({ ...formData, pet_ids: e.detail.value })}
                 >
-                  {pets.filter(pet => !formData.client_id || pet.client_id === formData.client_id).map((pet) => (
+                  {filteredPets.map((pet) => (
                     <IonSelectOption key={pet.id} value={pet.id}>
                       {pet.name} ({pet.client_name})
                     </IonSelectOption>
@@ -443,6 +445,28 @@ export default function AdminBookings() {
           duration={3000}
           color={toast.color}
           onDidDismiss={() => setToast({ ...toast, show: false })}
+        />
+
+        <IonAlert
+          isOpen={deleteAlert.show}
+          header="Confirm Delete"
+          message="Are you sure you want to delete this booking?"
+          buttons={[
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => setDeleteAlert({ show: false, bookingId: null }),
+            },
+            {
+              text: 'Delete',
+              role: 'destructive',
+              handler: () => {
+                handleDelete(deleteAlert.bookingId);
+                setDeleteAlert({ show: false, bookingId: null });
+              },
+            },
+          ]}
+          onDidDismiss={() => setDeleteAlert({ show: false, bookingId: null })}
         />
       </IonContent>
     </IonPage>

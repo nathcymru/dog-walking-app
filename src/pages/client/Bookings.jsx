@@ -52,15 +52,17 @@ export default function ClientBookings() {
     if (selectedStatus === 'all') {
       setFilteredBookings(bookings);
     } else if (selectedStatus === 'upcoming') {
+      // Show approved bookings with future start times
       setFilteredBookings(
         bookings.filter(
-          (b) => new Date(b.datetime_start) > now && b.status !== 'cancelled' && b.status !== 'completed'
+          (b) => new Date(b.datetime_start) > now && b.status === 'approved'
         )
       );
     } else if (selectedStatus === 'past') {
+      // Show completed bookings or those with past start times (excluding cancelled)
       setFilteredBookings(
         bookings.filter(
-          (b) => new Date(b.datetime_start) <= now || b.status === 'completed'
+          (b) => b.status === 'completed' || (new Date(b.datetime_start) <= now && b.status !== 'cancelled')
         )
       );
     } else {
