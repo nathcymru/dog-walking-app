@@ -1,5 +1,4 @@
 import { IonBreadcrumbs, IonBreadcrumb, IonIcon } from '@ionic/react';
-import { homeOutline } from 'ionicons/icons';
 
 export default function IonBreadcrumbsNav({ items }) {
   if (!items || items.length === 0) return null;

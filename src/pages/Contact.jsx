@@ -20,9 +20,8 @@ import {
   IonCol,
   IonIcon 
 } from '@ionic/react';
-import { person, mail, call } from 'ionicons/icons';
+import { person, mail, call, homeOutline } from 'ionicons/icons';
 import IonBreadcrumbsNav from '../components/IonBreadcrumbsNav';
-import { homeOutline } from 'ionicons/icons';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
