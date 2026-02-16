@@ -23,6 +23,7 @@ import { chevronDown, chevronUp } from 'ionicons/icons';
 export default function ClientBilling() {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [expandedInvoices, setExpandedInvoices] = useState(new Set());
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
 
@@ -32,10 +33,36 @@ export default function ClientBilling() {
 
   const fetchInvoices = async () => {
     try {
-      const response = await fetch('/api/client/invoices');
+      const response = await fetch('/api/client/invoices', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        setError('Authentication required. Please log in.');
+        setInvoices([]);
+        setLoading(false);
+        return;
+      }
+      
       const data = await response.json();
-      setInvoices(data);
+      
+      // Check if response is an error object
+      if (data.error) {
+        setError(data.error);
+        setInvoices([]);
+      } else if (Array.isArray(data)) {
+        setInvoices(data);
+        setError(null);
+      } else {
+        setError('Invalid response format');
+        setInvoices([]);
+      }
     } catch (error) {
+      setError(error.message || 'Failed to fetch invoices');
+      setInvoices([]);
       setToast({ show: true, message: 'Failed to fetch invoices', color: 'danger' });
     } finally {
       setLoading(false);
@@ -95,7 +122,13 @@ export default function ClientBilling() {
       </IonHeader>
       <IonContent>
         <div className="ion-padding">
-          {invoices.length === 0 ? (
+          {error ? (
+            <IonCard>
+              <IonCardContent>
+                <p style={{ color: 'var(--ion-color-danger)' }}>{error}</p>
+              </IonCardContent>
+            </IonCard>
+          ) : invoices.length === 0 ? (
             <IonCard>
               <IonCardContent>
                 <p>No invoices found.</p>
