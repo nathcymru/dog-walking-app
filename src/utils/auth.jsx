@@ -2,20 +2,20 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
-// Demo users database
+// Demo users database (fallback for when API is not available)
 const DEMO_USERS = {
   'admin@pawwalkers.com': {
     email: 'admin@pawwalkers.com',
     password: 'admin123',
     role: 'admin',
-    name: 'Admin User',
+    full_name: 'Admin User',
     id: 1
   },
   'client@example.com': {
     email: 'client@example.com',
     password: 'client123',
     role: 'client',
-    name: 'John Smith',
+    full_name: 'John Smith',
     id: 2
   }
 };
@@ -25,39 +25,118 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored session on mount
-    const storedUser = localStorage.getItem('pawwalkers_user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        localStorage.removeItem('pawwalkers_user');
-      }
-    }
-    setLoading(false);
+    // Check for active session on mount
+    checkSession();
   }, []);
 
-  const login = async (email, password) => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    const demoUser = DEMO_USERS[email];
-    
-    if (!demoUser || demoUser.password !== password) {
-      throw new Error('Invalid email or password');
+  const checkSession = async () => {
+    try {
+      const response = await fetch('/api/auth/session', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.user) {
+          setUser(data.user);
+        } else {
+          // Fallback to localStorage for demo mode
+          const storedUser = localStorage.getItem('pawwalkers_user');
+          if (storedUser) {
+            try {
+              setUser(JSON.parse(storedUser));
+            } catch (e) {
+              localStorage.removeItem('pawwalkers_user');
+            }
+          }
+        }
+      } else {
+        // API not available, try localStorage for demo mode
+        const storedUser = localStorage.getItem('pawwalkers_user');
+        if (storedUser) {
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (e) {
+            localStorage.removeItem('pawwalkers_user');
+          }
+        }
+      }
+    } catch (error) {
+      // API not available, try localStorage for demo mode
+      const storedUser = localStorage.getItem('pawwalkers_user');
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          localStorage.removeItem('pawwalkers_user');
+        }
+      }
+    } finally {
+      setLoading(false);
     }
-
-    // Remove password from user object
-    const { password: _, ...userWithoutPassword } = demoUser;
-    
-    // Store user in state and localStorage
-    setUser(userWithoutPassword);
-    localStorage.setItem('pawwalkers_user', JSON.stringify(userWithoutPassword));
-    
-    return userWithoutPassword;
   };
 
-  const logout = () => {
+  const login = async (email, password) => {
+    try {
+      // Try API login first
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        // Also store in localStorage as backup
+        localStorage.setItem('pawwalkers_user', JSON.stringify(data.user));
+        return data.user;
+      } else {
+        const error = await response.json();
+        throw new Error(error.error || 'Invalid email or password');
+      }
+    } catch (error) {
+      // Fallback to demo mode if API is not available
+      console.log('API login failed, using demo mode:', error.message);
+      
+      const demoUser = DEMO_USERS[email];
+      
+      if (!demoUser || demoUser.password !== password) {
+        throw new Error('Invalid email or password');
+      }
+
+      // Remove password from user object
+      const { password: _, ...userWithoutPassword } = demoUser;
+      
+      // Store user in state and localStorage
+      setUser(userWithoutPassword);
+      localStorage.setItem('pawwalkers_user', JSON.stringify(userWithoutPassword));
+      
+      return userWithoutPassword;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      // Try API logout first
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (error) {
+      console.log('API logout failed:', error.message);
+    }
+    
+    // Always clear local state
     setUser(null);
     localStorage.removeItem('pawwalkers_user');
   };

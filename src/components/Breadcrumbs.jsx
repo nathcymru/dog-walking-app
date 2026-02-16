@@ -1,20 +1,19 @@
-import { Link } from 'react-router-dom';
+import { IonBreadcrumbs, IonBreadcrumb, IonIcon } from '@ionic/react';
+import { homeOutline } from 'ionicons/icons';
 
 export default function Breadcrumbs({ items }) {
   return (
-    <nav className="breadcrumbs" aria-label="Breadcrumb">
+    <IonBreadcrumbs style={{ padding: '0.75rem 1rem' }}>
       {items.map((item, index) => (
-        <div key={index} className="breadcrumb-item">
-          {index > 0 && <span className="breadcrumb-separator">›</span>}
-          {index === items.length - 1 ? (
-            <span className="breadcrumb-current">{item.label}</span>
-          ) : (
-            <Link to={item.path} className="breadcrumb-link">
-              {item.label}
-            </Link>
-          )}
-        </div>
+        <IonBreadcrumb 
+          key={index} 
+          href={item.path}
+          active={index === items.length - 1}
+        >
+          {index === 0 && <IonIcon icon={homeOutline} slot="start" />}
+          {item.label}
+        </IonBreadcrumb>
       ))}
-    </nav>
+    </IonBreadcrumbs>
   );
 }
