@@ -23,6 +23,7 @@ export default function ClientBookings() {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
 
@@ -36,11 +37,36 @@ export default function ClientBookings() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('/api/client/bookings');
+      const response = await fetch('/api/client/bookings', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        setError('Authentication required. Please log in.');
+        setBookings([]);
+        setLoading(false);
+        return;
+      }
+      
       const data = await response.json();
-      setBookings(data);
+      
+      // Check if response is an error object
+      if (data.error) {
+        setError(data.error);
+        setBookings([]);
+      } else if (Array.isArray(data)) {
+        setBookings(data);
+        setError(null);
+      } else {
+        setError('Invalid response format');
+        setBookings([]);
+      }
     } catch (error) {
-      setToast({ show: true, message: 'Failed to fetch bookings', color: 'danger' });
+      setError(error.message || 'Failed to fetch bookings');
+      setBookings([]);
     } finally {
       setLoading(false);
     }
@@ -124,7 +150,13 @@ export default function ClientBookings() {
             </IonSegmentButton>
           </IonSegment>
 
-          {filteredBookings.length === 0 ? (
+          {error ? (
+            <IonCard>
+              <IonCardContent>
+                <p style={{ color: 'var(--ion-color-danger)' }}>{error}</p>
+              </IonCardContent>
+            </IonCard>
+          ) : filteredBookings.length === 0 ? (
             <IonCard>
               <IonCardContent>
                 <p>No bookings found for the selected filter.</p>

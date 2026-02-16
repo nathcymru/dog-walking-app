@@ -60,11 +60,35 @@ export default function AdminIncidents() {
 
   const fetchIncidents = async () => {
     try {
-      const response = await fetch('/api/admin/incidents');
+      const response = await fetch('/api/admin/incidents', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        showToast('Authentication required. Please log in.', 'danger');
+        setIncidents([]);
+        setLoading(false);
+        return;
+      }
+      
       const data = await response.json();
-      setIncidents(data);
+      
+      // Check if response is an error object
+      if (data.error) {
+        showToast(data.error, 'danger');
+        setIncidents([]);
+      } else if (Array.isArray(data)) {
+        setIncidents(data);
+      } else {
+        showToast('Invalid response format', 'danger');
+        setIncidents([]);
+      }
     } catch (error) {
       showToast('Failed to fetch incidents', 'danger');
+      setIncidents([]);
     } finally {
       setLoading(false);
     }
@@ -72,21 +96,65 @@ export default function AdminIncidents() {
 
   const fetchPets = async () => {
     try {
-      const response = await fetch('/api/admin/pets');
+      const response = await fetch('/api/admin/pets', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        console.error('Authentication required for pets');
+        setPets([]);
+        return;
+      }
+      
       const data = await response.json();
-      setPets(data);
+      
+      if (data.error) {
+        console.error('Failed to fetch pets', data.error);
+        setPets([]);
+      } else if (Array.isArray(data)) {
+        setPets(data);
+      } else {
+        console.error('Invalid response format for pets');
+        setPets([]);
+      }
     } catch (error) {
       console.error('Failed to fetch pets', error);
+      setPets([]);
     }
   };
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('/api/admin/bookings');
+      const response = await fetch('/api/admin/bookings', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        console.error('Authentication required for bookings');
+        setBookings([]);
+        return;
+      }
+      
       const data = await response.json();
-      setBookings(data);
+      
+      if (data.error) {
+        console.error('Failed to fetch bookings', data.error);
+        setBookings([]);
+      } else if (Array.isArray(data)) {
+        setBookings(data);
+      } else {
+        console.error('Invalid response format for bookings');
+        setBookings([]);
+      }
     } catch (error) {
       console.error('Failed to fetch bookings', error);
+      setBookings([]);
     }
   };
 
