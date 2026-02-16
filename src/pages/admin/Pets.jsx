@@ -1,18 +1,27 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
+import React from 'react';
+import { IonPage, IonContent, IonList, IonItem, IonButton } from '@ionic/react';
 
-export default function AdminPets() {
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar className="pastel-header">
-          <IonTitle>Pets</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
-          <p>Convert your existing Pets component to use Ionic components.</p>
-        </div>
-      </IonContent>
-    </IonPage>
-  );
-}
+const Pets = () => {
+    return (
+        <IonPage>
+            <IonContent>
+                <IonList>
+                    <IonItem>
+                        <h2>Pet 1</h2>
+                        <IonButton fill="outline">Edit</IonButton>
+                    </IonItem>
+                    <IonItem>
+                        <h2>Pet 2</h2>
+                        <IonButton fill="outline">Edit</IonButton>
+                    </IonItem>
+                    <IonItem>
+                        <h2>Pet 3</h2>
+                        <IonButton fill="outline">Edit</IonButton>
+                    </IonItem>
+                </IonList>
+            </IonContent>
+        </IonPage>
+    );
+};
+
+export default Pets;
