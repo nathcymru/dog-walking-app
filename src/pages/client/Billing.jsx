@@ -19,6 +19,7 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { chevronDown, chevronUp } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBilling() {
   const [invoices, setInvoices] = useState([]);
@@ -26,6 +27,11 @@ export default function ClientBilling() {
   const [error, setError] = useState(null);
   const [expandedInvoices, setExpandedInvoices] = useState(new Set());
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
+
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'Billing', path: '/client/billing' }
+  ];
 
   useEffect(() => {
     fetchInvoices();
@@ -99,11 +105,12 @@ export default function ClientBilling() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Billing</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -115,11 +122,12 @@ export default function ClientBilling() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Billing</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {error ? (
             <IonCard>

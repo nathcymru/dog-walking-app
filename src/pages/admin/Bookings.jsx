@@ -26,6 +26,7 @@ import {
   IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -36,6 +37,11 @@ export default function AdminBookings() {
   const [editingBooking, setEditingBooking] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, bookingId: null });
+
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Bookings', path: '/admin/bookings' }
+  ];
 
   const [formData, setFormData] = useState({
     client_id: '',
@@ -277,11 +283,12 @@ export default function AdminBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -293,7 +300,7 @@ export default function AdminBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -304,6 +311,7 @@ export default function AdminBookings() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {bookings.length === 0 ? (
             <IonCard>

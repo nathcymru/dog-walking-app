@@ -27,6 +27,7 @@ import {
   IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminIncidents() {
   const [incidents, setIncidents] = useState([]);
@@ -37,6 +38,11 @@ export default function AdminIncidents() {
   const [editingIncident, setEditingIncident] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, incidentId: null });
+
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Incidents', path: '/admin/incidents' }
+  ];
 
   const [formData, setFormData] = useState({
     incident_datetime: '',
@@ -269,11 +275,12 @@ export default function AdminIncidents() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Incidents</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -285,7 +292,7 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -296,6 +303,7 @@ export default function AdminIncidents() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {incidents.length === 0 ? (
             <IonCard>

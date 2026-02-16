@@ -1,5 +1,19 @@
 import React from 'react';
-import { IonPage, IonHeader, IonContent, IonList, IonItem, IonButton, IonTitle, IonToolbar } from '@ionic/react';
+import { 
+  IonPage, 
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent, 
+  IonList, 
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonButtons,
+  IonIcon
+} from '@ionic/react';
+import { add } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Pets = () => {
     const petsData = [
@@ -8,22 +22,38 @@ const Pets = () => {
         // Add more pet data as needed
     ];
 
+    const breadcrumbItems = [
+        { label: 'Client', path: '/client' },
+        { label: 'My Pets', path: '/client/pets' }
+    ];
+
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar>
+                <IonToolbar color="primary">
                     <IonTitle>My Pets</IonTitle>
+                    <IonButtons slot="end">
+                        <IonButton>
+                            <IonIcon icon={add} slot="start" />
+                            Add Pet
+                        </IonButton>
+                    </IonButtons>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <IonList>
-                    {petsData.map(pet => (
-                        <IonItem key={pet.id}>
-                            {pet.name} - {pet.breed}
-                        </IonItem>
-                    ))}
-                </IonList>
-                <IonButton expand="full">Add Pet</IonButton>
+                <Breadcrumbs items={breadcrumbItems} />
+                <div className="ion-padding">
+                    <IonList>
+                        {petsData.map(pet => (
+                            <IonItem key={pet.id}>
+                                <IonLabel>
+                                    <h2>{pet.name}</h2>
+                                    <p>{pet.breed}</p>
+                                </IonLabel>
+                            </IonItem>
+                        ))}
+                    </IonList>
+                </div>
             </IonContent>
         </IonPage>
     );
