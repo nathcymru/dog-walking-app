@@ -18,9 +18,14 @@ import {
   IonLabel,
   IonIcon,
 } from '@ionic/react';
-import { chevronDown, chevronUp } from 'ionicons/icons';
+import { chevronDown, chevronUp, homeOutline, receiptOutline } from 'ionicons/icons';
+import IonBreadcrumbsNav from '../../components/IonBreadcrumbsNav';
 
 export default function ClientBilling() {
+  const breadcrumbs = [
+    { label: 'Home', path: '/client', icon: homeOutline },
+    { label: 'Billing', path: '/client/billing', icon: receiptOutline }
+  ];
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -99,12 +104,15 @@ export default function ClientBilling() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Billing</IonTitle>
           </IonToolbar>
+          <IonToolbar>
+            <IonBreadcrumbsNav items={breadcrumbs} />
+          </IonToolbar>
         </IonHeader>
-        <IonContent>
-          <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+        <IonContent className="ion-padding">
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
         </IonContent>
@@ -115,12 +123,14 @@ export default function ClientBilling() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Billing</IonTitle>
         </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbsNav items={breadcrumbs} />
+        </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
           {error ? (
             <IonCard>
               <IonCardContent>
@@ -207,7 +217,6 @@ export default function ClientBilling() {
               ))}
             </IonList>
           )}
-        </div>
 
         <IonToast
           isOpen={toast.show}

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonContent,
   IonList,
   IonItem,
@@ -8,12 +11,24 @@ import {
   IonSearchbar,
   IonInput,
   IonLabel,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardContent,
 } from '@ionic/react';
+import IonBreadcrumbsNav from '../../components/IonBreadcrumbsNav';
+import { homeOutline, peopleOutline } from 'ionicons/icons';
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [newClient, setNewClient] = useState('');
+
+  const breadcrumbs = [
+    { label: 'Home', path: '/admin', icon: homeOutline },
+    { label: 'Clients', path: '/admin/clients', icon: peopleOutline }
+  ];
 
   useEffect(() => {
     // Initially fetch clients from a data source
@@ -45,18 +60,38 @@ const Clients = () => {
 
   return (
     <IonPage>
-      <IonContent>
-        <IonSearchbar value={searchText} onIonInput={handleSearch} placeholder='Search Clients' />
-        <IonInput value={newClient} onIonChange={e => setNewClient(e.target.value)} placeholder='Add Client' />
-        <IonButton onClick={addClient}>Add Client</IonButton>
-        <IonList>
-          {filteredClients.map(client => (
-            <IonItem key={client.id}>
-              <IonLabel>{client.name}</IonLabel>
-              <IonButton fill='outline' onClick={() => removeClient(client.id)}>Remove</IonButton>
-            </IonItem>
-          ))}
-        </IonList>
+      <IonHeader>
+        <IonToolbar color="primary">
+          <IonTitle>Clients</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbsNav items={breadcrumbs} />
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" sizeMd="8" offsetMd="2">
+              <IonCard>
+                <IonCardContent>
+                  <IonSearchbar value={searchText} onIonInput={handleSearch} placeholder='Search Clients' />
+                  <IonInput value={newClient} onIonChange={e => setNewClient(e.target.value)} placeholder='Add Client' />
+                  <IonButton onClick={addClient} expand="block" color="primary" style={{ marginTop: '1rem' }}>
+                    Add Client
+                  </IonButton>
+                </IonCardContent>
+              </IonCard>
+              <IonList>
+                {filteredClients.map(client => (
+                  <IonItem key={client.id}>
+                    <IonLabel>{client.name}</IonLabel>
+                    <IonButton fill='outline' onClick={() => removeClient(client.id)}>Remove</IonButton>
+                  </IonItem>
+                ))}
+              </IonList>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

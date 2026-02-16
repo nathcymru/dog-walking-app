@@ -25,9 +25,14 @@ import {
   IonBadge,
   IonAlert,
 } from '@ionic/react';
-import { add, create, trash, close } from 'ionicons/icons';
+import { add, create, trash, close, homeOutline, calendarOutline } from 'ionicons/icons';
+import IonBreadcrumbsNav from '../../components/IonBreadcrumbsNav';
 
 export default function AdminBookings() {
+  const breadcrumbs = [
+    { label: 'Home', path: '/admin', icon: homeOutline },
+    { label: 'Bookings', path: '/admin/bookings', icon: calendarOutline }
+  ];
   const [bookings, setBookings] = useState([]);
   const [clients, setClients] = useState([]);
   const [pets, setPets] = useState([]);
@@ -293,7 +298,7 @@ export default function AdminBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -302,9 +307,11 @@ export default function AdminBookings() {
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbsNav items={breadcrumbs} />
+        </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
           {bookings.length === 0 ? (
             <IonCard>
               <IonCardContent>
@@ -349,7 +356,6 @@ export default function AdminBookings() {
               ))}
             </IonList>
           )}
-        </div>
 
         {/* Create/Edit Modal */}
         <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>

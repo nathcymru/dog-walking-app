@@ -1,6 +1,28 @@
 import React, { useState } from 'react';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonInput, IonItem, IonLabel, IonTextarea, IonToast } from '@ionic/react';
+import { 
+  IonPage, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonButtons, 
+  IonBackButton, 
+  IonContent, 
+  IonInput, 
+  IonItem, 
+  IonLabel, 
+  IonTextarea, 
+  IonToast, 
+  IonButton, 
+  IonCard, 
+  IonCardContent, 
+  IonGrid, 
+  IonRow, 
+  IonCol,
+  IonIcon 
+} from '@ionic/react';
 import { person, mail, call } from 'ionicons/icons';
+import IonBreadcrumbsNav from '../components/IonBreadcrumbsNav';
+import { homeOutline } from 'ionicons/icons';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
@@ -17,55 +39,81 @@ const Contact = () => {
     setShowToast(true);
   };
 
+  const breadcrumbs = [
+    { label: 'Home', path: '/', icon: homeOutline },
+    { label: 'Contact Us', path: '/contact' }
+  ];
+
   return (
-    <IonContent>
+    <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonButtons slot="start">
-            <IonButton onClick={() => { /* code to go back */ }}>Back</IonButton>
+            <IonBackButton defaultHref="/" />
           </IonButtons>
           <IonTitle>Contact Us</IonTitle>
         </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbsNav items={breadcrumbs} />
+        </IonToolbar>
       </IonHeader>
+      <IonContent className="ion-padding">
 
-      <form onSubmit={handleSubmit}>
-        <IonItem>
-          <IonLabel position="floating">
-            <IonIcon icon={person} /> Name
-          </IonLabel>
-          <IonInput name="name" onIonChange={handleChange} required></IonInput>
-        </IonItem>
-        <IonItem>
-          <IonLabel position="floating">
-            <IonIcon icon={mail} /> Email
-          </IonLabel>
-          <IonInput type="email" name="email" onIonChange={handleChange} required></IonInput>
-        </IonItem>
-        <IonItem>
-          <IonLabel position="floating">
-            <IonIcon icon={call} /> Phone
-          </IonLabel>
-          <IonInput type="tel" name="phone" onIonChange={handleChange} required></IonInput>
-        </IonItem>
-        <IonItem>
-          <IonLabel position="floating">Message</IonLabel>
-          <IonTextarea name="message" onIonChange={handleChange} required></IonTextarea>
-        </IonItem>
-        <IonButton expand="full" type="submit">Submit</IonButton>
-      </form>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" sizeMd="8" offsetMd="2" sizeLg="6" offsetLg="3">
+              <IonCard>
+                <IonCardContent>
+                  <form onSubmit={handleSubmit}>
+                    <IonItem>
+                      <IonLabel position="floating">
+                        <IonIcon icon={person} /> Name
+                      </IonLabel>
+                      <IonInput name="name" onIonChange={handleChange} required></IonInput>
+                    </IonItem>
+                    <IonItem>
+                      <IonLabel position="floating">
+                        <IonIcon icon={mail} /> Email
+                      </IonLabel>
+                      <IonInput type="email" name="email" onIonChange={handleChange} required></IonInput>
+                    </IonItem>
+                    <IonItem>
+                      <IonLabel position="floating">
+                        <IonIcon icon={call} /> Phone
+                      </IonLabel>
+                      <IonInput type="tel" name="phone" onIonChange={handleChange} required></IonInput>
+                    </IonItem>
+                    <IonItem>
+                      <IonLabel position="floating">Message</IonLabel>
+                      <IonTextarea name="message" onIonChange={handleChange} required></IonTextarea>
+                    </IonItem>
+                    <IonButton expand="block" type="submit" color="primary" style={{ marginTop: '1rem' }}>
+                      Submit
+                    </IonButton>
+                  </form>
+                </IonCardContent>
+              </IonCard>
 
-      <IonToast
-        isOpen={showToast}
-        onClose={() => setShowToast(false)}
-        message="Your message has been sent!"
-        duration={2000}
-      />
+              <IonCard style={{ marginTop: '2rem' }}>
+                <IonCardContent>
+                  <h3>Contact Information</h3>
+                  <p><strong>Email:</strong> info@pawwalkers.co.uk</p>
+                  <p><strong>Phone:</strong> 07123 456789</p>
+                  <p><strong>Hours:</strong> Monday-Sunday 7am-7pm</p>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
 
-      <div>Contact Information:</div>
-      <div>Email: info@pawwalkers.co.uk</div>
-      <div>Phone: 07123 456789</div>
-      <div>Hours: Monday-Sunday 7am-7pm</div>
-    </IonContent>
+        <IonToast
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(false)}
+          message="Your message has been sent!"
+          duration={2000}
+        />
+      </IonContent>
+    </IonPage>
   );
 };
 

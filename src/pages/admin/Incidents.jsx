@@ -26,9 +26,14 @@ import {
   IonBadge,
   IonAlert,
 } from '@ionic/react';
-import { add, create, trash, close } from 'ionicons/icons';
+import { add, create, trash, close, homeOutline, warningOutline } from 'ionicons/icons';
+import IonBreadcrumbsNav from '../../components/IonBreadcrumbsNav';
 
 export default function AdminIncidents() {
+  const breadcrumbs = [
+    { label: 'Home', path: '/admin', icon: homeOutline },
+    { label: 'Incidents', path: '/admin/incidents', icon: warningOutline }
+  ];
   const [incidents, setIncidents] = useState([]);
   const [pets, setPets] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -285,7 +290,7 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -294,9 +299,11 @@ export default function AdminIncidents() {
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        <IonToolbar>
+          <IonBreadcrumbsNav items={breadcrumbs} />
+        </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
           {incidents.length === 0 ? (
             <IonCard>
               <IonCardContent>
@@ -346,7 +353,6 @@ export default function AdminIncidents() {
               ))}
             </IonList>
           )}
-        </div>
 
         {/* Create/Edit Modal */}
         <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
