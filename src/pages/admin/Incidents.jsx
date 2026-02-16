@@ -25,8 +25,13 @@ import {
   IonIcon,
   IonBadge,
   IonAlert,
+  IonMenuButton,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminIncidents() {
   const [incidents, setIncidents] = useState([]);
@@ -265,17 +270,28 @@ export default function AdminIncidents() {
     return colors[type] || 'medium';
   };
 
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Incidents', path: '/admin/incidents' }
+  ];
+
   if (loading) {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
             <IonTitle>Incidents</IonTitle>
+          </IonToolbar>
+          <IonToolbar>
+            <Breadcrumbs items={breadcrumbItems} />
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-            <IonSpinner />
+            <IonSpinner color="primary" />
           </div>
         </IonContent>
       </IonPage>
@@ -285,73 +301,129 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
           <IonTitle>Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
               <IonIcon icon={add} slot="start" />
-              Log Incident
+              Log
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
+        </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+      <IonContent className="ion-padding">
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12">
+              <IonButton expand="block" color="danger" onClick={openCreateModal}>
+                <IonIcon icon={add} slot="start" />
+                Log New Incident
+              </IonButton>
+            </IonCol>
+          </IonRow>
+
           {incidents.length === 0 ? (
-            <IonCard>
-              <IonCardContent>
-                <p>No incidents found.</p>
-              </IonCardContent>
-            </IonCard>
-          ) : (
-            <IonList>
-              {incidents.map((incident) => (
-                <IonCard key={incident.id}>
-                  <IonCardHeader>
-                    <IonCardTitle>
-                      {incident.pet_name} - {incident.client_name}
-                      <IonBadge color={getIncidentTypeColor(incident.incident_type)} style={{ marginLeft: '10px' }}>
-                        {incident.incident_type}
-                      </IonBadge>
-                    </IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <IonItem lines="none">
-                      <IonLabel>
-                        <p><strong>Date:</strong> {new Date(incident.incident_datetime).toLocaleString()}</p>
-                        <p><strong>Location:</strong> {incident.location || 'N/A'}</p>
-                        <p><strong>Summary:</strong> {incident.summary}</p>
-                        <p><strong>Actions Taken:</strong> {incident.actions_taken}</p>
-                        <p><strong>Owner Informed:</strong> {incident.owner_informed ? 'Yes' : 'No'}</p>
-                        {incident.follow_up_required && (
-                          <p><strong>Follow-up Required:</strong> Yes</p>
-                        )}
-                        {incident.follow_up_notes && (
-                          <p><strong>Follow-up Notes:</strong> {incident.follow_up_notes}</p>
-                        )}
-                      </IonLabel>
-                    </IonItem>
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                      <IonButton size="small" fill="outline" onClick={() => openEditModal(incident)}>
-                        <IonIcon icon={create} slot="start" />
-                        Edit
-                      </IonButton>
-                      <IonButton size="small" fill="outline" color="danger" onClick={() => setDeleteAlert({ show: true, incidentId: incident.id })}>
-                        <IonIcon icon={trash} slot="start" />
-                        Delete
-                      </IonButton>
-                    </div>
+            <IonRow>
+              <IonCol size="12">
+                <IonCard>
+                  <IonCardContent className="ion-text-center">
+                    <p>No incidents found.</p>
                   </IonCardContent>
                 </IonCard>
+              </IonCol>
+            </IonRow>
+          ) : (
+            <IonRow>
+              {incidents.map((incident) => (
+                <IonCol size="12" sizeMd="6" sizeLg="4" key={incident.id}>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>
+                        {incident.pet_name} - {incident.client_name}
+                        <IonBadge color={getIncidentTypeColor(incident.incident_type)} style={{ marginLeft: '10px' }}>
+                          {incident.incident_type}
+                        </IonBadge>
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <IonList lines="none">
+                        <IonItem>
+                          <IonLabel>
+                            <h3>Date</h3>
+                            <p>{new Date(incident.incident_datetime).toLocaleString()}</p>
+                          </IonLabel>
+                        </IonItem>
+                        <IonItem>
+                          <IonLabel>
+                            <h3>Location</h3>
+                            <p>{incident.location || 'N/A'}</p>
+                          </IonLabel>
+                        </IonItem>
+                        <IonItem>
+                          <IonLabel>
+                            <h3>Summary</h3>
+                            <p>{incident.summary}</p>
+                          </IonLabel>
+                        </IonItem>
+                        <IonItem>
+                          <IonLabel>
+                            <h3>Actions Taken</h3>
+                            <p>{incident.actions_taken}</p>
+                          </IonLabel>
+                        </IonItem>
+                        <IonItem>
+                          <IonLabel>
+                            <h3>Owner Informed</h3>
+                            <IonBadge color={incident.owner_informed ? 'success' : 'warning'}>
+                              {incident.owner_informed ? 'Yes' : 'No'}
+                            </IonBadge>
+                          </IonLabel>
+                        </IonItem>
+                        {incident.follow_up_required && (
+                          <IonItem>
+                            <IonLabel>
+                              <h3>Follow-up Required</h3>
+                              <IonBadge color="warning">Yes</IonBadge>
+                            </IonLabel>
+                          </IonItem>
+                        )}
+                        {incident.follow_up_notes && (
+                          <IonItem>
+                            <IonLabel>
+                              <h3>Follow-up Notes</h3>
+                              <p>{incident.follow_up_notes}</p>
+                            </IonLabel>
+                          </IonItem>
+                        )}
+                      </IonList>
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <IonButton expand="block" fill="outline" color="primary" onClick={() => openEditModal(incident)}>
+                          <IonIcon icon={create} slot="start" />
+                          Edit
+                        </IonButton>
+                        <IonButton expand="block" fill="outline" color="danger" onClick={() => setDeleteAlert({ show: true, incidentId: incident.id })}>
+                          <IonIcon icon={trash} slot="start" />
+                          Delete
+                        </IonButton>
+                      </div>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
               ))}
-            </IonList>
+            </IonRow>
           )}
-        </div>
+        </IonGrid>
 
         {/* Create/Edit Modal */}
         <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
           <IonHeader>
-            <IonToolbar>
+            <IonToolbar color="primary">
               <IonTitle>{editingIncident ? 'Edit Incident' : 'Log New Incident'}</IonTitle>
               <IonButtons slot="end">
                 <IonButton onClick={() => setShowModal(false)}>
@@ -482,7 +554,7 @@ export default function AdminIncidents() {
               </IonItem>
 
               <div className="ion-padding-top">
-                <IonButton expand="block" type="submit">
+                <IonButton expand="block" type="submit" color="danger">
                   {editingIncident ? 'Update Incident' : 'Log Incident'}
                 </IonButton>
                 <IonButton expand="block" fill="outline" onClick={() => setShowModal(false)}>
