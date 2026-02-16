@@ -265,11 +265,293 @@ export default function AdminIncidents() {
     return colors[type] || 'medium';
   };
 
+import React, { useState, useEffect } from 'react';
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonButton,
+  IonModal,
+  IonInput,
+  IonTextarea,
+  IonSelect,
+  IonSelectOption,
+  IonItem,
+  IonLabel,
+  IonCheckbox,
+  IonSpinner,
+  IonToast,
+  IonButtons,
+  IonIcon,
+  IonBadge,
+  IonAlert,
+} from '@ionic/react';
+import { add, create, trash, close, logOut } from 'ionicons/icons';
+import { useAuth } from '../../utils/auth';
+import { useHistory } from 'react-router-dom';
+import Breadcrumbs from '../../components/Breadcrumbs';
+
+export default function AdminIncidents() {
+  const { logout } = useAuth();
+  const history = useHistory();
+  const [incidents, setIncidents] = useState([]);
+  const [pets, setPets] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [editingIncident, setEditingIncident] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
+  const [deleteAlert, setDeleteAlert] = useState({ show: false, incidentId: null });
+
+  const [formData, setFormData] = useState({
+    incident_datetime: '',
+    incident_type: 'injury',
+    related_pet_id: '',
+    related_booking_id: '',
+    location: '',
+    summary: '',
+    actions_taken: '',
+    owner_informed: false,
+    attachments: '',
+    follow_up_required: false,
+    follow_up_notes: '',
+  });
+
+  useEffect(() => {
+    fetchIncidents();
+    fetchPets();
+    fetchBookings();
+  }, []);
+
+  const fetchIncidents = async () => {
+    try {
+      const response = await fetch('/api/admin/incidents', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        showToast('Authentication required. Please log in.', 'danger');
+        setIncidents([]);
+        setLoading(false);
+        return;
+      }
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        showToast(data.error, 'danger');
+        setIncidents([]);
+      } else if (Array.isArray(data)) {
+        setIncidents(data);
+      } else {
+        showToast('Invalid response format', 'danger');
+        setIncidents([]);
+      }
+    } catch (error) {
+      showToast('Failed to fetch incidents', 'danger');
+      setIncidents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPets = async () => {
+    try {
+      const response = await fetch('/api/admin/pets', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        console.error('Authentication required for pets');
+        setPets([]);
+        return;
+      }
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        console.error('Failed to fetch pets', data.error);
+        setPets([]);
+      } else if (Array.isArray(data)) {
+        setPets(data);
+      } else {
+        console.error('Invalid response format for pets');
+        setPets([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch pets', error);
+      setPets([]);
+    }
+  };
+
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch('/api/admin/bookings', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 403 || response.status === 401) {
+        console.error('Authentication required for bookings');
+        setBookings([]);
+        return;
+      }
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        console.error('Failed to fetch bookings', data.error);
+        setBookings([]);
+      } else if (Array.isArray(data)) {
+        setBookings(data);
+      } else {
+        console.error('Invalid response format for bookings');
+        setBookings([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch bookings', error);
+      setBookings([]);
+    }
+  };
+
+  const showToast = (message, color = 'success') => {
+    setToast({ show: true, message, color });
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    history.push('/login');
+  };
+
+  const openCreateModal = () => {
+    setEditingIncident(null);
+    setFormData({
+      incident_datetime: '',
+      incident_type: 'injury',
+      related_pet_id: '',
+      related_booking_id: '',
+      location: '',
+      summary: '',
+      actions_taken: '',
+      owner_informed: false,
+      attachments: '',
+      follow_up_required: false,
+      follow_up_notes: '',
+    });
+    setShowModal(true);
+  };
+
+  const openEditModal = async (incident) => {
+    try {
+      const response = await fetch(`/api/admin/incidents/${incident.id}`);
+      const data = await response.json();
+      setEditingIncident(data);
+      setFormData({
+        incident_datetime: data.incident_datetime,
+        incident_type: data.incident_type,
+        related_pet_id: data.related_pet_id,
+        related_booking_id: data.related_booking_id || '',
+        location: data.location || '',
+        summary: data.summary,
+        actions_taken: data.actions_taken,
+        owner_informed: Boolean(data.owner_informed),
+        attachments: data.attachments || '',
+        follow_up_required: Boolean(data.follow_up_required),
+        follow_up_notes: data.follow_up_notes || '',
+      });
+      setShowModal(true);
+    } catch (error) {
+      showToast('Failed to fetch incident details', 'danger');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.incident_datetime || !formData.incident_type || !formData.related_pet_id || !formData.summary || !formData.actions_taken) {
+      showToast('Please fill in all required fields', 'warning');
+      return;
+    }
+
+    try {
+      const url = editingIncident 
+        ? `/api/admin/incidents/${editingIncident.id}`
+        : '/api/admin/incidents';
+      
+      const method = editingIncident ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        showToast(editingIncident ? 'Incident updated successfully' : 'Incident logged successfully');
+        setShowModal(false);
+        fetchIncidents();
+      } else {
+        showToast('Failed to save incident', 'danger');
+      }
+    } catch (error) {
+      showToast('Error saving incident', 'danger');
+    }
+  };
+
+  const handleDelete = async (incidentId) => {
+    try {
+      const response = await fetch(`/api/admin/incidents/${incidentId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        showToast('Incident deleted successfully');
+        fetchIncidents();
+      } else {
+        showToast('Failed to delete incident', 'danger');
+      }
+    } catch (error) {
+      showToast('Error deleting incident', 'danger');
+    }
+  };
+
+  const getIncidentTypeColor = (type) => {
+    const colors = {
+      injury: 'danger',
+      illness: 'warning',
+      altercation: 'danger',
+      escape: 'warning',
+      'property damage': 'medium',
+    };
+    return colors[type] || 'medium';
+  };
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Admin', path: '/admin' },
+    { label: 'Incidents' }
+  ];
+
   if (loading) {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Incidents</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -285,14 +567,21 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
-          <IonTitle>Incidents</IonTitle>
+        <IonToolbar color="primary">
+          <IonTitle>Manage Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
               <IonIcon icon={add} slot="start" />
-              Log Incident
+              Log
+            </IonButton>
+            <IonButton onClick={handleLogout}>
+              <IonIcon icon={logOut} slot="start" />
+              Logout
             </IonButton>
           </IonButtons>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
         </IonToolbar>
       </IonHeader>
       <IonContent>
