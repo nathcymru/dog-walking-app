@@ -18,8 +18,14 @@ import {
   IonToast,
   IonItem,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientBookings() {
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'Bookings', path: '/client/bookings' }
+  ];
+
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,8 +116,11 @@ export default function ClientBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
+          </IonToolbar>
+          <IonToolbar>
+            <Breadcrumbs items={breadcrumbItems} />
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -126,8 +135,11 @@ export default function ClientBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
         </IonToolbar>
       </IonHeader>
       <IonContent>

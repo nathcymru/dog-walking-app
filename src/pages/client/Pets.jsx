@@ -1,5 +1,6 @@
 import React from 'react';
 import { IonPage, IonHeader, IonContent, IonList, IonItem, IonButton, IonTitle, IonToolbar } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Pets = () => {
     const petsData = [
@@ -8,11 +9,19 @@ const Pets = () => {
         // Add more pet data as needed
     ];
 
+    const breadcrumbItems = [
+        { label: 'Client', path: '/client' },
+        { label: 'Pets', path: '/client/pets' }
+    ];
+
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar>
+                <IonToolbar color="primary">
                     <IonTitle>My Pets</IonTitle>
+                </IonToolbar>
+                <IonToolbar>
+                    <Breadcrumbs items={breadcrumbItems} />
                 </IonToolbar>
             </IonHeader>
             <IonContent>

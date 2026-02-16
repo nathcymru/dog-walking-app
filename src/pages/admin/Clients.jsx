@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonContent,
   IonList,
   IonItem,
@@ -9,11 +12,17 @@ import {
   IonInput,
   IonLabel,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Clients = () => {
   const [clients, setClients] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [newClient, setNewClient] = useState('');
+
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Clients', path: '/admin/clients' }
+  ];
 
   useEffect(() => {
     // Initially fetch clients from a data source
@@ -45,6 +54,14 @@ const Clients = () => {
 
   return (
     <IonPage>
+      <IonHeader>
+        <IonToolbar color="primary">
+          <IonTitle>Clients</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
+        </IonToolbar>
+      </IonHeader>
       <IonContent>
         <IonSearchbar value={searchText} onIonInput={handleSearch} placeholder='Search Clients' />
         <IonInput value={newClient} onIonChange={e => setNewClient(e.target.value)} placeholder='Add Client' />

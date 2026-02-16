@@ -27,8 +27,14 @@ import {
   IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminIncidents() {
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Incidents', path: '/admin/incidents' }
+  ];
+
   const [incidents, setIncidents] = useState([]);
   const [pets, setPets] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -269,8 +275,11 @@ export default function AdminIncidents() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Incidents</IonTitle>
+          </IonToolbar>
+          <IonToolbar>
+            <Breadcrumbs items={breadcrumbItems} />
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -285,7 +294,7 @@ export default function AdminIncidents() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Incidents</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -293,6 +302,9 @@ export default function AdminIncidents() {
               Log Incident
             </IonButton>
           </IonButtons>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
         </IonToolbar>
       </IonHeader>
       <IonContent>

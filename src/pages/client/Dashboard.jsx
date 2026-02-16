@@ -10,13 +10,22 @@ import {
   IonRow,
   IonCol,
 } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'Dashboard', path: '/client/dashboard' }
+  ];
+
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonTitle>Your Dashboard</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
         </IonToolbar>
       </IonHeader>
       <IonContent>

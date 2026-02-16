@@ -26,8 +26,14 @@ import {
   IonAlert,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminBookings() {
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Bookings', path: '/admin/bookings' }
+  ];
+
   const [bookings, setBookings] = useState([]);
   const [clients, setClients] = useState([]);
   const [pets, setPets] = useState([]);
@@ -277,8 +283,11 @@ export default function AdminBookings() {
     return (
       <IonPage>
         <IonHeader>
-          <IonToolbar className="pastel-header">
+          <IonToolbar color="primary">
             <IonTitle>Bookings</IonTitle>
+          </IonToolbar>
+          <IonToolbar>
+            <Breadcrumbs items={breadcrumbItems} />
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -293,7 +302,7 @@ export default function AdminBookings() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="pastel-header">
+        <IonToolbar color="primary">
           <IonTitle>Bookings</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={openCreateModal}>
@@ -301,6 +310,9 @@ export default function AdminBookings() {
               New Booking
             </IonButton>
           </IonButtons>
+        </IonToolbar>
+        <IonToolbar>
+          <Breadcrumbs items={breadcrumbItems} />
         </IonToolbar>
       </IonHeader>
       <IonContent>

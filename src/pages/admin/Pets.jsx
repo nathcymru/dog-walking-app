@@ -1,9 +1,23 @@
 import React from 'react';
-import { IonPage, IonContent, IonList, IonItem, IonButton } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonButton } from '@ionic/react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Pets = () => {
+    const breadcrumbItems = [
+        { label: 'Admin', path: '/admin' },
+        { label: 'Pets', path: '/admin/pets' }
+    ];
+
     return (
         <IonPage>
+            <IonHeader>
+                <IonToolbar color="primary">
+                    <IonTitle>Pets</IonTitle>
+                </IonToolbar>
+                <IonToolbar>
+                    <Breadcrumbs items={breadcrumbItems} />
+                </IonToolbar>
+            </IonHeader>
             <IonContent>
                 <IonList>
                     <IonItem>
