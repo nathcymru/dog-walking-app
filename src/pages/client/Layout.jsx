@@ -1,10 +1,9 @@
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/auth';
-import { DogIcon, HomeIcon, CalendarIcon, PawIcon, FileTextIcon, LogOutIcon } from '../../components/Icons';
+import { ClientBottomNav } from '../../components/BottomNav';
 
 export default function ClientLayout() {
   const { user, logout } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -12,48 +11,41 @@ export default function ClientLayout() {
     navigate('/');
   };
 
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
-
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', paddingBottom: '4rem' }}>
-      <nav className="nav">
-        <div className="nav-content container">
-          <div className="flex items-center gap-2">
-            <DogIcon size={32} />
-            <span className="text-xl font-bold">PawWalkers</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user?.full_name}</span>
-            <button onClick={handleLogout} className="flex items-center gap-2 text-gray-700">
-              <LogOutIcon size={20} />
-              <span className="hidden md:inline">Logout</span>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--gray-50)', paddingBottom: '5rem' }}>
+      {/* Header */}
+      <header style={{
+        background: 'white',
+        borderBottom: '1px solid var(--gray-200)',
+        padding: 'var(--space-md) var(--space-lg)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        boxShadow: 'var(--shadow-sm)'
+      }}>
+        <div className="container">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-md">
+              <span style={{fontSize: '1.5rem'}}>🐕</span>
+              <div>
+                <h1 style={{fontSize: '1.25rem', fontWeight: 700}}>PawWalkers</h1>
+                <p style={{fontSize: '0.875rem', color: 'var(--gray-600)'}}>Welcome back, {user?.full_name}</p>
+              </div>
+            </div>
+            <button onClick={handleLogout} className="btn btn-secondary btn-sm">
+              Logout
             </button>
           </div>
         </div>
-      </nav>
+      </header>
 
-      <div className="container py-8">
+      {/* Main Content */}
+      <main>
         <Outlet />
-      </div>
+      </main>
 
-      <div className="mobile-nav">
-        <Link to="/client" className={`mobile-nav-item ${isActive('/client') && location.pathname === '/client' ? 'active' : ''}`}>
-          <HomeIcon size={24} />
-          Dashboard
-        </Link>
-        <Link to="/client/bookings" className={`mobile-nav-item ${isActive('/client/bookings') ? 'active' : ''}`}>
-          <CalendarIcon size={24} />
-          Bookings
-        </Link>
-        <Link to="/client/pets" className={`mobile-nav-item ${isActive('/client/pets') ? 'active' : ''}`}>
-          <PawIcon size={24} />
-          Pets
-        </Link>
-        <Link to="/client/billing" className={`mobile-nav-item ${isActive('/client/billing') ? 'active' : ''}`}>
-          <FileTextIcon size={24} />
-          Billing
-        </Link>
-      </div>
+      {/* Bottom Navigation */}
+      <ClientBottomNav />
     </div>
   );
 }
