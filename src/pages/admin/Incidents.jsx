@@ -144,15 +144,6 @@ export default function AdminIncidents() {
       setBookings([]);
     }
   };
-      } else {
-        console.error('Invalid response format for bookings');
-        setBookings([]);
-      }
-    } catch (error) {
-      console.error('Failed to fetch bookings', error);
-      setBookings([]);
-    }
-  };
 
   const showToast = (message, color = 'success') => {
     setToast({ show: true, message, color });
