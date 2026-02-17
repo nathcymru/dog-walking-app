@@ -24,10 +24,10 @@ export async function onRequestGet({ request, env }) {
     ).all();
     stats.unpaidInvoices = unpaidCount[0].count;
 
-    // Get bookings for this month
+    // Get bookings for this month (using UTC to ensure consistent timezone handling)
     const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
+    startOfMonth.setUTCDate(1);
+    startOfMonth.setUTCHours(0, 0, 0, 0);
     const startOfMonthStr = startOfMonth.toISOString();
     
     const { results: monthlyBookings } = await db.prepare(
@@ -35,7 +35,8 @@ export async function onRequestGet({ request, env }) {
     ).bind(startOfMonthStr).all();
     stats.bookingsThisMonth = monthlyBookings[0].count;
 
-    // Incidents table doesn't exist in schema, returning 0
+    // TODO: Incidents tracking not yet implemented. 
+    // Once an incidents table is added to the schema, replace this with actual count query.
     stats.incidentsThisMonth = 0;
 
     const today = new Date().toISOString().split('T')[0];
