@@ -22,27 +22,27 @@ export default function AdminTabs() {
         <Route exact path="/admin/account" component={AdminAccount} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
-        <IonTabButton tab="dashboard" href="/admin/dashboard">
+        <IonTabButton tab="admin-dashboard" href="/admin/dashboard">
           <IonIcon icon={home} />
           <IonLabel>Dashboard</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="clients" href="/admin/clients">
+        <IonTabButton tab="admin-clients" href="/admin/clients">
           <IonIcon icon={people} />
           <IonLabel>Clients</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="pets" href="/admin/pets">
+        <IonTabButton tab="admin-pets" href="/admin/pets">
           <IonIcon icon={paw} />
           <IonLabel>Pets</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="bookings" href="/admin/bookings">
+        <IonTabButton tab="admin-bookings" href="/admin/bookings">
           <IonIcon icon={calendar} />
           <IonLabel>Bookings</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="incidents" href="/admin/incidents">
+        <IonTabButton tab="admin-incidents" href="/admin/incidents">
           <IonIcon icon={warning} />
           <IonLabel>Incidents</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="account" href="/admin/account">
+        <IonTabButton tab="admin-account" href="/admin/account">
           <IonIcon icon={personCircleOutline} />
           <IonLabel>Account</IonLabel>
         </IonTabButton>
