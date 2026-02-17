@@ -8,6 +8,8 @@ import React from 'react';
  * @param {string} ariaLabel - Accessibility label for the avatar
  */
 export const InitialsAvatar = ({ fullName = '', photoUrl = '', sizePx = 40, ariaLabel = 'User avatar' }) => {
+  const [imageError, setImageError] = React.useState(false);
+
   // Extract initials from full name
   const getInitials = (name) => {
     if (!name) return '?';
@@ -44,12 +46,22 @@ export const InitialsAvatar = ({ fullName = '', photoUrl = '', sizePx = 40, aria
     objectFit: 'cover',
   };
 
+  // Reset image error state when photoUrl changes
+  React.useEffect(() => {
+    setImageError(false);
+  }, [photoUrl]);
+
+  const shouldShowImage = photoUrl && !imageError;
+
   return (
     <div style={avatarStyle} aria-label={ariaLabel} role="img">
-      {photoUrl ? (
-        <img src={photoUrl} alt={fullName} style={imageStyle} onError={(e) => {
-          e.target.style.display = 'none';
-        }} />
+      {shouldShowImage ? (
+        <img 
+          src={photoUrl} 
+          alt={fullName} 
+          style={imageStyle} 
+          onError={() => setImageError(true)} 
+        />
       ) : (
         <span>{initials}</span>
       )}
