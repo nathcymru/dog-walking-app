@@ -294,19 +294,28 @@ const AddDogWizard = ({
   };
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={handleClose}>
+    <IonModal 
+      isOpen={isOpen} 
+      onDidDismiss={handleClose}
+      cssClass="custom-modal"
+      backdropDismiss={true}
+    >
       <IonHeader>
         <IonToolbar>
           <IonTitle>Add Dog</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={handleClose}>
+            <IonButton 
+              onClick={handleClose}
+              type="button"
+              style={{ pointerEvents: 'auto' }}
+            >
               <IonIcon icon={close} />
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
 
-      <IonContent>
+      <IonContent className="ion-padding">
         <WizardProgress 
           currentStep={currentStep} 
           totalSteps={4}
@@ -361,10 +370,20 @@ const AddDogWizard = ({
           />
         ) : (
           <div className="wizard-navigation">
-            <IonButton fill="outline" onClick={() => setCurrentStep(3)}>
+            <IonButton 
+              fill="outline" 
+              onClick={() => setCurrentStep(3)}
+              type="button"
+              style={{ pointerEvents: 'auto' }}
+            >
               Back to Health
             </IonButton>
-            <IonButton fill="solid" onClick={handleSave}>
+            <IonButton 
+              fill="solid" 
+              onClick={handleSave}
+              type="button"
+              style={{ pointerEvents: 'auto' }}
+            >
               Save Dog
             </IonButton>
           </div>

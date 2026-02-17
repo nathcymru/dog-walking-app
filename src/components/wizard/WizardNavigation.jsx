@@ -17,6 +17,8 @@ const WizardNavigation = ({
         fill="outline"
         disabled={currentStep === 1}
         onClick={onBack}
+        type="button"
+        style={{ pointerEvents: 'auto' }}
         className="wizard-nav-button"
       >
         <IonIcon slot="start" icon={arrowBack} />
@@ -27,6 +29,8 @@ const WizardNavigation = ({
         fill="solid"
         disabled={!canProceed}
         onClick={onNext}
+        type="button"
+        style={{ pointerEvents: 'auto' }}
         className="wizard-nav-button wizard-nav-next"
       >
         {isLastStep ? 'Review' : 'Next'}
