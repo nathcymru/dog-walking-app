@@ -1,9 +1,6 @@
 import React from 'react';
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonCard,
   IonCardHeader,
@@ -16,6 +13,7 @@ import {
   IonButton,
 } from '@ionic/react';
 import { calendarOutline, pawOutline, receiptOutline } from 'ionicons/icons';
+import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
@@ -26,11 +24,7 @@ const Dashboard = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Your Dashboard</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <AppHeader title="Your Dashboard" />
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <IonGrid className="ion-padding">

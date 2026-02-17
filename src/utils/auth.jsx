@@ -103,23 +103,24 @@ export function AuthProvider({ children }) {
         throw new Error(error.error || 'Invalid email or password');
       }
     } catch (error) {
-      // Fallback to demo mode if API is not available
-      console.log('API login failed, using demo mode:', error.message);
+      // If API is completely unavailable, check demo users as fallback
+      console.log('API login failed, checking demo users:', error.message);
       
       const demoUser = DEMO_USERS[email];
       
-      if (!demoUser || demoUser.password !== password) {
-        throw new Error('Invalid email or password');
+      if (demoUser && demoUser.password === password) {
+        // Remove password from user object
+        const { password: _, ...userWithoutPassword } = demoUser;
+        
+        // Store user in state and localStorage
+        setUser(userWithoutPassword);
+        localStorage.setItem('pawwalkers_user', JSON.stringify(userWithoutPassword));
+        
+        return userWithoutPassword;
       }
-
-      // Remove password from user object
-      const { password: _, ...userWithoutPassword } = demoUser;
       
-      // Store user in state and localStorage
-      setUser(userWithoutPassword);
-      localStorage.setItem('pawwalkers_user', JSON.stringify(userWithoutPassword));
-      
-      return userWithoutPassword;
+      // If demo user doesn't exist or password wrong, throw error
+      throw new Error('Invalid email or password');
     }
   };
 
@@ -142,11 +143,17 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('pawwalkers_user');
   };
 
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem('pawwalkers_user', JSON.stringify(updatedUser));
+  };
+
   const value = { 
     user, 
     loading, 
     login, 
-    logout 
+    logout,
+    updateUser 
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
