@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   IonPage, 
   IonHeader, 
@@ -12,16 +12,52 @@ import {
   IonGrid, 
   IonRow, 
   IonCol,
-  IonIcon
+  IonIcon,
+  IonSpinner
 } from '@ionic/react';
 import { peopleOutline, pawOutline, calendarOutline, warningOutline } from 'ionicons/icons';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
+    const [stats, setStats] = useState({
+      totalClients: '-',
+      totalPets: '-',
+      bookingsThisMonth: '-',
+      incidentsThisMonth: '-'
+    });
+    const [loading, setLoading] = useState(true);
+
     const breadcrumbItems = [
         { label: 'Admin', path: '/admin' },
         { label: 'Dashboard', path: '/admin/dashboard' }
     ];
+
+    useEffect(() => {
+      fetchDashboardData();
+    }, []);
+
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch('/api/admin/dashboard', {
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setStats({
+            totalClients: data.totalClients ?? '-',
+            totalPets: data.totalPets ?? '-',
+            bookingsThisMonth: data.bookingsThisMonth ?? '-',
+            incidentsThisMonth: data.incidentsThisMonth ?? '-'
+          });
+        }
+      } catch (error) {
+        console.log('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     return (
         <IonPage>
@@ -43,8 +79,14 @@ const Dashboard = () => {
                                     </div>
                                 </IonCardHeader>
                                 <IonCardContent>
-                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
-                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>Total Clients</p>
+                                    {loading ? (
+                                      <IonSpinner />
+                                    ) : (
+                                      <>
+                                        <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{stats.totalClients}</p>
+                                        <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>Total Clients</p>
+                                      </>
+                                    )}
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
@@ -57,8 +99,14 @@ const Dashboard = () => {
                                     </div>
                                 </IonCardHeader>
                                 <IonCardContent>
-                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
-                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>Total Pets</p>
+                                    {loading ? (
+                                      <IonSpinner />
+                                    ) : (
+                                      <>
+                                        <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{stats.totalPets}</p>
+                                        <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>Total Pets</p>
+                                      </>
+                                    )}
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
@@ -71,8 +119,14 @@ const Dashboard = () => {
                                     </div>
                                 </IonCardHeader>
                                 <IonCardContent>
-                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
-                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>This Month</p>
+                                    {loading ? (
+                                      <IonSpinner />
+                                    ) : (
+                                      <>
+                                        <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{stats.bookingsThisMonth}</p>
+                                        <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>This Month</p>
+                                      </>
+                                    )}
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
@@ -85,8 +139,14 @@ const Dashboard = () => {
                                     </div>
                                 </IonCardHeader>
                                 <IonCardContent>
-                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
-                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>This Month</p>
+                                    {loading ? (
+                                      <IonSpinner />
+                                    ) : (
+                                      <>
+                                        <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{stats.incidentsThisMonth}</p>
+                                        <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>This Month</p>
+                                      </>
+                                    )}
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
