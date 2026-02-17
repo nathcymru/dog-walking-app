@@ -76,8 +76,12 @@ export default function ClientBookings() {
         setError(null);
       } else {
         // API returned an error, show error message
-        const errorData = await response.json();
-        setError(errorData.error || 'Failed to load bookings');
+        try {
+          const errorData = await response.json();
+          setError(errorData.error || 'Failed to load bookings');
+        } catch {
+          setError('Failed to load bookings');
+        }
         setBookings([]);
       }
     } catch (error) {

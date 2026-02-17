@@ -72,12 +72,20 @@ export default function ClientPets() {
         setPets(Array.isArray(data) ? data : []);
       } else {
         // API returned an error
-        const errorData = await response.json();
-        setToast({ 
-          show: true, 
-          message: errorData.error || 'Failed to load pets', 
-          color: 'danger' 
-        });
+        try {
+          const errorData = await response.json();
+          setToast({ 
+            show: true, 
+            message: errorData.error || 'Failed to load pets', 
+            color: 'danger' 
+          });
+        } catch {
+          setToast({ 
+            show: true, 
+            message: 'Failed to load pets', 
+            color: 'danger' 
+          });
+        }
         setPets([]);
       }
     } catch (error) {

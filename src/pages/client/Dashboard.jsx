@@ -81,7 +81,7 @@ const Dashboard = () => {
         const invoices = await invoicesResponse.json();
         if (Array.isArray(invoices)) {
           const unpaid = invoices.filter(inv => inv.status === 'unpaid' || inv.status === 'part_paid');
-          const balance = unpaid.reduce((sum, inv) => sum + (inv.total_amount || 0), 0);
+          const balance = unpaid.reduce((sum, inv) => sum + parseFloat(inv.total_amount || 0), 0);
           newStats.unpaidBalance = `£${balance.toFixed(2)}`;
         }
       }

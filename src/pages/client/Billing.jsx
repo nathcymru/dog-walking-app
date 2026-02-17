@@ -80,8 +80,12 @@ export default function ClientBilling() {
         setError(null);
       } else {
         // API returned an error
-        const errorData = await response.json();
-        setError(errorData.error || 'Failed to load invoices');
+        try {
+          const errorData = await response.json();
+          setError(errorData.error || 'Failed to load invoices');
+        } catch {
+          setError('Failed to load invoices');
+        }
         setInvoices([]);
       }
     } catch (error) {

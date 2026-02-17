@@ -37,8 +37,7 @@ export async function onRequestPost({ request, env }) {
     // Determine full_name based on role
     let fullName = user.client_full_name; // from client_profiles
     if (user.role === 'admin') {
-      // For admin, try to get name from a potential admin_profiles table, or use email
-      // For now, use email username as fallback
+      // For admin users, use email username as fallback since they don't have client_profiles
       fullName = fullName || user.email.split('@')[0];
     }
 
