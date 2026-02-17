@@ -47,12 +47,38 @@ export const AccountPage = () => {
     };
   }, [photoUrl]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
-      updateUser({ ...user, full_name: fullName, email, phone, photo_url: photoUrl });
+      const response = await fetch('/api/client/profile', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          full_name: fullName,
+          email,
+          phone
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update profile');
+      }
+
+      const data = await response.json();
+      
+      // Update localStorage to keep UI in sync
+      // photo_url is preserved here as it's not stored in the database
+      if (data.user) {
+        updateUser({ ...data.user, photo_url: photoUrl });
+      }
+      
       setToast({ show: true, message: "Profile updated successfully", color: "success" });
     } catch (error) {
-      setToast({ show: true, message: "Error updating profile", color: "danger" });
+      console.error('Profile update error:', error);
+      setToast({ show: true, message: error.message || "Error updating profile", color: "danger" });
     }
   };
 

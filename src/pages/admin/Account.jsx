@@ -51,13 +51,29 @@ const AdminAccount = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // In a real implementation, you'd call an API endpoint to update admin profile
-      // For now, just update local state
-      await updateUser({
-        ...user,
-        full_name: formData.full_name,
-        email: formData.email,
+      const response = await fetch('/api/admin/profile', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          full_name: formData.full_name,
+          email: formData.email
+        })
       });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update profile');
+      }
+
+      const data = await response.json();
+      
+      // Update localStorage to keep UI in sync
+      if (data.user) {
+        await updateUser(data.user);
+      }
 
       setToast({
         show: true,
@@ -68,7 +84,7 @@ const AdminAccount = () => {
       console.error('Save error:', error);
       setToast({
         show: true,
-        message: 'Failed to update account',
+        message: error.message || 'Failed to update account',
         color: 'danger'
       });
     } finally {
