@@ -113,3 +113,12 @@ export async function requireAdmin(request, db) {
 
   return { user, error: null };
 }
+
+export function normalizeMicrochippedValue(value) {
+  // Convert various microchipped values to text enum
+  if (value === 'Yes' || value === 'No' || value === 'Unknown') {
+    return value;
+  }
+  // Handle boolean or numeric values
+  return value ? 'Yes' : 'Unknown';
+}

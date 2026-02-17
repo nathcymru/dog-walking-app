@@ -1,0 +1,31 @@
+.allergies-item {
+  background: rgba(var(--ion-color-warning-rgb), 0.1);
+  border: 2px solid var(--ion-color-warning);
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.allergies-label {
+  font-weight: 700;
+  color: var(--ion-color-warning-shade);
+}
+
+.allergies-textarea {
+  border: 1px solid var(--ion-color-warning);
+  border-radius: 4px;
+}
+
+.allergies-note {
+  font-weight: 600;
+  color: var(--ion-color-warning-shade);
+}
+
+.section-header {
+  margin-top: 24px;
+  border-bottom: 2px solid var(--ion-color-light-shade);
+}
+
+.section-header ion-label h3 {
+  font-weight: 600;
+  font-size: 16px;
+}
