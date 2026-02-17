@@ -1,0 +1,10 @@
+.wizard-content {
+  min-height: 400px;
+  padding-bottom: 80px; /* Space for sticky navigation */
+}
+
+@media (max-width: 576px) {
+  .wizard-content {
+    padding-bottom: 70px;
+  }
+}
