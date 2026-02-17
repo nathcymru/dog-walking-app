@@ -46,7 +46,7 @@ const Step2WalkSetup = ({
       onChange('eligible_for_private_walk', true);
       setShowAutoCorrectAlert(false);
     }
-  }, [formData.handling_requirement]);
+  }, [formData.handling_requirement, formData.walk_type_preference, onChange]);
 
   const isGroupWalkDisabled = formData.handling_requirement === 'Long-Line Required' || 
                                formData.handling_requirement === 'Lead Required';

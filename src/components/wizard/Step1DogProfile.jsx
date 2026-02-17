@@ -143,7 +143,8 @@ const Step1DogProfile = ({
           <IonInput
             value={formData.name}
             placeholder="e.g. Max"
-            onIonInput={(e) => onChange('name', e.detail.value.trim())}
+            onIonInput={(e) => onChange('name', e.detail.value)}
+            onIonBlur={(e) => onChange('name', e.detail.value.trim())}
             maxlength={40}
           />
           {errors.name && (
@@ -161,7 +162,8 @@ const Step1DogProfile = ({
           <IonInput
             value={formData.breed}
             placeholder="e.g. Labrador Retriever"
-            onIonInput={(e) => onChange('breed', e.detail.value.trim())}
+            onIonInput={(e) => onChange('breed', e.detail.value)}
+            onIonBlur={(e) => onChange('breed', e.detail.value.trim())}
             maxlength={60}
           />
           {errors.breed && (

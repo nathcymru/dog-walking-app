@@ -1,4 +1,4 @@
-import { authenticateRequest, parseBody, jsonResponse } from '../../_helpers';
+import { authenticateRequest, parseBody, jsonResponse, normalizeMicrochippedValue } from '../../_helpers';
 
 export async function onRequestGet({ request, env }) {
   const db = env.DB;
@@ -42,10 +42,7 @@ export async function onRequestPost({ request, env }) {
   // Force client_id to be the authenticated user's ID
   const client_id = user.id;
 
-  // Convert microchipped to text enum
-  const microchippedValue = body.microchipped === 'Yes' || body.microchipped === 'No' || body.microchipped === 'Unknown' 
-    ? body.microchipped 
-    : (body.microchipped ? 'Yes' : 'Unknown');
+  const microchippedValue = normalizeMicrochippedValue(body.microchipped);
 
   try {
     const { results } = await db.prepare(`

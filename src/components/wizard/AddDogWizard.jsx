@@ -85,7 +85,7 @@ const AddDogWizard = ({
         }
       }
     }
-  }, [isOpen]);
+  }, [isOpen, draftKey]);
 
   // Save draft to localStorage on any change
   useEffect(() => {
@@ -98,7 +98,7 @@ const AddDogWizard = ({
       };
       localStorage.setItem(draftKey, JSON.stringify(draft));
     }
-  }, [formData, currentStep, completedSteps, isOpen]);
+  }, [formData, currentStep, completedSteps, isOpen, draftKey]);
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));

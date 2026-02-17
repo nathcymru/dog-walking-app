@@ -1,4 +1,4 @@
-import { requireAdmin, parseBody, jsonResponse } from '../../_helpers';
+import { requireAdmin, parseBody, jsonResponse, normalizeMicrochippedValue } from '../../_helpers';
 
 export async function onRequestGet({ request, env }) {
   const db = env.DB;
@@ -32,10 +32,7 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ error: 'Client ID, name, and breed are required' }, 400);
   }
 
-  // Convert microchipped to text enum
-  const microchippedValue = body.microchipped === 'Yes' || body.microchipped === 'No' || body.microchipped === 'Unknown' 
-    ? body.microchipped 
-    : (body.microchipped ? 'Yes' : 'Unknown');
+  const microchippedValue = normalizeMicrochippedValue(body.microchipped);
 
   try {
     const { results } = await db.prepare(`
