@@ -15,10 +15,15 @@ import {
   IonRow,
   IonCol,
   IonLabel,
+  IonButton,
+  IonFab,
+  IonFabButton,
 } from '@ionic/react';
-import { pawOutline } from 'ionicons/icons';
+import { pawOutline, add } from 'ionicons/icons';
 import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import AddDogWizard from '../../components/wizard/AddDogWizard';
+import { useAuth } from '../../utils/auth';
 
 const DEMO_PETS = [
   {
@@ -44,8 +49,10 @@ const DEMO_PETS = [
 ];
 
 export default function ClientPets() {
+  const { user } = useAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showWizard, setShowWizard] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
 
   const breadcrumbItems = [
@@ -97,6 +104,28 @@ export default function ClientPets() {
     }
   };
 
+  const handleWizardSave = async (wizardData) => {
+    try {
+      const response = await fetch('/api/client/pets', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(wizardData),
+      });
+
+      if (response.ok) {
+        setToast({ show: true, message: 'Dog added successfully!', color: 'success' });
+        setShowWizard(false);
+        fetchPets();
+      } else {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save dog');
+      }
+    } catch (error) {
+      throw error; // Let wizard handle the error display
+    }
+  };
+
   if (loading) {
     return (
       <IonPage>
@@ -116,10 +145,18 @@ export default function ClientPets() {
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
+          {/* Add Dog Button */}
+          <div style={{ marginBottom: '20px' }}>
+            <IonButton color="primary" onClick={() => setShowWizard(true)}>
+              <IonIcon slot="start" icon={add} />
+              Add Dog
+            </IonButton>
+          </div>
+
           {pets.length === 0 ? (
             <IonCard>
               <IonCardContent>
-                <p>No pets found. Please contact your administrator to add pet profiles.</p>
+                <p>No pets found. Click "Add Dog" above to add your first pet profile.</p>
               </IonCardContent>
             </IonCard>
           ) : (
@@ -157,6 +194,16 @@ export default function ClientPets() {
             </IonGrid>
           )}
         </div>
+
+        {/* Add Dog Wizard */}
+        <AddDogWizard
+          isOpen={showWizard}
+          onClose={() => setShowWizard(false)}
+          onSave={handleWizardSave}
+          isAdmin={false}
+          user={user}
+          clients={[]}
+        />
 
         <IonToast
           isOpen={toast.show}
