@@ -12,17 +12,32 @@ export async function onRequestGet({ request, env }) {
     const { results: clientCount } = await db.prepare(
       'SELECT COUNT(*) as count FROM users WHERE role = "client"'
     ).all();
-    stats.clients = clientCount[0].count;
+    stats.totalClients = clientCount[0].count;
 
     const { results: petCount } = await db.prepare(
       'SELECT COUNT(*) as count FROM pets'
     ).all();
-    stats.pets = petCount[0].count;
+    stats.totalPets = petCount[0].count;
 
     const { results: unpaidCount } = await db.prepare(
       'SELECT COUNT(*) as count FROM invoices WHERE status = "unpaid"'
     ).all();
     stats.unpaidInvoices = unpaidCount[0].count;
+
+    // Get bookings for this month (using UTC to ensure consistent timezone handling)
+    const startOfMonth = new Date();
+    startOfMonth.setUTCDate(1);
+    startOfMonth.setUTCHours(0, 0, 0, 0);
+    const startOfMonthStr = startOfMonth.toISOString();
+    
+    const { results: monthlyBookings } = await db.prepare(
+      'SELECT COUNT(*) as count FROM bookings WHERE datetime_start >= ?'
+    ).bind(startOfMonthStr).all();
+    stats.bookingsThisMonth = monthlyBookings[0].count;
+
+    // TODO: Incidents tracking not yet implemented. 
+    // Once an incidents table is added to the schema, replace this with actual count query.
+    stats.incidentsThisMonth = 0;
 
     const today = new Date().toISOString().split('T')[0];
     const { results: todayBookings } = await db.prepare(`
