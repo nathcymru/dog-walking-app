@@ -1331,77 +1331,7 @@ ion-item::part(native) {
   font-weight: 600;
 }
 
-/* ==========================================
-   CUSTOM MODAL STYLING
-   ========================================== */
-.custom-modal {
-  --height: auto;
-  --max-height: 90vh;
-  --border-radius: 16px 16px 0 0;
-}
 
-.custom-modal ion-content {
-  --background: white;
-}
-
-.custom-modal ion-header {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.custom-modal ion-footer {
-  padding: 16px;
-  background: white;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Ensure buttons in modals are always clickable */
-.custom-modal ion-button,
-ion-modal ion-button {
-  pointer-events: auto !important;
-  position: relative;
-  z-index: 10;
-  cursor: pointer;
-}
-
-/* Ensure modal content is above backdrop */
-ion-modal ion-content {
-  position: relative;
-  z-index: 1;
-}
-
-ion-modal ion-footer {
-  position: relative;
-  z-index: 2;
-}
-
-/* ==========================================
-   SAFARI-SPECIFIC FIXES
-   ========================================== */
-@supports (-webkit-appearance: none) {
-  /* Safari button fixes */
-  .custom-modal ion-button,
-  ion-modal ion-button {
-    -webkit-appearance: none;
-    pointer-events: auto !important;
-    touch-action: manipulation;
-  }
-  
-  /* Safari modal content z-index */
-  .custom-modal ion-content {
-    z-index: 1;
-  }
-  
-  .custom-modal ion-footer {
-    z-index: 2;
-  }
-  
-  /* Safari input fixes - prevent zoom */
-  ion-input,
-  ion-textarea,
-  ion-select {
-    font-size: 16px !important;
-  }
-}
 
 /* ==========================================
    ACCESSIBILITY ENHANCEMENTS
