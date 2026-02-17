@@ -1466,6 +1466,8 @@ ion-select.ion-valid {
 ion-searchbar {
   --background: white;
   --border-radius: 8px;
+  --border-width: 1px;
+  --border-color: #d1d5db;
   --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   --color: #1f2937;
   --placeholder-color: #9ca3af;

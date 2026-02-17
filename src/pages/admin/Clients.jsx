@@ -352,7 +352,7 @@ export default function AdminClients() {
 
             <IonItem>
               <IonLabel position="stacked">
-                Password {editingClient ? '(leave blank to keep current)' : <span className="required">*</span>}
+                Password {editingClient ? '(leave blank to keep current)' : ''} {!editingClient && <span className="required">*</span>}
               </IonLabel>
               <IonInput
                 type="password"
