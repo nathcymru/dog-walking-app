@@ -71,16 +71,22 @@ export default function ClientBookings() {
       
       if (response.ok) {
         const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setBookings(data);
-          setError(null);
-        } else {
-          setBookings(DEMO_BOOKINGS);
-        }
+        // Always use API data, even if empty
+        setBookings(Array.isArray(data) ? data : []);
+        setError(null);
       } else {
-        setBookings(DEMO_BOOKINGS);
+        // API returned an error, show error message
+        try {
+          const errorData = await response.json();
+          setError(errorData.error || 'Failed to load bookings');
+        } catch {
+          setError('Failed to load bookings');
+        }
+        setBookings([]);
       }
     } catch (error) {
+      // Network error - API completely unreachable, use demo data as fallback
+      console.log('API unreachable, using demo data:', error.message);
       setBookings(DEMO_BOOKINGS);
     } finally {
       setLoading(false);

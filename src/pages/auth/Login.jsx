@@ -14,8 +14,7 @@ import {
   IonIcon,
   IonText,
   IonButtons,
-  IonBackButton,
-  IonNote
+  IonBackButton
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { mailOutline, lockClosedOutline, pawOutline, alertCircleOutline } from 'ionicons/icons';
@@ -45,16 +44,6 @@ export default function Login() {
       setError(err.message || 'Failed to login. Please check your credentials.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fillDemoCredentials = (type) => {
-    if (type === 'admin') {
-      setEmail('admin@pawwalkers.com');
-      setPassword('admin123');
-    } else {
-      setEmail('client@example.com');
-      setPassword('client123');
     }
   };
 
@@ -131,47 +120,6 @@ export default function Login() {
                   {loading ? 'Signing in...' : 'Sign In'}
                 </IonButton>
               </form>
-            </IonCardContent>
-          </IonCard>
-
-          {/* Demo Credentials Card */}
-          <IonCard style={{ marginTop: '2rem', backgroundColor: '#e0f2fe' }}>
-            <IonCardContent>
-              <IonText color="primary">
-                <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>Demo Accounts</h3>
-              </IonText>
-              
-              <div style={{ marginBottom: '1rem' }}>
-                <IonNote>
-                  <strong>Admin Account:</strong><br />
-                  Email: admin@pawwalkers.com<br />
-                  Password: admin123
-                </IonNote>
-                <IonButton 
-                  size="small" 
-                  fill="outline" 
-                  onClick={() => fillDemoCredentials('admin')}
-                  style={{ marginTop: '0.5rem' }}
-                >
-                  Use Admin Login
-                </IonButton>
-              </div>
-
-              <div>
-                <IonNote>
-                  <strong>Client Account:</strong><br />
-                  Email: client@example.com<br />
-                  Password: client123
-                </IonNote>
-                <IonButton 
-                  size="small" 
-                  fill="outline" 
-                  onClick={() => fillDemoCredentials('client')}
-                  style={{ marginTop: '0.5rem' }}
-                >
-                  Use Client Login
-                </IonButton>
-              </div>
             </IonCardContent>
           </IonCard>
         </div>

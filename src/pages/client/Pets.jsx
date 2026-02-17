@@ -68,18 +68,29 @@ export default function ClientPets() {
       
       if (response.ok) {
         const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setPets(data);
-        } else {
-          // No pets from API, use demo data
-          setPets(DEMO_PETS);
-        }
+        // Always use API data, even if empty
+        setPets(Array.isArray(data) ? data : []);
       } else {
-        // API error, use demo data
-        setPets(DEMO_PETS);
+        // API returned an error
+        try {
+          const errorData = await response.json();
+          setToast({ 
+            show: true, 
+            message: errorData.error || 'Failed to load pets', 
+            color: 'danger' 
+          });
+        } catch {
+          setToast({ 
+            show: true, 
+            message: 'Failed to load pets', 
+            color: 'danger' 
+          });
+        }
+        setPets([]);
       }
     } catch (error) {
-      // Network error, use demo data
+      // Network error - API completely unreachable, use demo data as fallback
+      console.log('API unreachable, using demo data:', error.message);
       setPets(DEMO_PETS);
     } finally {
       setLoading(false);

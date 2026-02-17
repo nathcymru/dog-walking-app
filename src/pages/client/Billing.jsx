@@ -75,16 +75,22 @@ export default function ClientBilling() {
       
       if (response.ok) {
         const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setInvoices(data);
-          setError(null);
-        } else {
-          setInvoices(DEMO_INVOICES);
-        }
+        // Always use API data, even if empty
+        setInvoices(Array.isArray(data) ? data : []);
+        setError(null);
       } else {
-        setInvoices(DEMO_INVOICES);
+        // API returned an error
+        try {
+          const errorData = await response.json();
+          setError(errorData.error || 'Failed to load invoices');
+        } catch {
+          setError('Failed to load invoices');
+        }
+        setInvoices([]);
       }
     } catch (error) {
+      // Network error - API completely unreachable, use demo data as fallback
+      console.log('API unreachable, using demo data:', error.message);
       setInvoices(DEMO_INVOICES);
     } finally {
       setLoading(false);

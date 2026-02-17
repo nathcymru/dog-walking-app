@@ -17,9 +17,12 @@ export async function onRequestPost({ request, env }) {
   }
 
   try {
-    const { results } = await db.prepare(
-      'SELECT u.*, cp.full_name FROM users u JOIN client_profiles cp ON u.id = cp.user_id WHERE u.email = ?'
-    ).bind(body.email).all();
+    const { results } = await db.prepare(`
+      SELECT u.*, cp.full_name as client_full_name 
+      FROM users u 
+      LEFT JOIN client_profiles cp ON u.id = cp.user_id 
+      WHERE u.email = ?
+    `).bind(body.email).all();
 
     if (results.length === 0) {
       return errorResponse('Invalid credentials', 401);
@@ -29,6 +32,13 @@ export async function onRequestPost({ request, env }) {
     const isValid = await verifyPassword(body.password, user.password_hash);
     if (!isValid) {
       return errorResponse('Invalid credentials', 401);
+    }
+
+    // Determine full_name based on role
+    let fullName = user.client_full_name; // from client_profiles
+    if (user.role === 'admin') {
+      // For admin users, use email username as fallback since they don't have client_profiles
+      fullName = fullName || user.email.split('@')[0];
     }
 
     const sessionToken = generateSessionToken();
@@ -44,7 +54,7 @@ export async function onRequestPost({ request, env }) {
         id: user.id,
         email: user.email,
         role: user.role,
-        full_name: user.full_name,
+        full_name: fullName,
       },
     });
 
