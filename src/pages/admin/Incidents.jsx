@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonList,
   IonCard,
@@ -25,8 +22,12 @@ import {
   IonIcon,
   IonBadge,
   IonAlert,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminIncidents() {
@@ -274,11 +275,7 @@ export default function AdminIncidents() {
   if (loading) {
     return (
       <IonPage>
-        <IonHeader>
-          <IonToolbar color="primary">
-            <IonTitle>Incidents</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <AppHeader title="Incidents" />
         <IonContent>
           <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
@@ -291,20 +288,15 @@ export default function AdminIncidents() {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Incidents</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={openCreateModal}>
-              <IonIcon icon={add} slot="start" />
-              Log Incident
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+      <AppHeader title="Incidents" />
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
+          <IonButton color="primary" onClick={openCreateModal}>
+            <IonIcon icon={add} slot="start" />
+            Report Incident
+          </IonButton>
+          
           {incidents.length === 0 ? (
             <IonCard>
               <IonCardContent>

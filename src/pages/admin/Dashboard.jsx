@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
   IonPage, 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
   IonContent, 
   IonCard, 
   IonCardHeader,
@@ -16,6 +13,7 @@ import {
   IonSpinner
 } from '@ionic/react';
 import { peopleOutline, pawOutline, calendarOutline, warningOutline } from 'ionicons/icons';
+import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
@@ -61,11 +59,7 @@ const Dashboard = () => {
 
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar color="primary">
-                    <IonTitle>Admin Dashboard</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+            <AppHeader title="Admin Dashboard" />
             <IonContent>
                 <Breadcrumbs items={breadcrumbItems} />
                 <IonGrid className="ion-padding">
