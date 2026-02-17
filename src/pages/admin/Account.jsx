@@ -12,7 +12,6 @@ import {
   IonButton,
   IonIcon,
   IonToast,
-  IonSpinner,
 } from '@ionic/react';
 import { personOutline, mailOutline, logOutOutline, saveOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
@@ -23,7 +22,6 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 const AdminAccount = () => {
   const { user, logout, updateUser } = useAuth();
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
 
@@ -82,19 +80,6 @@ const AdminAccount = () => {
     await logout();
     history.push('/login');
   };
-
-  if (loading) {
-    return (
-      <IonPage>
-        <AppHeader title="Account Settings" />
-        <IonContent>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-            <IonSpinner />
-          </div>
-        </IonContent>
-      </IonPage>
-    );
-  }
 
   return (
     <IonPage>

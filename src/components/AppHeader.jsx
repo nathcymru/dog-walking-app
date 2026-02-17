@@ -76,7 +76,7 @@ export const AppHeader = ({ title }) => {
         >
           <IonList>
             <IonItem
-              button={true}
+              button
               detail={false}
               onClick={handleAccount}
               onTouchEnd={handleAccount}
@@ -86,7 +86,7 @@ export const AppHeader = ({ title }) => {
             </IonItem>
 
             <IonItem
-              button={true}
+              button
               detail={false}
               lines="none"
               onClick={handleLogout}
