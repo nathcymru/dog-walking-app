@@ -14,12 +14,16 @@ import {
   IonCard,
   IonCardContent,
   IonToast,
+  IonIcon,
 } from "@ionic/react";
+import { useHistory } from "react-router-dom";
+import { logOutOutline } from "ionicons/icons";
 import { InitialsAvatar } from "../components/InitialsAvatar";
 import { useAuth } from "../utils/auth";
 
 export const AccountPage = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
+  const history = useHistory();
   const [fullName, setFullName] = useState(user?.full_name ?? "");
   const [email, setEmail] = useState(user?.email ?? "");
   const [phone, setPhone] = useState(user?.phone ?? "");
@@ -50,6 +54,11 @@ export const AccountPage = () => {
     } catch (error) {
       setToast({ show: true, message: "Error updating profile", color: "danger" });
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    history.push('/login');
   };
 
   return (
@@ -120,6 +129,13 @@ export const AccountPage = () => {
             <div style={{ marginTop: 20 }}>
               <IonButton expand="block" onClick={handleSave}>
                 Save Changes
+              </IonButton>
+            </div>
+
+            <div style={{ marginTop: 10 }}>
+              <IonButton expand="block" fill="outline" color="danger" onClick={handleLogout}>
+                <IonIcon icon={logOutOutline} slot="start" />
+                Logout
               </IonButton>
             </div>
           </IonCardContent>

@@ -1,29 +1,88 @@
-import React from 'react';
-import { IonHeader, IonToolbar, IonTitle, IonButtons } from '@ionic/react';
-import { InitialsAvatar } from './InitialsAvatar';
-import { useAuth } from '../utils/auth';
+import React, { useState } from "react";
+import {
+  IonButtons,
+  IonButton,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonPopover,
+  IonList,
+  IonItem,
+  IonLabel,
+} from "@ionic/react";
+import { useHistory } from "react-router-dom";
+import { InitialsAvatar } from "./InitialsAvatar";
+import { useAuth } from "../utils/auth";
 
-/**
- * AppHeader component displays a header with title and user avatar
- * @param {string} title - Title to display in the header
- */
 export const AppHeader = ({ title }) => {
-  const { user } = useAuth();
+  const history = useHistory();
+  const { user, logout } = useAuth();
+  const [popoverEvent, setPopoverEvent] = useState(undefined);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = async () => {
+    setIsOpen(false);
+    await logout();
+    history.push('/login');
+  };
+
+  const handleAccount = () => {
+    setIsOpen(false);
+    if (user?.role === 'admin') {
+      history.push('/admin/settings');
+    } else {
+      history.push('/client/account');
+    }
+  };
 
   return (
     <IonHeader>
       <IonToolbar color="primary">
         <IonTitle>{title}</IonTitle>
+
         <IonButtons slot="end">
-          <div style={{ padding: '0 16px', display: 'flex', alignItems: 'center' }}>
+          <IonButton
+            fill="clear"
+            aria-label="User menu"
+            onClick={(e) => {
+              setPopoverEvent(e.nativeEvent);
+              setIsOpen(true);
+            }}
+            style={{ paddingInline: 6 }}
+          >
             <InitialsAvatar 
-              fullName={user?.full_name || 'User'} 
-              photoUrl={user?.photo_url || ''} 
-              sizePx={40}
-              ariaLabel="User profile avatar"
+              fullName={user?.full_name} 
+              photoUrl={user?.photo_url} 
+              sizePx={36} 
             />
-          </div>
+          </IonButton>
         </IonButtons>
+
+        <IonPopover
+          isOpen={isOpen}
+          event={popoverEvent}
+          onDidDismiss={() => setIsOpen(false)}
+          showBackdrop={true}
+        >
+          <IonList>
+            <IonItem
+              button
+              detail={false}
+              onClick={handleAccount}
+            >
+              <IonLabel>Account</IonLabel>
+            </IonItem>
+
+            <IonItem
+              button
+              detail={false}
+              lines="none"
+              onClick={handleLogout}
+            >
+              <IonLabel color="danger">Logout</IonLabel>
+            </IonItem>
+          </IonList>
+        </IonPopover>
       </IonToolbar>
     </IonHeader>
   );
