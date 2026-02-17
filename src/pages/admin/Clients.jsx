@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonList,
   IonCard,
@@ -27,6 +24,7 @@ import {
   IonCol,
 } from '@ionic/react';
 import { add, create, trash, close, mailOutline, phonePortraitOutline, locationOutline } from 'ionicons/icons';
+import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminClients() {
@@ -214,11 +212,7 @@ export default function AdminClients() {
   if (loading) {
     return (
       <IonPage>
-        <IonHeader>
-          <IonToolbar color="primary">
-            <IonTitle>Clients</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <AppHeader title="Clients" />
         <IonContent>
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
@@ -230,20 +224,15 @@ export default function AdminClients() {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Clients</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={openCreateModal}>
-              <IonIcon icon={add} slot="start" />
-              New Client
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+      <AppHeader title="Clients" />
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
+          <IonButton color="primary" onClick={openCreateModal}>
+            <IonIcon icon={add} slot="start" />
+            Add Client
+          </IonButton>
+          
           <IonSearchbar
             value={searchText}
             onIonChange={(e) => setSearchText(e.detail.value)}

@@ -20,16 +20,24 @@ export const AppHeader = ({ title }) => {
   const [popoverEvent, setPopoverEvent] = useState(undefined);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = async () => {
+  const handleLogout = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setIsOpen(false);
     await logout();
     history.push('/login');
   };
 
-  const handleAccount = () => {
+  const handleAccount = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setIsOpen(false);
     if (user?.role === 'admin') {
-      history.push('/admin/settings');
+      history.push('/admin/account');
     } else {
       history.push('/client/account');
     }
@@ -45,6 +53,8 @@ export const AppHeader = ({ title }) => {
             fill="clear"
             aria-label="User menu"
             onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               setPopoverEvent(e.nativeEvent);
               setIsOpen(true);
             }}
@@ -69,6 +79,8 @@ export const AppHeader = ({ title }) => {
               button
               detail={false}
               onClick={handleAccount}
+              onTouchEnd={handleAccount}
+              style={{ cursor: 'pointer' }}
             >
               <IonLabel>Account</IonLabel>
             </IonItem>
@@ -78,6 +90,8 @@ export const AppHeader = ({ title }) => {
               detail={false}
               lines="none"
               onClick={handleLogout}
+              onTouchEnd={handleLogout}
+              style={{ cursor: 'pointer' }}
             >
               <IonLabel color="danger">Logout</IonLabel>
             </IonItem>

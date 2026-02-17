@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonList,
   IonCard,
@@ -32,8 +29,12 @@ import {
   IonRange,
   IonSegment,
   IonSegmentButton,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
 } from '@ionic/react';
 import { add, create, trash, close, pawOutline } from 'ionicons/icons';
+import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminPets() {
@@ -377,11 +378,7 @@ export default function AdminPets() {
   if (loading) {
     return (
       <IonPage>
-        <IonHeader>
-          <IonToolbar color="primary">
-            <IonTitle>Pets</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <AppHeader title="Pets" />
         <IonContent>
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
@@ -393,20 +390,15 @@ export default function AdminPets() {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Pets</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={openCreateModal}>
-              <IonIcon icon={add} slot="start" />
-              New Pet
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+      <AppHeader title="Pets" />
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
+          <IonButton color="primary" onClick={openCreateModal}>
+            <IonIcon icon={add} slot="start" />
+            New Pet
+          </IonButton>
+          
           <IonSearchbar
             value={searchText}
             onIonChange={(e) => setSearchText(e.detail.value)}

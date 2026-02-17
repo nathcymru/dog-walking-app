@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonList,
   IonCard,
@@ -24,8 +21,12 @@ import {
   IonIcon,
   IonBadge,
   IonAlert,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
 } from '@ionic/react';
 import { add, create, trash, close } from 'ionicons/icons';
+import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function AdminBookings() {
@@ -282,11 +283,7 @@ export default function AdminBookings() {
   if (loading) {
     return (
       <IonPage>
-        <IonHeader>
-          <IonToolbar color="primary">
-            <IonTitle>Bookings</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <AppHeader title="Bookings" />
         <IonContent>
           <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
@@ -299,20 +296,15 @@ export default function AdminBookings() {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Bookings</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={openCreateModal}>
-              <IonIcon icon={add} slot="start" />
-              New Booking
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-           <IonContent>
+      <AppHeader title="Bookings" />
+      <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
+          <IonButton color="primary" onClick={openCreateModal}>
+            <IonIcon icon={add} slot="start" />
+            New Booking
+          </IonButton>
+          
           {bookings.length === 0 ? (
             <IonCard>
               <IonCardContent>
