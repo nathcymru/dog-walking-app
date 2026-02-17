@@ -1,11 +1,12 @@
 import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
 import { Route, Redirect } from 'react-router-dom';
-import { home, calendar, paw, receipt } from 'ionicons/icons';
+import { home, calendar, paw, receipt, person } from 'ionicons/icons';
 
 import Dashboard from './Dashboard';
 import Bookings from './Bookings';
 import Pets from './Pets';
 import Billing from './Billing';
+import { AccountPage } from '../Account';
 
 export default function ClientTabs() {
   return (
@@ -16,6 +17,7 @@ export default function ClientTabs() {
         <Route exact path="/client/bookings" component={Bookings} />
         <Route exact path="/client/pets" component={Pets} />
         <Route exact path="/client/billing" component={Billing} />
+        <Route exact path="/client/account" component={AccountPage} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
         <IonTabButton tab="dashboard" href="/client/dashboard">
@@ -33,6 +35,10 @@ export default function ClientTabs() {
         <IonTabButton tab="billing" href="/client/billing">
           <IonIcon icon={receipt} />
           <IonLabel>Billing</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="account" href="/client/account">
+          <IonIcon icon={person} />
+          <IonLabel>Account</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
