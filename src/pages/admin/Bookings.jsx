@@ -214,7 +214,9 @@ export default function AdminBookings() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
 
     if (!formData.client_id || !formData.datetime_start || !formData.datetime_end || !formData.service_type) {
       showToast('Please fill in all required fields', 'warning');
@@ -352,160 +354,194 @@ export default function AdminBookings() {
         </div>
 
         {/* Create/Edit Modal */}
-        <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+        <IonModal 
+          isOpen={showModal} 
+          onDidDismiss={() => setShowModal(false)}
+          cssClass="custom-modal"
+          backdropDismiss={true}
+        >
           <IonHeader>
             <IonToolbar>
               <IonTitle>{editingBooking ? 'Edit Booking' : 'Create Booking'}</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>
+                <IonButton 
+                  onClick={() => setShowModal(false)}
+                  type="button"
+                  style={{ pointerEvents: 'auto' }}
+                >
                   <IonIcon icon={close} />
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <IonContent>
-            <form onSubmit={handleSubmit} className="ion-padding">
-              <IonItem>
-                <IonLabel position="stacked">Client *</IonLabel>
-                <IonSelect
-                  value={formData.client_id}
-                  onIonChange={(e) => setFormData({ ...formData, client_id: e.detail.value })}
-                >
-                  <IonSelectOption value="">Select Client</IonSelectOption>
-                  {clients.map((client) => (
-                    <IonSelectOption key={client.id} value={client.id}>
-                      {client.full_name}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
+          <IonContent className="ion-padding">
+            <IonItem>
+              <IonLabel position="stacked">Client <span className="required">*</span></IonLabel>
+              <IonSelect
+                value={formData.client_id}
+                onIonChange={(e) => setFormData({ ...formData, client_id: e.detail.value })}
+                aria-required="true"
+                aria-label="Select client"
+              >
+                <IonSelectOption value="">Select Client</IonSelectOption>
+                {clients.map((client) => (
+                  <IonSelectOption key={client.id} value={client.id}>
+                    {client.full_name}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Pets</IonLabel>
-                <IonSelect
-                  multiple
-                  value={formData.pet_ids}
-                  onIonChange={(e) => setFormData({ ...formData, pet_ids: e.detail.value })}
-                >
-                  {filteredPets.map((pet) => (
-                    <IonSelectOption key={pet.id} value={pet.id}>
-                      {pet.name} ({pet.client_name})
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Pets</IonLabel>
+              <IonSelect
+                multiple
+                value={formData.pet_ids}
+                onIonChange={(e) => setFormData({ ...formData, pet_ids: e.detail.value })}
+                aria-label="Select pets"
+              >
+                {filteredPets.map((pet) => (
+                  <IonSelectOption key={pet.id} value={pet.id}>
+                    {pet.name} ({pet.client_name})
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Start Date & Time *</IonLabel>
-                <IonInput
-                  type="datetime-local"
-                  value={formData.datetime_start}
-                  onIonInput={(e) => setFormData({ ...formData, datetime_start: e.detail.value })}
-                />
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Start Date & Time <span className="required">*</span></IonLabel>
+              <IonInput
+                type="datetime-local"
+                value={formData.datetime_start}
+                onIonInput={(e) => setFormData({ ...formData, datetime_start: e.detail.value })}
+                aria-required="true"
+                aria-label="Start date and time"
+              />
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">End Date & Time *</IonLabel>
-                <IonInput
-                  type="datetime-local"
-                  value={formData.datetime_end}
-                  onIonInput={(e) => setFormData({ ...formData, datetime_end: e.detail.value })}
-                />
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">End Date & Time <span className="required">*</span></IonLabel>
+              <IonInput
+                type="datetime-local"
+                value={formData.datetime_end}
+                onIonInput={(e) => setFormData({ ...formData, datetime_end: e.detail.value })}
+                aria-required="true"
+                aria-label="End date and time"
+              />
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Service Type *</IonLabel>
-                <IonSelect
-                  value={formData.service_type}
-                  onIonChange={(e) => setFormData({ ...formData, service_type: e.detail.value })}
-                >
-                  <IonSelectOption value="walk">Walk</IonSelectOption>
-                  <IonSelectOption value="visit">Visit</IonSelectOption>
-                  <IonSelectOption value="sitting">Sitting</IonSelectOption>
-                </IonSelect>
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Service Type <span className="required">*</span></IonLabel>
+              <IonSelect
+                value={formData.service_type}
+                onIonChange={(e) => setFormData({ ...formData, service_type: e.detail.value })}
+                aria-required="true"
+                aria-label="Service type"
+              >
+                <IonSelectOption value="walk">Walk</IonSelectOption>
+                <IonSelectOption value="visit">Visit</IonSelectOption>
+                <IonSelectOption value="sitting">Sitting</IonSelectOption>
+              </IonSelect>
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Status</IonLabel>
-                <IonSelect
-                  value={formData.status}
-                  onIonChange={(e) => setFormData({ ...formData, status: e.detail.value })}
-                >
-                  <IonSelectOption value="approved">Approved</IonSelectOption>
-                  <IonSelectOption value="pending">Pending</IonSelectOption>
-                  <IonSelectOption value="cancelled">Cancelled</IonSelectOption>
-                  <IonSelectOption value="completed">Completed</IonSelectOption>
-                </IonSelect>
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Status</IonLabel>
+              <IonSelect
+                value={formData.status}
+                onIonChange={(e) => setFormData({ ...formData, status: e.detail.value })}
+                aria-label="Booking status"
+              >
+                <IonSelectOption value="approved">Approved</IonSelectOption>
+                <IonSelectOption value="pending">Pending</IonSelectOption>
+                <IonSelectOption value="cancelled">Cancelled</IonSelectOption>
+                <IonSelectOption value="completed">Completed</IonSelectOption>
+              </IonSelect>
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Walker Name</IonLabel>
-                <IonInput
-                  value={formData.walker_name}
-                  onIonInput={(e) => setFormData({ ...formData, walker_name: e.detail.value })}
-                  placeholder="Enter walker name"
-                />
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Walker Name</IonLabel>
+              <IonInput
+                value={formData.walker_name}
+                onIonInput={(e) => setFormData({ ...formData, walker_name: e.detail.value })}
+                placeholder="Enter walker name"
+                aria-label="Walker name"
+              />
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Recurrence</IonLabel>
-                <IonSelect
-                  value={formData.recurrence}
-                  onIonChange={(e) => setFormData({ ...formData, recurrence: e.detail.value })}
-                >
-                  <IonSelectOption value="One-off">One-off</IonSelectOption>
-                  <IonSelectOption value="Daily">Daily</IonSelectOption>
-                  <IonSelectOption value="Weekly">Weekly</IonSelectOption>
-                </IonSelect>
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Recurrence</IonLabel>
+              <IonSelect
+                value={formData.recurrence}
+                onIonChange={(e) => setFormData({ ...formData, recurrence: e.detail.value })}
+                aria-label="Recurrence pattern"
+              >
+                <IonSelectOption value="One-off">One-off</IonSelectOption>
+                <IonSelectOption value="Daily">Daily</IonSelectOption>
+                <IonSelectOption value="Weekly">Weekly</IonSelectOption>
+              </IonSelect>
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Time Window Start</IonLabel>
-                <IonInput
-                  type="time"
-                  value={formData.time_window_start}
-                  onIonInput={(e) => setFormData({ ...formData, time_window_start: e.detail.value })}
-                />
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Time Window Start</IonLabel>
+              <IonInput
+                type="time"
+                value={formData.time_window_start}
+                onIonInput={(e) => setFormData({ ...formData, time_window_start: e.detail.value })}
+                aria-label="Time window start"
+              />
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Time Window End</IonLabel>
-                <IonInput
-                  type="time"
-                  value={formData.time_window_end}
-                  onIonInput={(e) => setFormData({ ...formData, time_window_end: e.detail.value })}
-                />
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Time Window End</IonLabel>
+              <IonInput
+                type="time"
+                value={formData.time_window_end}
+                onIonInput={(e) => setFormData({ ...formData, time_window_end: e.detail.value })}
+                aria-label="Time window end"
+              />
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Notes</IonLabel>
-                <IonTextarea
-                  value={formData.notes}
-                  onIonInput={(e) => setFormData({ ...formData, notes: e.detail.value })}
-                  placeholder="Enter any notes"
-                  rows={3}
-                />
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Notes</IonLabel>
+              <IonTextarea
+                value={formData.notes}
+                onIonInput={(e) => setFormData({ ...formData, notes: e.detail.value })}
+                placeholder="Enter any notes"
+                rows={3}
+                aria-label="Booking notes"
+              />
+            </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">Admin Comment</IonLabel>
-                <IonTextarea
-                  value={formData.admin_comment}
-                  onIonInput={(e) => setFormData({ ...formData, admin_comment: e.detail.value })}
-                  placeholder="Enter admin comments"
-                  rows={3}
-                />
-              </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Admin Comment</IonLabel>
+              <IonTextarea
+                value={formData.admin_comment}
+                onIonInput={(e) => setFormData({ ...formData, admin_comment: e.detail.value })}
+                placeholder="Enter admin comments"
+                rows={3}
+                aria-label="Admin comments"
+              />
+            </IonItem>
 
-              <div className="ion-padding-top">
-                <IonButton expand="block" type="submit">
-                  {editingBooking ? 'Update Booking' : 'Create Booking'}
-                </IonButton>
-                <IonButton expand="block" fill="outline" onClick={() => setShowModal(false)}>
-                  Cancel
-                </IonButton>
-              </div>
-            </form>
+            <div className="ion-padding-top">
+              <IonButton 
+                expand="block" 
+                onClick={handleSubmit}
+                type="button"
+                style={{ pointerEvents: 'auto' }}
+              >
+                {editingBooking ? 'Update Booking' : 'Create Booking'}
+              </IonButton>
+              <IonButton 
+                expand="block" 
+                fill="outline" 
+                onClick={() => setShowModal(false)}
+                type="button"
+                style={{ pointerEvents: 'auto' }}
+              >
+                Cancel
+              </IonButton>
+            </div>
           </IonContent>
         </IonModal>
 
