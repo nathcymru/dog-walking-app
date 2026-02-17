@@ -51,6 +51,7 @@ export async function onRequestPut({ request, env }) {
 
   try {
     // Update client_profiles table
+    // Note: email is stored in both users and client_profiles tables (existing schema design)
     await db.prepare(`
       UPDATE client_profiles SET
         full_name = ?,
@@ -66,7 +67,7 @@ export async function onRequestPut({ request, env }) {
     ).run();
 
     // Update users table email if changed
-    if (body.email && body.email !== user.email) {
+    if (body.email !== user.email) {
       await db.prepare(`
         UPDATE users SET
           email = ?,

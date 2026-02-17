@@ -40,8 +40,8 @@ export async function onRequestPut({ request, env }) {
   }
 
   try {
-    // Update users table email
-    if (body.email && body.email !== user.email) {
+    // Update users table email if changed
+    if (body.email !== user.email) {
       await db.prepare(`
         UPDATE users SET
           email = ?,
@@ -78,11 +78,13 @@ export async function onRequestPut({ request, env }) {
       return errorResponse('Failed to fetch updated profile', 500);
     }
 
+    // Return the full_name from database if exists, otherwise null
+    // Admin users may not have client_profiles, which is expected
     const updatedUser = {
       id: results[0].id,
       email: results[0].email,
       role: results[0].role,
-      full_name: results[0].full_name ?? body.full_name
+      full_name: results[0].full_name
     };
 
     return jsonResponse({ 
