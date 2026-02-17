@@ -1,8 +1,28 @@
 import React from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
+import { 
+  IonPage, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonContent, 
+  IonCard, 
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonGrid, 
+  IonRow, 
+  IonCol,
+  IonIcon
+} from '@ionic/react';
 import { peopleOutline, pawOutline, calendarOutline, warningOutline } from 'ionicons/icons';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
+    const breadcrumbItems = [
+        { label: 'Admin', path: '/admin' },
+        { label: 'Dashboard', path: '/admin/dashboard' }
+    ];
+
     return (
         <IonPage>
             <IonHeader>
@@ -10,8 +30,9 @@ const Dashboard = () => {
                     <IonTitle>Admin Dashboard</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent className="ion-padding">
-                <IonGrid>
+            <IonContent>
+                <Breadcrumbs items={breadcrumbItems} />
+                <IonGrid className="ion-padding">
                     <IonRow>
                         <IonCol size="12" sizeMd="6" sizeLg="3">
                             <IonCard>

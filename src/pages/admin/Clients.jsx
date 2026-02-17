@@ -47,6 +47,11 @@ export default function AdminClients() {
     address: '',
   });
 
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Clients', path: '/admin/clients' }
+  ];
+
   useEffect(() => {
     fetchClients();
   }, []);
@@ -237,11 +242,7 @@ export default function AdminClients() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <Breadcrumbs items={[
-          { label: 'Home', path: '/admin/dashboard' },
-          { label: 'Admin', path: '/admin/dashboard' },
-          { label: 'Clients', path: '/admin/clients' }
-        ]} />
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           <IonSearchbar
             value={searchText}

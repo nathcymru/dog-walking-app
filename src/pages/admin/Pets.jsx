@@ -48,6 +48,11 @@ export default function AdminPets() {
   const [searchText, setSearchText] = useState('');
   const [modalSection, setModalSection] = useState('identity');
 
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Pets', path: '/admin/pets' }
+  ];
+
   const [formData, setFormData] = useState({
     // Identity
     client_id: '',
@@ -400,11 +405,7 @@ export default function AdminPets() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <Breadcrumbs items={[
-          { label: 'Home', path: '/admin/dashboard' },
-          { label: 'Admin', path: '/admin/dashboard' },
-          { label: 'Pets', path: '/admin/pets' }
-        ]} />
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           <IonSearchbar
             value={searchText}

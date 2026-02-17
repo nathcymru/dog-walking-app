@@ -28,6 +28,11 @@ export default function ClientBookings() {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
 
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'Bookings', path: '/client/bookings' }
+  ];
+
   useEffect(() => {
     fetchBookings();
   }, []);
@@ -116,6 +121,7 @@ export default function ClientBookings() {
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -132,11 +138,7 @@ export default function ClientBookings() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <Breadcrumbs items={[
-          { label: 'Home', path: '/client/dashboard' },
-          { label: 'Client', path: '/client/dashboard' },
-          { label: 'Bookings', path: '/client/bookings' }
-        ]} />
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           <IonSegment value={selectedStatus} onIonChange={(e) => setSelectedStatus(e.detail.value)}>
             <IonSegmentButton value="all">

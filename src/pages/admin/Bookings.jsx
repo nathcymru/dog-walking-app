@@ -38,6 +38,11 @@ export default function AdminBookings() {
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, bookingId: null });
 
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Bookings', path: '/admin/bookings' }
+  ];
+
   const [formData, setFormData] = useState({
     client_id: '',
     datetime_start: '',
@@ -283,6 +288,7 @@ export default function AdminBookings() {
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -304,12 +310,8 @@ export default function AdminBookings() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <Breadcrumbs items={[
-          { label: 'Home', path: '/admin/dashboard' },
-          { label: 'Admin', path: '/admin/dashboard' },
-          { label: 'Bookings', path: '/admin/bookings' }
-        ]} />
+           <IonContent>
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {bookings.length === 0 ? (
             <IonCard>

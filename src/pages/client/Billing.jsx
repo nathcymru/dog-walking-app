@@ -28,6 +28,11 @@ export default function ClientBilling() {
   const [expandedInvoices, setExpandedInvoices] = useState(new Set());
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
 
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'Billing', path: '/client/billing' }
+  ];
+
   useEffect(() => {
     fetchInvoices();
   }, []);
@@ -105,6 +110,7 @@ export default function ClientBilling() {
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -121,11 +127,7 @@ export default function ClientBilling() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <Breadcrumbs items={[
-          { label: 'Home', path: '/client/dashboard' },
-          { label: 'Client', path: '/client/dashboard' },
-          { label: 'Billing', path: '/client/billing' }
-        ]} />
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {error ? (
             <IonCard>

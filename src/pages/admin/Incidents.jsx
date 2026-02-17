@@ -39,6 +39,11 @@ export default function AdminIncidents() {
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, incidentId: null });
 
+  const breadcrumbItems = [
+    { label: 'Admin', path: '/admin' },
+    { label: 'Incidents', path: '/admin/incidents' }
+  ];
+
   const [formData, setFormData] = useState({
     incident_datetime: '',
     incident_type: 'injury',
@@ -275,6 +280,7 @@ export default function AdminIncidents() {
           </IonToolbar>
         </IonHeader>
         <IonContent>
+          <Breadcrumbs items={breadcrumbItems} />
           <div className="ion-padding" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <IonSpinner />
           </div>
@@ -297,11 +303,7 @@ export default function AdminIncidents() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <Breadcrumbs items={[
-          { label: 'Home', path: '/admin/dashboard' },
-          { label: 'Admin', path: '/admin/dashboard' },
-          { label: 'Incidents', path: '/admin/incidents' }
-        ]} />
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {incidents.length === 0 ? (
             <IonCard>

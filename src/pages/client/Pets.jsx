@@ -5,7 +5,6 @@ import {
   IonContent, 
   IonList, 
   IonItem, 
-  IonButton, 
   IonTitle, 
   IonToolbar,
   IonCard,
@@ -20,13 +19,18 @@ import {
   IonCol,
   IonLabel,
 } from '@ionic/react';
-import { pawOutline, addOutline } from 'ionicons/icons';
+import { pawOutline } from 'ionicons/icons';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 export default function ClientPets() {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState({ show: false, message: '', color: 'danger' });
+
+  const breadcrumbItems = [
+    { label: 'Client', path: '/client' },
+    { label: 'My Pets', path: '/client/pets' }
+  ];
 
   useEffect(() => {
     fetchPets();
@@ -92,11 +96,7 @@ export default function ClientPets() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <Breadcrumbs items={[
-          { label: 'Home', path: '/client/dashboard' },
-          { label: 'Client', path: '/client/dashboard' },
-          { label: 'My Pets', path: '/client/pets' }
-        ]} />
+        <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {pets.length === 0 ? (
             <IonCard>
