@@ -41,7 +41,7 @@ export async function verifySession(db, sessionToken) {
       SELECT u.id, u.email, u.role, cp.full_name
       FROM sessions s
       JOIN users u ON s.user_id = u.id
-      JOIN client_profiles cp ON u.id = cp.user_id
+      LEFT JOIN client_profiles cp ON u.id = cp.user_id
       WHERE s.session_token = ? AND s.expires_at > datetime('now')
     `).bind(sessionToken).all();
 
