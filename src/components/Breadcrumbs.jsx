@@ -1,20 +1,23 @@
-import { Link } from 'react-router-dom';
+import { IonBreadcrumbs, IonBreadcrumb } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 
 export default function Breadcrumbs({ items }) {
+  const history = useHistory();
+
+  if (!items || items.length === 0) return null;
+
   return (
-    <nav className="breadcrumbs" aria-label="Breadcrumb">
+    <IonBreadcrumbs style={{ padding: '0.5rem 1rem' }}>
       {items.map((item, index) => (
-        <div key={index} className="breadcrumb-item">
-          {index > 0 && <span className="breadcrumb-separator">›</span>}
-          {index === items.length - 1 ? (
-            <span className="breadcrumb-current">{item.label}</span>
-          ) : (
-            <Link to={item.path} className="breadcrumb-link">
-              {item.label}
-            </Link>
-          )}
-        </div>
+        <IonBreadcrumb
+          key={index}
+          onClick={() => index < items.length - 1 && history.push(item.path)}
+          active={index === items.length - 1}
+          style={{ cursor: index < items.length - 1 ? 'pointer' : 'default' }}
+        >
+          {item.label}
+        </IonBreadcrumb>
       ))}
-    </nav>
+    </IonBreadcrumbs>
   );
 }
