@@ -58,8 +58,7 @@ export const AccountPage = () => {
         body: JSON.stringify({
           full_name: fullName,
           email,
-          phone,
-          photo_url: photoUrl
+          phone
         })
       });
 

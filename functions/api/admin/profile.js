@@ -34,6 +34,11 @@ export async function onRequestPut({ request, env }) {
     return errorResponse('Invalid request body', 400);
   }
 
+  // Validate required field
+  if (!body.email) {
+    return errorResponse('Email is required', 400);
+  }
+
   try {
     // Update users table email
     if (body.email && body.email !== user.email) {
@@ -45,18 +50,20 @@ export async function onRequestPut({ request, env }) {
       `).bind(body.email, user.id).run();
     }
 
-    // If admin has a client_profile entry, update that too
-    const { results: profileCheck } = await db.prepare(`
-      SELECT id FROM client_profiles WHERE user_id = ?
-    `).bind(user.id).all();
+    // If admin has a client_profile entry and full_name is provided, update that too
+    if (body.full_name) {
+      const { results: profileCheck } = await db.prepare(`
+        SELECT id FROM client_profiles WHERE user_id = ?
+      `).bind(user.id).all();
 
-    if (profileCheck.length > 0 && body.full_name) {
-      await db.prepare(`
-        UPDATE client_profiles SET
-          full_name = ?,
-          updated_at = CURRENT_TIMESTAMP
-        WHERE user_id = ?
-      `).bind(body.full_name, user.id).run();
+      if (profileCheck.length > 0) {
+        await db.prepare(`
+          UPDATE client_profiles SET
+            full_name = ?,
+            updated_at = CURRENT_TIMESTAMP
+          WHERE user_id = ?
+        `).bind(body.full_name, user.id).run();
+      }
     }
 
     // Fetch updated user data to return
@@ -75,7 +82,7 @@ export async function onRequestPut({ request, env }) {
       id: results[0].id,
       email: results[0].email,
       role: results[0].role,
-      full_name: results[0].full_name ?? body.full_name ?? 'Admin User'
+      full_name: results[0].full_name ?? body.full_name
     };
 
     return jsonResponse({ 

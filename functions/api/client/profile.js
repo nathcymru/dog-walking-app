@@ -44,6 +44,11 @@ export async function onRequestPut({ request, env }) {
     return errorResponse('Invalid request body', 400);
   }
 
+  // Validate required fields
+  if (!body.full_name || !body.email) {
+    return errorResponse('Full name and email are required', 400);
+  }
+
   try {
     // Update client_profiles table
     await db.prepare(`
@@ -54,9 +59,9 @@ export async function onRequestPut({ request, env }) {
         updated_at = CURRENT_TIMESTAMP
       WHERE user_id = ?
     `).bind(
-      body.full_name ?? '',
+      body.full_name,
       body.phone ?? body.mobile ?? '',
-      body.email ?? '',
+      body.email,
       user.id
     ).run();
 
