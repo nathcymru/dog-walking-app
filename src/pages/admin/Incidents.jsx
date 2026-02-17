@@ -500,7 +500,6 @@ export default function AdminIncidents() {
             </IonToolbar>
           </IonFooter>
         </IonModal>
-        </IonModal>
 
         <IonToast
           isOpen={toast.show}

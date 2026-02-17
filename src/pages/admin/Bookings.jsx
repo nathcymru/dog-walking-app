@@ -516,7 +516,6 @@ export default function AdminBookings() {
             </IonToolbar>
           </IonFooter>
         </IonModal>
-        </IonModal>
 
         <IonToast
           isOpen={toast.show}
