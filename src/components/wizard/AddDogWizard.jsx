@@ -9,6 +9,7 @@ import {
   IonIcon,
   IonContent,
   IonToast,
+  IonFooter,
 } from '@ionic/react';
 import { close } from 'ionicons/icons';
 import WizardProgress from './WizardProgress';
@@ -297,19 +298,13 @@ const AddDogWizard = ({
     <IonModal 
       isOpen={isOpen} 
       onDidDismiss={handleClose}
-      cssClass="custom-modal"
-      backdropDismiss={true}
     >
       <IonHeader>
         <IonToolbar>
           <IonTitle>Add Dog</IonTitle>
           <IonButtons slot="end">
-            <IonButton 
-              onClick={handleClose}
-              type="button"
-              style={{ pointerEvents: 'auto' }}
-            >
-              <IonIcon icon={close} />
+            <IonButton onClick={handleClose}>
+              Close
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -358,37 +353,33 @@ const AddDogWizard = ({
             />
           )}
         </div>
-
-        {currentStep < 4 ? (
-          <WizardNavigation
-            currentStep={currentStep}
-            totalSteps={4}
-            onBack={handleBack}
-            onNext={handleNext}
-            canProceed={canProceed()}
-            isLastStep={currentStep === 3}
-          />
-        ) : (
-          <div className="wizard-navigation">
-            <IonButton 
-              fill="outline" 
-              onClick={() => setCurrentStep(3)}
-              type="button"
-              style={{ pointerEvents: 'auto' }}
-            >
-              Back to Health
-            </IonButton>
-            <IonButton 
-              fill="solid" 
-              onClick={handleSave}
-              type="button"
-              style={{ pointerEvents: 'auto' }}
-            >
-              Save Dog
-            </IonButton>
-          </div>
-        )}
       </IonContent>
+
+      {currentStep < 4 ? (
+        <IonFooter>
+          <IonToolbar>
+            <IonButtons slot="start">
+              {currentStep > 1 && (
+                <IonButton onClick={handleBack}>Back</IonButton>
+              )}
+            </IonButtons>
+            <IonButtons slot="end">
+              <IonButton strong onClick={handleNext}>
+                {currentStep === 3 ? 'Review' : 'Next'}
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonFooter>
+      ) : (
+        <IonFooter>
+          <IonToolbar>
+            <IonButtons slot="end">
+              <IonButton onClick={() => setCurrentStep(3)}>Back</IonButton>
+              <IonButton strong onClick={handleSave}>Save Dog</IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonFooter>
+      )}
 
       <IonToast
         isOpen={toast.show}
