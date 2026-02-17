@@ -310,7 +310,7 @@ export default function AdminBookings() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+           <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
           {bookings.length === 0 ? (

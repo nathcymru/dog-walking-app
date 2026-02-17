@@ -12,8 +12,9 @@ import {
   IonGrid, 
   IonRow, 
   IonCol,
-  IonText
+  IonIcon
 } from '@ionic/react';
+import { peopleOutline, pawOutline, calendarOutline, warningOutline } from 'ionicons/icons';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
@@ -33,29 +34,71 @@ const Dashboard = () => {
                 <Breadcrumbs items={breadcrumbItems} />
                 <IonGrid className="ion-padding">
                     <IonRow>
-                        <IonCol size="12" sizeMd="6" sizeLg="4">
-                            <IonCard color="light">
+                        <IonCol size="12" sizeMd="6" sizeLg="3">
+                            <IonCard>
                                 <IonCardHeader>
-                                    <IonCardTitle color="primary">Statistics Overview</IonCardTitle>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <IonIcon icon={peopleOutline} style={{ fontSize: '2rem', color: 'var(--ion-color-primary)' }} />
+                                        <IonCardTitle>Clients</IonCardTitle>
+                                    </div>
                                 </IonCardHeader>
                                 <IonCardContent>
-                                    <IonText>
-                                        <p><strong>Total Walks:</strong> 150</p>
-                                        <p><strong>Total Dogs Walked:</strong> 200</p>
-                                        <p><strong>Total Walkers:</strong> 15</p>
-                                    </IonText>
+                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
+                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>Total Clients</p>
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
-                        <IonCol size="12" sizeMd="6" sizeLg="4">
-                            <IonCard color="light">
+                        <IonCol size="12" sizeMd="6" sizeLg="3">
+                            <IonCard>
                                 <IonCardHeader>
-                                    <IonCardTitle color="success">Latest Activity</IonCardTitle>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <IonIcon icon={pawOutline} style={{ fontSize: '2rem', color: 'var(--ion-color-success)' }} />
+                                        <IonCardTitle>Pets</IonCardTitle>
+                                    </div>
                                 </IonCardHeader>
                                 <IonCardContent>
-                                    <IonText>
-                                        <p>Walker John Doe walked Buddy on 2026-01-30</p>
-                                    </IonText>
+                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
+                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>Total Pets</p>
+                                </IonCardContent>
+                            </IonCard>
+                        </IonCol>
+                        <IonCol size="12" sizeMd="6" sizeLg="3">
+                            <IonCard>
+                                <IonCardHeader>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <IonIcon icon={calendarOutline} style={{ fontSize: '2rem', color: 'var(--ion-color-warning)' }} />
+                                        <IonCardTitle>Bookings</IonCardTitle>
+                                    </div>
+                                </IonCardHeader>
+                                <IonCardContent>
+                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
+                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>This Month</p>
+                                </IonCardContent>
+                            </IonCard>
+                        </IonCol>
+                        <IonCol size="12" sizeMd="6" sizeLg="3">
+                            <IonCard>
+                                <IonCardHeader>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <IonIcon icon={warningOutline} style={{ fontSize: '2rem', color: 'var(--ion-color-danger)' }} />
+                                        <IonCardTitle>Incidents</IonCardTitle>
+                                    </div>
+                                </IonCardHeader>
+                                <IonCardContent>
+                                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>-</p>
+                                    <p style={{ color: 'var(--ion-color-medium)', margin: 0 }}>This Month</p>
+                                </IonCardContent>
+                            </IonCard>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol size="12">
+                            <IonCard>
+                                <IonCardHeader>
+                                    <IonCardTitle>Quick Actions</IonCardTitle>
+                                </IonCardHeader>
+                                <IonCardContent>
+                                    <p>Use the navigation tabs below to manage clients, pets, bookings, and incidents.</p>
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
