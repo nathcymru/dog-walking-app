@@ -12,17 +12,31 @@ export async function onRequestGet({ request, env }) {
     const { results: clientCount } = await db.prepare(
       'SELECT COUNT(*) as count FROM users WHERE role = "client"'
     ).all();
-    stats.clients = clientCount[0].count;
+    stats.totalClients = clientCount[0].count;
 
     const { results: petCount } = await db.prepare(
       'SELECT COUNT(*) as count FROM pets'
     ).all();
-    stats.pets = petCount[0].count;
+    stats.totalPets = petCount[0].count;
 
     const { results: unpaidCount } = await db.prepare(
       'SELECT COUNT(*) as count FROM invoices WHERE status = "unpaid"'
     ).all();
     stats.unpaidInvoices = unpaidCount[0].count;
+
+    // Get bookings for this month
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const startOfMonthStr = startOfMonth.toISOString().split('T')[0];
+    
+    const { results: monthlyBookings } = await db.prepare(
+      'SELECT COUNT(*) as count FROM bookings WHERE DATE(datetime_start) >= ?'
+    ).bind(startOfMonthStr).all();
+    stats.bookingsThisMonth = monthlyBookings[0].count;
+
+    // Incidents table doesn't exist in schema, returning 0
+    stats.incidentsThisMonth = 0;
 
     const today = new Date().toISOString().split('T')[0];
     const { results: todayBookings } = await db.prepare(`
