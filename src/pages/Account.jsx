@@ -71,8 +71,9 @@ export const AccountPage = () => {
       const data = await response.json();
       
       // Update localStorage to keep UI in sync
+      // photo_url is preserved here as it's not stored in the database
       if (data.user) {
-        updateUser(data.user);
+        updateUser({ ...data.user, photo_url: photoUrl });
       }
       
       setToast({ show: true, message: "Profile updated successfully", color: "success" });

@@ -54,9 +54,9 @@ export async function onRequestPut({ request, env }) {
         updated_at = CURRENT_TIMESTAMP
       WHERE user_id = ?
     `).bind(
-      body.full_name || '',
-      body.phone || body.mobile || '',
-      body.email || '',
+      body.full_name ?? '',
+      body.phone ?? body.mobile ?? '',
+      body.email ?? '',
       user.id
     ).run();
 
@@ -87,9 +87,11 @@ export async function onRequestPut({ request, env }) {
       email: results[0].email,
       role: results[0].role,
       full_name: results[0].full_name,
-      phone: results[0].phone,
-      photo_url: body.photo_url || ''
+      phone: results[0].phone
     };
+
+    // Note: photo_url is not stored in the database (not in client_profiles schema)
+    // It will remain in localStorage only, which is acceptable for this optional field
 
     return jsonResponse({ 
       success: true,

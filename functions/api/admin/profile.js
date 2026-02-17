@@ -75,7 +75,7 @@ export async function onRequestPut({ request, env }) {
       id: results[0].id,
       email: results[0].email,
       role: results[0].role,
-      full_name: results[0].full_name || body.full_name || user.email.split('@')[0]
+      full_name: results[0].full_name ?? body.full_name ?? 'Admin User'
     };
 
     return jsonResponse({ 
