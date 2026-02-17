@@ -28,10 +28,10 @@ export async function onRequestGet({ request, env }) {
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
-    const startOfMonthStr = startOfMonth.toISOString().split('T')[0];
+    const startOfMonthStr = startOfMonth.toISOString();
     
     const { results: monthlyBookings } = await db.prepare(
-      'SELECT COUNT(*) as count FROM bookings WHERE DATE(datetime_start) >= ?'
+      'SELECT COUNT(*) as count FROM bookings WHERE datetime_start >= ?'
     ).bind(startOfMonthStr).all();
     stats.bookingsThisMonth = monthlyBookings[0].count;
 
