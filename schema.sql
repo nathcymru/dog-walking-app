@@ -39,6 +39,50 @@ CREATE TABLE IF NOT EXISTS pets (
     FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS walkers (
+    walker_id TEXT PRIMARY KEY,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    preferred_name TEXT,
+    email TEXT NOT NULL UNIQUE,
+    phone_mobile TEXT NOT NULL,
+    phone_alternative TEXT,
+    address_line_1 TEXT,
+    town_city TEXT,
+    postcode TEXT,
+    emergency_contact_name TEXT,
+    emergency_contact_phone TEXT,
+    employment_status TEXT NOT NULL CHECK(employment_status IN ('employee', 'worker', 'contractor')),
+    start_date TEXT NOT NULL,
+    account_status TEXT NOT NULL DEFAULT 'active' CHECK(account_status IN ('active', 'suspended', 'left')),
+    photo_url TEXT,
+    notes_internal TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_walkers_status ON walkers(account_status);
+CREATE INDEX IF NOT EXISTS idx_walkers_email ON walkers(email);
+
+CREATE TABLE IF NOT EXISTS walk_slots (
+    id TEXT PRIMARY KEY,
+    start_at TEXT NOT NULL,
+    end_at TEXT NOT NULL,
+    walk_type TEXT NOT NULL CHECK(walk_type IN ('GROUP', 'PRIVATE')),
+    capacity_dogs INTEGER NOT NULL,
+    walker_id TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'AVAILABLE' CHECK(status IN ('AVAILABLE', 'CANCELLED', 'LOCKED')),
+    location_label TEXT,
+    notes TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (walker_id) REFERENCES walkers(walker_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_slots_start ON walk_slots(start_at);
+CREATE INDEX IF NOT EXISTS idx_slots_walker ON walk_slots(walker_id);
+CREATE INDEX IF NOT EXISTS idx_slots_status ON walk_slots(status);
+
 CREATE TABLE IF NOT EXISTS bookings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     client_id INTEGER NOT NULL,
@@ -48,9 +92,17 @@ CREATE TABLE IF NOT EXISTS bookings (
     status TEXT NOT NULL CHECK(status IN ('scheduled', 'completed', 'cancelled')) DEFAULT 'scheduled',
     walker_name TEXT,
     notes TEXT,
+    slot_id TEXT,
+    booking_status TEXT DEFAULT 'PENDING_APPROVAL' CHECK(booking_status IN ('PENDING_APPROVAL', 'APPROVED', 'REJECTED', 'CANCELLED_BY_CLIENT', 'CANCELLED_BY_ADMIN')),
+    requested_at TEXT NOT NULL DEFAULT (datetime('now')),
+    decided_at TEXT,
+    decided_by_user_id TEXT,
+    decision_notes TEXT,
+    cancellation_reason TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (slot_id) REFERENCES walk_slots(id)
 );
 
 CREATE TABLE IF NOT EXISTS booking_pets (

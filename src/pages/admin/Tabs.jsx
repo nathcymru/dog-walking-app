@@ -15,6 +15,9 @@ import PetForm from './PetForm';
 import BookingForm from './BookingForm';
 import IncidentForm from './IncidentForm';
 import InvoiceForm from './InvoiceForm';
+import Walkers from './Walkers';
+import WalkerForm from './WalkerForm';
+import WalkerDetail from './WalkerDetail';
 
 export default function AdminTabs() {
   return (
@@ -36,6 +39,10 @@ export default function AdminTabs() {
         <Route path="/admin/incidents/:id/edit" component={IncidentForm} />
         <Route exact path="/admin/invoices/new" component={InvoiceForm} />
         <Route path="/admin/invoices/:id/edit" component={InvoiceForm} />
+        <Route exact path="/admin/walkers" component={Walkers} />
+        <Route exact path="/admin/walkers/new" component={WalkerForm} />
+        <Route exact path="/admin/walkers/:walkerId" component={WalkerDetail} />
+        <Route path="/admin/walkers/:walkerId/edit" component={WalkerForm} />
         <Route exact path="/admin/rewards" component={Rewards} />
         <Route path="/admin/rewards/:id" component={RewardForm} />
         <Route exact path="/admin/account" component={AdminAccount} />
