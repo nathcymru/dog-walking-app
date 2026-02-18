@@ -46,7 +46,14 @@ export async function verifySession(db, sessionToken) {
     `).bind(sessionToken).all();
 
     if (results.length === 0) return null;
-    return results[0];
+    
+    // For admin users without client profiles, use email as fallback
+    const user = results[0];
+    if (!user.full_name && user.role === 'admin') {
+      user.full_name = user.email.split('@')[0];
+    }
+    
+    return user;
   } catch (error) {
     console.error('Session verification error:', error);
     return null;
