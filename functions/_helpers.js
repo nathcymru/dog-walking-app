@@ -49,7 +49,7 @@ export async function verifySession(db, sessionToken) {
     
     // For admin users without client profiles, use email as fallback
     const user = results[0];
-    if (!user.full_name && user.role === 'admin') {
+    if (!user.full_name && user.role === 'admin' && user.email) {
       user.full_name = user.email.split('@')[0];
     }
     
