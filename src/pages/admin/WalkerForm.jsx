@@ -181,7 +181,7 @@ export default function WalkerForm() {
       });
 
       if (response.ok) {
-        showToast('Progress saved', 'success');
+        showToast('Changes saved successfully', 'success');
         setHasUnsavedChanges(false);
         setTimeout(() => {
           history.goBack();

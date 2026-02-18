@@ -72,8 +72,16 @@ export default function Slots() {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (dateFrom) params.append('date_from', `${dateFrom}T00:00:00.000Z`);
-      if (dateTo) params.append('date_to', `${dateTo}T23:59:59.999Z`);
+      if (dateFrom) {
+        const fromDate = new Date(dateFrom);
+        fromDate.setHours(0, 0, 0, 0);
+        params.append('date_from', fromDate.toISOString());
+      }
+      if (dateTo) {
+        const toDate = new Date(dateTo);
+        toDate.setHours(23, 59, 59, 999);
+        params.append('date_to', toDate.toISOString());
+      }
       if (filterWalkerId) params.append('walker_id', filterWalkerId);
       if (filterWalkType) params.append('walk_type', filterWalkType);
       if (filterStatus) params.append('status', filterStatus);

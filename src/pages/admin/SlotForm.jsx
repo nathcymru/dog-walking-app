@@ -197,7 +197,7 @@ export default function SlotForm() {
       });
 
       if (response.ok) {
-        showToast('Progress saved', 'success');
+        showToast('Changes saved successfully', 'success');
         setHasUnsavedChanges(false);
         setTimeout(() => {
           history.goBack();
