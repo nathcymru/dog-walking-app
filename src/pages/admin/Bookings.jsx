@@ -93,7 +93,7 @@ export default function AdminBookings() {
   const openEditForm = (booking) => {
     history.push(`/admin/bookings/${booking.id}/edit`);
   };
-      showToast('Please fill in all required fields', 'warning');
+
   const handleDelete = async (bookingId) => {
     try {
       const response = await fetch(`/api/admin/bookings/${bookingId}`, {
