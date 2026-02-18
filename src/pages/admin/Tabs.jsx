@@ -1,12 +1,14 @@
 import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
 import { Route, Redirect } from 'react-router-dom';
-import { home, people, paw, calendar, warning, personCircleOutline } from 'ionicons/icons';
+import { home, people, paw, calendar, warning, gift, personCircleOutline } from 'ionicons/icons';
 
 import Dashboard from './Dashboard';
 import Clients from './Clients';
 import Pets from './Pets';
 import Bookings from './Bookings';
 import Incidents from './Incidents';
+import Rewards from './Rewards';
+import RewardForm from './RewardForm';
 import AdminAccount from './Account';
 
 export default function AdminTabs() {
@@ -19,6 +21,8 @@ export default function AdminTabs() {
         <Route exact path="/admin/pets" component={Pets} />
         <Route exact path="/admin/bookings" component={Bookings} />
         <Route exact path="/admin/incidents" component={Incidents} />
+        <Route exact path="/admin/rewards" component={Rewards} />
+        <Route path="/admin/rewards/:id" component={RewardForm} />
         <Route exact path="/admin/account" component={AdminAccount} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
@@ -41,6 +45,10 @@ export default function AdminTabs() {
         <IonTabButton tab="admin-incidents" href="/admin/incidents">
           <IonIcon icon={warning} />
           <IonLabel>Incidents</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="admin-rewards" href="/admin/rewards">
+          <IonIcon icon={gift} />
+          <IonLabel>Rewards</IonLabel>
         </IonTabButton>
         <IonTabButton tab="admin-account" href="/admin/account">
           <IonIcon icon={personCircleOutline} />
