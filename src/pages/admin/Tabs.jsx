@@ -1,6 +1,6 @@
 import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
 import { Route, Redirect } from 'react-router-dom';
-import { home, people, paw, calendar, warning, gift, personCircleOutline } from 'ionicons/icons';
+import { home, people, paw, calendar, warning, gift, personCircleOutline, time } from 'ionicons/icons';
 
 import Dashboard from './Dashboard';
 import Clients from './Clients';
@@ -18,6 +18,9 @@ import InvoiceForm from './InvoiceForm';
 import Walkers from './Walkers';
 import WalkerForm from './WalkerForm';
 import WalkerDetail from './WalkerDetail';
+import Slots from './Slots';
+import SlotForm from './SlotForm';
+import SlotDetail from './SlotDetail';
 
 export default function AdminTabs() {
   return (
@@ -43,6 +46,10 @@ export default function AdminTabs() {
         <Route exact path="/admin/walkers/new" component={WalkerForm} />
         <Route exact path="/admin/walkers/:walkerId" component={WalkerDetail} />
         <Route path="/admin/walkers/:walkerId/edit" component={WalkerForm} />
+        <Route exact path="/admin/slots" component={Slots} />
+        <Route exact path="/admin/slots/new" component={SlotForm} />
+        <Route exact path="/admin/slots/:slotId" component={SlotDetail} />
+        <Route path="/admin/slots/:slotId/edit" component={SlotForm} />
         <Route exact path="/admin/rewards" component={Rewards} />
         <Route path="/admin/rewards/:id" component={RewardForm} />
         <Route exact path="/admin/account" component={AdminAccount} />
@@ -63,6 +70,10 @@ export default function AdminTabs() {
         <IonTabButton tab="admin-bookings" href="/admin/bookings">
           <IonIcon icon={calendar} />
           <IonLabel>Bookings</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="admin-slots" href="/admin/slots">
+          <IonIcon icon={time} />
+          <IonLabel>Slots</IonLabel>
         </IonTabButton>
         <IonTabButton tab="admin-incidents" href="/admin/incidents">
           <IonIcon icon={warning} />
