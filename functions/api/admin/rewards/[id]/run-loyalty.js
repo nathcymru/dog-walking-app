@@ -81,8 +81,9 @@ async function calculateLoyaltyEligibility(db, campaign) {
   
   // Issue rewards (idempotent)
   for (const client of eligibleClients) {
-    const [firstName, ...lastNameParts] = client.full_name.split(' ');
-    const lastName = lastNameParts.join(' ');
+    const nameParts = client.full_name.trim().split(' ').filter(p => p.length > 0);
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : firstName;
     const initials = generateInitials(firstName, lastName);
     const voucherCode = `${campaign.voucher_prefix}${initials}`;
     
