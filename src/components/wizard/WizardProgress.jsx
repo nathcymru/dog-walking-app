@@ -1,5 +1,4 @@
 import React from 'react';
-import './WizardProgress.css';
 
 const WizardProgress = ({ currentStep, totalSteps = 4, completedSteps = [] }) => {
   return (

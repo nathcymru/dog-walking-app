@@ -10,7 +10,6 @@ import {
   IonText,
   IonNote,
 } from '@ionic/react';
-import './Step3HealthVetInsurance.css';
 
 const Step3HealthVetInsurance = ({ 
   formData, 

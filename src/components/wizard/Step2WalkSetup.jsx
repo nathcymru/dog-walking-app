@@ -13,7 +13,6 @@ import {
   IonCard,
   IonCardContent,
 } from '@ionic/react';
-import './Step2WalkSetup.css';
 
 const Step2WalkSetup = ({ 
   formData, 

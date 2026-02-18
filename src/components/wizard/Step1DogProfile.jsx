@@ -15,7 +15,6 @@ import {
   IonButton,
 } from '@ionic/react';
 import { camera, personCircle } from 'ionicons/icons';
-import './Step1DogProfile.css';
 
 const Step1DogProfile = ({ 
   formData, 

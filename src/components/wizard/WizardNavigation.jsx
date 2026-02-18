@@ -1,7 +1,6 @@
 import React from 'react';
 import { IonButton, IonIcon } from '@ionic/react';
 import { arrowBack, arrowForward } from 'ionicons/icons';
-import './WizardNavigation.css';
 
 const WizardNavigation = ({ 
   currentStep, 

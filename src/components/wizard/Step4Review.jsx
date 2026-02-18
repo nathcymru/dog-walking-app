@@ -9,7 +9,6 @@ import {
   IonText,
 } from '@ionic/react';
 import { create, personCircle } from 'ionicons/icons';
-import './Step4Review.css';
 
 const Step4Review = ({ 
   formData, 
