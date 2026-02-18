@@ -126,11 +126,15 @@ export default function WalkerForm() {
       newErrors.last_name = 'Last name is required (min 2 characters)';
     }
     
-    if (!formData.email || !formData.email.includes('@')) {
+    // Email validation with regex
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailPattern.test(formData.email)) {
       newErrors.email = 'Valid email is required';
     }
     
-    if (!formData.phone_mobile || formData.phone_mobile.trim().length < 10) {
+    // Phone number validation - ensure it contains at least 10 digits
+    const phoneDigits = formData.phone_mobile.replace(/\D/g, '');
+    if (!formData.phone_mobile || phoneDigits.length < 10) {
       newErrors.phone_mobile = 'Valid phone number is required (min 10 digits)';
     }
     
