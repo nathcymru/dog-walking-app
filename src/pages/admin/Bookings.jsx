@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonPage,
   IonContent,
@@ -8,7 +8,6 @@ import {
   IonCardTitle,
   IonCardContent,
   IonButton,
-  IonModal,
   IonInput,
   IonTextarea,
   IonSelect,
@@ -29,14 +28,12 @@ import {
 import { add, create, trash, close } from 'ionicons/icons';
 import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { useHistory } from 'react-router-dom';
 
 export default function AdminBookings() {
+  const history = useHistory();
   const [bookings, setBookings] = useState([]);
-  const [clients, setClients] = useState([]);
-  const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [editingBooking, setEditingBooking] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, bookingId: null });
 
@@ -45,25 +42,8 @@ export default function AdminBookings() {
     { label: 'Bookings', path: '/admin/bookings' }
   ];
 
-  const [formData, setFormData] = useState({
-    client_id: '',
-    datetime_start: '',
-    datetime_end: '',
-    service_type: 'walk',
-    status: 'approved',
-    walker_name: '',
-    notes: '',
-    admin_comment: '',
-    time_window_start: '',
-    time_window_end: '',
-    recurrence: 'One-off',
-    pet_ids: [],
-  });
-
   useEffect(() => {
     fetchBookings();
-    fetchClients();
-    fetchPets();
   }, []);
 
   const fetchBookings = async () => {
@@ -102,151 +82,16 @@ export default function AdminBookings() {
     }
   };
 
-  const fetchClients = async () => {
-    try {
-      const response = await fetch('/api/admin/clients', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (response.status === 403 || response.status === 401) {
-        console.error('Authentication required for clients');
-        setClients([]);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        console.error('Failed to fetch clients', data.error);
-        setClients([]);
-      } else if (Array.isArray(data)) {
-        setClients(data);
-      } else {
-        console.error('Invalid response format for clients');
-        setClients([]);
-      }
-    } catch (error) {
-      console.error('Failed to fetch clients', error);
-      setClients([]);
-    }
-  };
-
-  const fetchPets = async () => {
-    try {
-      const response = await fetch('/api/admin/pets', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (response.status === 403 || response.status === 401) {
-        console.error('Authentication required for pets');
-        setPets([]);
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        console.error('Failed to fetch pets', data.error);
-        setPets([]);
-      } else if (Array.isArray(data)) {
-        setPets(data);
-      } else {
-        console.error('Invalid response format for pets');
-        setPets([]);
-      }
-    } catch (error) {
-      console.error('Failed to fetch pets', error);
-      setPets([]);
-    }
-  };
-
   const showToast = (message, color = 'success') => {
     setToast({ show: true, message, color });
   };
 
-  const openCreateModal = () => {
-    setEditingBooking(null);
-    setFormData({
-      client_id: '',
-      datetime_start: '',
-      datetime_end: '',
-      service_type: 'walk',
-      status: 'approved',
-      walker_name: '',
-      notes: '',
-      admin_comment: '',
-      time_window_start: '',
-      time_window_end: '',
-      recurrence: 'One-off',
-      pet_ids: [],
-    });
-    setShowModal(true);
+  const openCreateForm = () => {
+    history.push('/admin/bookings/new');
   };
 
-  const openEditModal = async (booking) => {
-    try {
-      const response = await fetch(`/api/admin/bookings/${booking.id}`);
-      const data = await response.json();
-      setEditingBooking(data);
-      setFormData({
-        client_id: data.client_id,
-        datetime_start: data.datetime_start,
-        datetime_end: data.datetime_end,
-        service_type: data.service_type,
-        status: data.status,
-        walker_name: data.walker_name || '',
-        notes: data.notes || '',
-        admin_comment: data.admin_comment || '',
-        time_window_start: data.time_window_start || '',
-        time_window_end: data.time_window_end || '',
-        recurrence: data.recurrence || 'One-off',
-        pet_ids: data.pet_ids || [],
-      });
-      setShowModal(true);
-    } catch (error) {
-      showToast('Failed to fetch booking details', 'danger');
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
-
-    if (!formData.client_id || !formData.datetime_start || !formData.datetime_end || !formData.service_type) {
-      showToast('Please fill in all required fields', 'warning');
-      return;
-    }
-
-    try {
-      const url = editingBooking 
-        ? `/api/admin/bookings/${editingBooking.id}`
-        : '/api/admin/bookings';
-      
-      const method = editingBooking ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        showToast(editingBooking ? 'Booking updated successfully' : 'Booking created successfully');
-        setShowModal(false);
-        fetchBookings();
-      } else {
-        showToast('Failed to save booking', 'danger');
-      }
-    } catch (error) {
-      showToast('Error saving booking', 'danger');
-    }
+  const openEditForm = (booking) => {
+    history.push(`/admin/bookings/${booking.id}/edit`);
   };
 
   const handleDelete = async (bookingId) => {
@@ -265,13 +110,6 @@ export default function AdminBookings() {
       showToast('Error deleting booking', 'danger');
     }
   };
-
-  // Memoize filtered pets to avoid recalculating on every render
-  // Only show pets for the selected client, or empty list if no client selected
-  const filteredPets = useMemo(() => {
-    if (!formData.client_id) return [];
-    return pets.filter(pet => pet.client_id === formData.client_id);
-  }, [pets, formData.client_id]);
 
   const getStatusColor = (status) => {
     const colors = {
@@ -303,7 +141,7 @@ export default function AdminBookings() {
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
-          <IonButton color="primary" onClick={openCreateModal}>
+          <IonButton color="primary" onClick={openCreateForm}>
             <IonIcon icon={add} slot="start" />
             New Booking
           </IonButton>
@@ -338,7 +176,7 @@ export default function AdminBookings() {
                       </IonLabel>
                     </IonItem>
                     <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                      <IonButton size="small" fill="outline" onClick={() => openEditModal(booking)}>
+                      <IonButton size="small" fill="outline" onClick={() => openEditForm(booking)}>
                         <IonIcon icon={create} slot="start" />
                         Edit
                       </IonButton>
@@ -354,167 +192,6 @@ export default function AdminBookings() {
           )}
         </div>
 
-        {/* Create/Edit Modal */}
-        <IonModal 
-          isOpen={showModal} 
-          onDidDismiss={() => setShowModal(false)}
-        >
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>{editingBooking ? 'Edit Booking' : 'New Booking'}</IonTitle>
-              <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>
-                  <IonIcon icon={close} />
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <IonList>
-              <IonItem>
-                <IonLabel position="stacked">Client *</IonLabel>
-                <IonSelect
-                  value={formData.client_id}
-                  onIonChange={(e) => setFormData({ ...formData, client_id: e.detail.value })}
-                >
-                  <IonSelectOption value="">Select Client</IonSelectOption>
-                  {clients.map((client) => (
-                    <IonSelectOption key={client.id} value={client.id}>
-                      {client.full_name}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Pets</IonLabel>
-                <IonSelect
-                  multiple
-                  value={formData.pet_ids}
-                  onIonChange={(e) => setFormData({ ...formData, pet_ids: e.detail.value })}
-                >
-                  {filteredPets.map((pet) => (
-                    <IonSelectOption key={pet.id} value={pet.id}>
-                      {pet.name} ({pet.client_name})
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Start Date & Time *</IonLabel>
-                <IonInput
-                  type="datetime-local"
-                  value={formData.datetime_start}
-                  onIonInput={(e) => setFormData({ ...formData, datetime_start: e.detail.value })}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">End Date & Time *</IonLabel>
-                <IonInput
-                  type="datetime-local"
-                  value={formData.datetime_end}
-                  onIonInput={(e) => setFormData({ ...formData, datetime_end: e.detail.value })}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Service Type *</IonLabel>
-                <IonSelect
-                  value={formData.service_type}
-                  onIonChange={(e) => setFormData({ ...formData, service_type: e.detail.value })}
-                >
-                  <IonSelectOption value="walk">Walk</IonSelectOption>
-                  <IonSelectOption value="visit">Visit</IonSelectOption>
-                  <IonSelectOption value="sitting">Sitting</IonSelectOption>
-                </IonSelect>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Status</IonLabel>
-                <IonSelect
-                  value={formData.status}
-                  onIonChange={(e) => setFormData({ ...formData, status: e.detail.value })}
-                >
-                  <IonSelectOption value="approved">Approved</IonSelectOption>
-                  <IonSelectOption value="pending">Pending</IonSelectOption>
-                  <IonSelectOption value="cancelled">Cancelled</IonSelectOption>
-                  <IonSelectOption value="completed">Completed</IonSelectOption>
-                </IonSelect>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Walker Name</IonLabel>
-                <IonInput
-                  value={formData.walker_name}
-                  onIonInput={(e) => setFormData({ ...formData, walker_name: e.detail.value })}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Recurrence</IonLabel>
-                <IonSelect
-                  value={formData.recurrence}
-                  onIonChange={(e) => setFormData({ ...formData, recurrence: e.detail.value })}
-                >
-                  <IonSelectOption value="One-off">One-off</IonSelectOption>
-                  <IonSelectOption value="Daily">Daily</IonSelectOption>
-                  <IonSelectOption value="Weekly">Weekly</IonSelectOption>
-                </IonSelect>
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Time Window Start</IonLabel>
-                <IonInput
-                  type="time"
-                  value={formData.time_window_start}
-                  onIonInput={(e) => setFormData({ ...formData, time_window_start: e.detail.value })}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Time Window End</IonLabel>
-                <IonInput
-                  type="time"
-                  value={formData.time_window_end}
-                  onIonInput={(e) => setFormData({ ...formData, time_window_end: e.detail.value })}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Notes</IonLabel>
-                <IonTextarea
-                  value={formData.notes}
-                  onIonInput={(e) => setFormData({ ...formData, notes: e.detail.value })}
-                  rows={3}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Admin Comment</IonLabel>
-                <IonTextarea
-                  value={formData.admin_comment}
-                  onIonInput={(e) => setFormData({ ...formData, admin_comment: e.detail.value })}
-                  rows={3}
-                />
-              </IonItem>
-            </IonList>
-          </IonContent>
-
-          <IonFooter>
-            <IonToolbar>
-              <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>
-                  Cancel
-                </IonButton>
-                <IonButton strong={true} onClick={handleSubmit}>
-                  Save
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonFooter>
-        </IonModal>
 
         <IonToast
           isOpen={toast.show}

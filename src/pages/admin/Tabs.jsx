@@ -10,6 +10,11 @@ import Incidents from './Incidents';
 import Rewards from './Rewards';
 import RewardForm from './RewardForm';
 import AdminAccount from './Account';
+import ClientForm from './ClientForm';
+import PetForm from './PetForm';
+import BookingForm from './BookingForm';
+import IncidentForm from './IncidentForm';
+import InvoiceForm from './InvoiceForm';
 
 export default function AdminTabs() {
   return (
@@ -18,9 +23,19 @@ export default function AdminTabs() {
         <Route exact path="/admin"><Redirect to="/admin/dashboard" /></Route>
         <Route exact path="/admin/dashboard" component={Dashboard} />
         <Route exact path="/admin/clients" component={Clients} />
+        <Route exact path="/admin/clients/new" component={ClientForm} />
+        <Route path="/admin/clients/:id/edit" component={ClientForm} />
         <Route exact path="/admin/pets" component={Pets} />
+        <Route exact path="/admin/pets/new" component={PetForm} />
+        <Route path="/admin/pets/:id/edit" component={PetForm} />
         <Route exact path="/admin/bookings" component={Bookings} />
+        <Route exact path="/admin/bookings/new" component={BookingForm} />
+        <Route path="/admin/bookings/:id/edit" component={BookingForm} />
         <Route exact path="/admin/incidents" component={Incidents} />
+        <Route exact path="/admin/incidents/new" component={IncidentForm} />
+        <Route path="/admin/incidents/:id/edit" component={IncidentForm} />
+        <Route exact path="/admin/invoices/new" component={InvoiceForm} />
+        <Route path="/admin/invoices/:id/edit" component={InvoiceForm} />
         <Route exact path="/admin/rewards" component={Rewards} />
         <Route path="/admin/rewards/:id" component={RewardForm} />
         <Route exact path="/admin/account" component={AdminAccount} />
