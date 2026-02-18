@@ -358,10 +358,10 @@ export default function AdminIncidents() {
         >
           <IonHeader>
             <IonToolbar>
-              <IonTitle>{editingIncident ? 'Edit Incident' : 'Log New Incident'}</IonTitle>
+              <IonTitle>{editingIncident ? 'Edit Incident' : 'New Incident'}</IonTitle>
               <IonButtons slot="end">
                 <IonButton onClick={() => setShowModal(false)}>
-                  Close
+                  <IonIcon icon={close} />
                 </IonButton>
               </IonButtons>
             </IonToolbar>
@@ -369,7 +369,7 @@ export default function AdminIncidents() {
           <IonContent className="ion-padding">
             <IonList>
               <IonItem>
-                <IonLabel position="stacked">Incident Date & Time <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Incident Date & Time *</IonLabel>
                 <IonInput
                   type="datetime-local"
                   value={formData.incident_datetime}
@@ -378,7 +378,7 @@ export default function AdminIncidents() {
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">Incident Type <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Incident Type *</IonLabel>
                 <IonSelect
                   value={formData.incident_type}
                   onIonChange={(e) => setFormData({ ...formData, incident_type: e.detail.value })}
@@ -392,7 +392,7 @@ export default function AdminIncidents() {
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">Pet <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Pet *</IonLabel>
                 <IonSelect
                   value={formData.related_pet_id}
                   onIonChange={(e) => setFormData({ ...formData, related_pet_id: e.detail.value })}
@@ -426,26 +426,23 @@ export default function AdminIncidents() {
                 <IonInput
                   value={formData.location}
                   onIonInput={(e) => setFormData({ ...formData, location: e.detail.value })}
-                  placeholder="Enter location"
                 />
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">Summary <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Summary *</IonLabel>
                 <IonTextarea
                   value={formData.summary}
                   onIonInput={(e) => setFormData({ ...formData, summary: e.detail.value })}
-                  placeholder="Describe the incident"
                   rows={4}
                 />
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">Actions Taken <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Actions Taken *</IonLabel>
                 <IonTextarea
                   value={formData.actions_taken}
                   onIonInput={(e) => setFormData({ ...formData, actions_taken: e.detail.value })}
-                  placeholder="Describe actions taken"
                   rows={4}
                 />
               </IonItem>
@@ -464,7 +461,6 @@ export default function AdminIncidents() {
                 <IonInput
                   value={formData.attachments}
                   onIonInput={(e) => setFormData({ ...formData, attachments: e.detail.value })}
-                  placeholder="Enter attachment URLs"
                 />
               </IonItem>
 
@@ -482,7 +478,6 @@ export default function AdminIncidents() {
                 <IonTextarea
                   value={formData.follow_up_notes}
                   onIonInput={(e) => setFormData({ ...formData, follow_up_notes: e.detail.value })}
-                  placeholder="Enter follow-up notes"
                   rows={3}
                 />
               </IonItem>
@@ -492,9 +487,11 @@ export default function AdminIncidents() {
           <IonFooter>
             <IonToolbar>
               <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>Cancel</IonButton>
-                <IonButton strong onClick={handleSubmit}>
-                  {editingIncident ? 'Update' : 'Save'}
+                <IonButton onClick={() => setShowModal(false)}>
+                  Cancel
+                </IonButton>
+                <IonButton strong={true} onClick={handleSubmit}>
+                  Save
                 </IonButton>
               </IonButtons>
             </IonToolbar>

@@ -361,10 +361,10 @@ export default function AdminBookings() {
         >
           <IonHeader>
             <IonToolbar>
-              <IonTitle>{editingBooking ? 'Edit Booking' : 'Create Booking'}</IonTitle>
+              <IonTitle>{editingBooking ? 'Edit Booking' : 'New Booking'}</IonTitle>
               <IonButtons slot="end">
                 <IonButton onClick={() => setShowModal(false)}>
-                  Close
+                  <IonIcon icon={close} />
                 </IonButton>
               </IonButtons>
             </IonToolbar>
@@ -372,7 +372,7 @@ export default function AdminBookings() {
           <IonContent className="ion-padding">
             <IonList>
               <IonItem>
-                <IonLabel position="stacked">Client <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Client *</IonLabel>
                 <IonSelect
                   value={formData.client_id}
                   onIonChange={(e) => setFormData({ ...formData, client_id: e.detail.value })}
@@ -402,7 +402,7 @@ export default function AdminBookings() {
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">Start Date & Time <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Start Date & Time *</IonLabel>
                 <IonInput
                   type="datetime-local"
                   value={formData.datetime_start}
@@ -411,7 +411,7 @@ export default function AdminBookings() {
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">End Date & Time <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">End Date & Time *</IonLabel>
                 <IonInput
                   type="datetime-local"
                   value={formData.datetime_end}
@@ -420,7 +420,7 @@ export default function AdminBookings() {
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">Service Type <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Service Type *</IonLabel>
                 <IonSelect
                   value={formData.service_type}
                   onIonChange={(e) => setFormData({ ...formData, service_type: e.detail.value })}
@@ -449,7 +449,6 @@ export default function AdminBookings() {
                 <IonInput
                   value={formData.walker_name}
                   onIonInput={(e) => setFormData({ ...formData, walker_name: e.detail.value })}
-                  placeholder="Enter walker name"
                 />
               </IonItem>
 
@@ -488,7 +487,6 @@ export default function AdminBookings() {
                 <IonTextarea
                   value={formData.notes}
                   onIonInput={(e) => setFormData({ ...formData, notes: e.detail.value })}
-                  placeholder="Enter any notes"
                   rows={3}
                 />
               </IonItem>
@@ -498,7 +496,6 @@ export default function AdminBookings() {
                 <IonTextarea
                   value={formData.admin_comment}
                   onIonInput={(e) => setFormData({ ...formData, admin_comment: e.detail.value })}
-                  placeholder="Enter admin comments"
                   rows={3}
                 />
               </IonItem>
@@ -508,9 +505,11 @@ export default function AdminBookings() {
           <IonFooter>
             <IonToolbar>
               <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>Cancel</IonButton>
-                <IonButton strong onClick={handleSubmit}>
-                  {editingBooking ? 'Update' : 'Save'}
+                <IonButton onClick={() => setShowModal(false)}>
+                  Cancel
+                </IonButton>
+                <IonButton strong={true} onClick={handleSubmit}>
+                  Save
                 </IonButton>
               </IonButtons>
             </IonToolbar>
