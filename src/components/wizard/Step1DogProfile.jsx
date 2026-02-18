@@ -62,12 +62,12 @@ const Step1DogProfile = ({
   };
 
   return (
-    <div className="step-container">
-      <h2 className="step-title">Dog Profile</h2>
+    <div>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>Dog Profile</h2>
       
       {/* Admin Only: Owner Selection */}
       {isAdmin && (
-        <div className="owner-selection-section">
+        <div style={{ marginBottom: '1.5rem' }}>
           <IonList>
             <IonItem>
               <IonLabel position="stacked">
@@ -94,9 +94,9 @@ const Step1DogProfile = ({
           </IonList>
           
           {selectedClient && (
-            <div className="selected-owner-display">
+            <div style={{ padding: '0.75rem', background: 'var(--ion-color-light)', borderRadius: '8px', marginTop: '0.75rem' }}>
               <IonText color="medium">
-                <p>Adding dog for: <strong>{selectedClient.full_name}</strong></p>
+                <p style={{ margin: 0, fontSize: '0.875rem' }}>Adding dog for: <strong>{selectedClient.full_name}</strong></p>
               </IonText>
             </div>
           )}
@@ -104,10 +104,10 @@ const Step1DogProfile = ({
       )}
 
       {/* Photo Upload */}
-      <div className="photo-upload-section">
+      <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
         <IonLabel>Dog Photo/Avatar</IonLabel>
-        <div className="photo-upload-container">
-          <IonAvatar className="dog-avatar">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', marginTop: '0.75rem' }}>
+          <IonAvatar style={{ width: '150px', height: '150px' }}>
             {formData.profile_photo_url ? (
               <img src={formData.profile_photo_url} alt="Dog" />
             ) : (

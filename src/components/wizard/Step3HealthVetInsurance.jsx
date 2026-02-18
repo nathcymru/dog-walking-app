@@ -17,8 +17,8 @@ const Step3HealthVetInsurance = ({
   errors 
 }) => {
   return (
-    <div className="step-container">
-      <h2 className="step-title">Health, Vet & Insurance</h2>
+    <div>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>Health, Vet & Insurance</h2>
 
       <IonList>
         {/* Medical Conditions */}

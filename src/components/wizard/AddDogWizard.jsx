@@ -316,7 +316,7 @@ const AddDogWizard = ({
           completedSteps={completedSteps}
         />
 
-        <div className="wizard-content">
+        <div>
           {currentStep === 1 && (
             <Step1DogProfile
               formData={formData}
