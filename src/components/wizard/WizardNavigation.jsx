@@ -1,7 +1,6 @@
 import React from 'react';
 import { IonButton, IonIcon } from '@ionic/react';
 import { arrowBack, arrowForward } from 'ionicons/icons';
-import './WizardNavigation.css';
 
 const WizardNavigation = ({ 
   currentStep, 
@@ -12,14 +11,13 @@ const WizardNavigation = ({
   isLastStep = false 
 }) => {
   return (
-    <div className="wizard-navigation">
+    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', borderTop: '1px solid var(--ion-color-light)' }}>
       <IonButton 
         fill="outline"
         disabled={currentStep === 1}
         onClick={onBack}
         type="button"
         style={{ pointerEvents: 'auto' }}
-        className="wizard-nav-button"
       >
         <IonIcon slot="start" icon={arrowBack} />
         Back
@@ -31,7 +29,6 @@ const WizardNavigation = ({
         onClick={onNext}
         type="button"
         style={{ pointerEvents: 'auto' }}
-        className="wizard-nav-button wizard-nav-next"
       >
         {isLastStep ? 'Review' : 'Next'}
         {!isLastStep && <IonIcon slot="end" icon={arrowForward} />}

@@ -13,7 +13,6 @@ import {
   IonCard,
   IonCardContent,
 } from '@ionic/react';
-import './Step2WalkSetup.css';
 
 const Step2WalkSetup = ({ 
   formData, 
@@ -53,8 +52,8 @@ const Step2WalkSetup = ({
   const isAnyWalkDisabled = isGroupWalkDisabled;
 
   return (
-    <div className="step-container">
-      <h2 className="step-title">Walk Setup</h2>
+    <div>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>Walk Setup</h2>
 
       {/* Walk Eligibility Policy Notice */}
       <IonCard className="policy-notice">

@@ -18,7 +18,6 @@ import Step1DogProfile from './Step1DogProfile';
 import Step2WalkSetup from './Step2WalkSetup';
 import Step3HealthVetInsurance from './Step3HealthVetInsurance';
 import Step4Review from './Step4Review';
-import './AddDogWizard.css';
 
 const AddDogWizard = ({ 
   isOpen, 
@@ -317,7 +316,7 @@ const AddDogWizard = ({
           completedSteps={completedSteps}
         />
 
-        <div className="wizard-content">
+        <div>
           {currentStep === 1 && (
             <Step1DogProfile
               formData={formData}

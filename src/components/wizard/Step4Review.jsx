@@ -9,7 +9,6 @@ import {
   IonText,
 } from '@ionic/react';
 import { create, personCircle } from 'ionicons/icons';
-import './Step4Review.css';
 
 const Step4Review = ({ 
   formData, 
@@ -47,8 +46,8 @@ const Step4Review = ({
   };
 
   return (
-    <div className="step-container">
-      <h2 className="step-title">Review & Confirm</h2>
+    <div>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>Review & Confirm</h2>
       <p className="review-subtitle">Please review all information before saving</p>
 
       {/* Section 1: Dog Profile */}

@@ -311,10 +311,10 @@ export default function AdminClients() {
         >
           <IonHeader>
             <IonToolbar>
-              <IonTitle>{editingClient ? 'Edit Client' : 'Create Client'}</IonTitle>
+              <IonTitle>{editingClient ? 'Edit Client' : 'New Client'}</IonTitle>
               <IonButtons slot="end">
                 <IonButton onClick={() => setShowModal(false)}>
-                  Close
+                  <IonIcon icon={close} />
                 </IonButton>
               </IonButtons>
             </IonToolbar>
@@ -322,35 +322,32 @@ export default function AdminClients() {
           <IonContent className="ion-padding">
             <IonList>
               <IonItem>
-                <IonLabel position="stacked">Full Name <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Full Name *</IonLabel>
                 <IonInput
                   value={formData.full_name}
                   onIonInput={(e) => setFormData({ ...formData, full_name: e.detail.value })}
-                  placeholder="Enter full name"
                 />
               </IonItem>
 
               <IonItem>
-                <IonLabel position="stacked">Email <span className="required">*</span></IonLabel>
+                <IonLabel position="stacked">Email *</IonLabel>
                 <IonInput
                   type="email"
                   value={formData.email}
                   onIonInput={(e) => setFormData({ ...formData, email: e.detail.value })}
-                  placeholder="Enter email address"
                 />
               </IonItem>
 
-              <IonItem>
-                <IonLabel position="stacked">
-                  Password {editingClient ? '(leave blank to keep current)' : ''} {!editingClient && <span className="required">*</span>}
-                </IonLabel>
-                <IonInput
-                  type="password"
-                  value={formData.password}
-                  onIonInput={(e) => setFormData({ ...formData, password: e.detail.value })}
-                  placeholder={editingClient ? 'Enter new password to change' : 'Enter password'}
-                />
-              </IonItem>
+              {!editingClient && (
+                <IonItem>
+                  <IonLabel position="stacked">Password *</IonLabel>
+                  <IonInput
+                    type="password"
+                    value={formData.password}
+                    onIonInput={(e) => setFormData({ ...formData, password: e.detail.value })}
+                  />
+                </IonItem>
+              )}
 
               <IonItem>
                 <IonLabel position="stacked">Phone</IonLabel>
@@ -358,7 +355,6 @@ export default function AdminClients() {
                   type="tel"
                   value={formData.phone}
                   onIonInput={(e) => setFormData({ ...formData, phone: e.detail.value })}
-                  placeholder="Enter phone number"
                 />
               </IonItem>
 
@@ -367,7 +363,6 @@ export default function AdminClients() {
                 <IonTextarea
                   value={formData.address}
                   onIonInput={(e) => setFormData({ ...formData, address: e.detail.value })}
-                  placeholder="Enter address"
                   rows={3}
                 />
               </IonItem>
@@ -377,9 +372,11 @@ export default function AdminClients() {
           <IonFooter>
             <IonToolbar>
               <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>Cancel</IonButton>
-                <IonButton strong onClick={handleSubmit}>
-                  {editingClient ? 'Update' : 'Save'}
+                <IonButton onClick={() => setShowModal(false)}>
+                  Cancel
+                </IonButton>
+                <IonButton strong={true} onClick={handleSubmit}>
+                  Save
                 </IonButton>
               </IonButtons>
             </IonToolbar>
