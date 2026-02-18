@@ -18,10 +18,10 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
-      totalClients: '-',
-      totalPets: '-',
-      bookingsThisMonth: '-',
-      incidentsThisMonth: '-'
+      totalClients: 0,
+      totalPets: 0,
+      bookingsThisMonth: 0,
+      incidentsThisMonth: 0
     });
     const [loading, setLoading] = useState(true);
 
@@ -44,10 +44,10 @@ const Dashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setStats({
-            totalClients: data.totalClients ?? '-',
-            totalPets: data.totalPets ?? '-',
-            bookingsThisMonth: data.bookingsThisMonth ?? '-',
-            incidentsThisMonth: data.incidentsThisMonth ?? '-'
+            totalClients: data.totalClients ?? 0,
+            totalPets: data.totalPets ?? 0,
+            bookingsThisMonth: data.bookingsThisMonth ?? 0,
+            incidentsThisMonth: data.incidentsThisMonth ?? 0
           });
         }
       } catch (error) {
