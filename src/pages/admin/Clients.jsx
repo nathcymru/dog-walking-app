@@ -11,7 +11,6 @@ import {
   IonCardTitle,
   IonCardContent,
   IonButton,
-  IonModal,
   IonInput,
   IonTextarea,
   IonItem,
@@ -30,24 +29,16 @@ import {
 import { add, create, trash, close, mailOutline, phonePortraitOutline, locationOutline } from 'ionicons/icons';
 import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { useHistory } from 'react-router-dom';
 
 export default function AdminClients() {
+  const history = useHistory();
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [editingClient, setEditingClient] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', color: 'success' });
   const [deleteAlert, setDeleteAlert] = useState({ show: false, clientId: null });
   const [searchText, setSearchText] = useState('');
-
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    full_name: '',
-    phone: '',
-    address: '',
-  });
 
   const breadcrumbItems = [
     { label: 'Admin', path: '/admin' },
@@ -111,87 +102,12 @@ export default function AdminClients() {
     setToast({ show: true, message, color });
   };
 
-  const openCreateModal = () => {
-    setEditingClient(null);
-    setFormData({
-      email: '',
-      password: '',
-      full_name: '',
-      phone: '',
-      address: '',
-    });
-    setShowModal(true);
+  const openCreateForm = () => {
+    history.push('/admin/clients/new');
   };
 
-  const openEditModal = async (client) => {
-    try {
-      const response = await fetch(`/api/admin/clients/${client.id}`, {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const data = await response.json();
-      setEditingClient(data);
-      setFormData({
-        email: data.email || '',
-        password: '', // Don't populate password for security
-        full_name: data.full_name || '',
-        phone: data.phone || '',
-        address: data.address || '',
-      });
-      setShowModal(true);
-    } catch (error) {
-      showToast('Failed to fetch client details', 'danger');
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
-
-    if (!formData.full_name || !formData.email) {
-      showToast('Please fill in required fields (Name and Email)', 'warning');
-      return;
-    }
-
-    if (!editingClient && !formData.password) {
-      showToast('Password is required for new clients', 'warning');
-      return;
-    }
-
-    try {
-      const url = editingClient 
-        ? `/api/admin/clients/${editingClient.id}`
-        : '/api/admin/clients';
-      
-      const method = editingClient ? 'PUT' : 'POST';
-
-      // Only include password if it's set
-      const payload = { ...formData };
-      if (editingClient && !formData.password) {
-        delete payload.password;
-      }
-
-      const response = await fetch(url, {
-        method,
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        showToast(editingClient ? 'Client updated successfully' : 'Client created successfully');
-        setShowModal(false);
-        fetchClients();
-      } else {
-        const error = await response.json();
-        showToast(error.error || 'Failed to save client', 'danger');
-      }
-    } catch (error) {
-      showToast('Error saving client', 'danger');
-    }
+  const openEditForm = (client) => {
+    history.push(`/admin/clients/${client.id}/edit`);
   };
 
   const handleDelete = async (clientId) => {
@@ -234,7 +150,7 @@ export default function AdminClients() {
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
-          <IonButton color="primary" onClick={openCreateModal}>
+          <IonButton color="primary" onClick={openCreateForm}>
             <IonIcon icon={add} slot="start" />
             Add Client
           </IonButton>
@@ -286,7 +202,7 @@ export default function AdminClients() {
                           )}
                         </IonList>
                         <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-                          <IonButton size="small" fill="outline" expand="block" onClick={() => openEditModal(client)}>
+                          <IonButton size="small" fill="outline" expand="block" onClick={() => openEditForm(client)}>
                             <IonIcon icon={create} slot="start" />
                             Edit
                           </IonButton>
@@ -303,85 +219,6 @@ export default function AdminClients() {
             </IonGrid>
           )}
         </div>
-
-        {/* Create/Edit Modal */}
-        <IonModal 
-          isOpen={showModal} 
-          onDidDismiss={() => setShowModal(false)}
-        >
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>{editingClient ? 'Edit Client' : 'New Client'}</IonTitle>
-              <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>
-                  <IonIcon icon={close} />
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <IonList>
-              <IonItem>
-                <IonLabel position="stacked">Full Name *</IonLabel>
-                <IonInput
-                  value={formData.full_name}
-                  onIonInput={(e) => setFormData({ ...formData, full_name: e.detail.value })}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Email *</IonLabel>
-                <IonInput
-                  type="email"
-                  value={formData.email}
-                  onIonInput={(e) => setFormData({ ...formData, email: e.detail.value })}
-                />
-              </IonItem>
-
-              {!editingClient && (
-                <IonItem>
-                  <IonLabel position="stacked">Password *</IonLabel>
-                  <IonInput
-                    type="password"
-                    value={formData.password}
-                    onIonInput={(e) => setFormData({ ...formData, password: e.detail.value })}
-                  />
-                </IonItem>
-              )}
-
-              <IonItem>
-                <IonLabel position="stacked">Phone</IonLabel>
-                <IonInput
-                  type="tel"
-                  value={formData.phone}
-                  onIonInput={(e) => setFormData({ ...formData, phone: e.detail.value })}
-                />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel position="stacked">Address</IonLabel>
-                <IonTextarea
-                  value={formData.address}
-                  onIonInput={(e) => setFormData({ ...formData, address: e.detail.value })}
-                  rows={3}
-                />
-              </IonItem>
-            </IonList>
-          </IonContent>
-
-          <IonFooter>
-            <IonToolbar>
-              <IonButtons slot="end">
-                <IonButton onClick={() => setShowModal(false)}>
-                  Cancel
-                </IonButton>
-                <IonButton strong={true} onClick={handleSubmit}>
-                  Save
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonFooter>
-        </IonModal>
 
         <IonToast
           isOpen={toast.show}

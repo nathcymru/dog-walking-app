@@ -29,6 +29,7 @@ import {
 import { add, create, trash, close } from 'ionicons/icons';
 import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { useHistory } from 'react-router-dom';
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
