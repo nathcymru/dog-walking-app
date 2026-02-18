@@ -8,6 +8,7 @@ import Pets from './Pets';
 import Billing from './Billing';
 import Rewards from './Rewards';
 import { AccountPage } from '../Account';
+import PetForm from '../admin/PetForm'; // Reuse the same form component
 
 export default function ClientTabs() {
   return (
@@ -17,6 +18,8 @@ export default function ClientTabs() {
         <Route exact path="/client/dashboard" component={Dashboard} />
         <Route exact path="/client/bookings" component={Bookings} />
         <Route exact path="/client/pets" component={Pets} />
+        <Route exact path="/client/pets/new" component={PetForm} />
+        <Route path="/client/pets/:id/edit" component={PetForm} />
         <Route exact path="/client/billing" component={Billing} />
         <Route exact path="/client/rewards" component={Rewards} />
         <Route exact path="/client/account" component={AccountPage} />
