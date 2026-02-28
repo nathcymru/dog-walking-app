@@ -4,6 +4,7 @@ import { home, calendar, paw, receipt, gift, person } from 'ionicons/icons';
 
 import Dashboard from './Dashboard';
 import Bookings from './Bookings';
+import BookingNew from './BookingNew';
 import Pets from './Pets';
 import Billing from './Billing';
 import Rewards from './Rewards';
@@ -17,6 +18,7 @@ export default function ClientTabs() {
         <Route exact path="/client"><Redirect to="/client/dashboard" /></Route>
         <Route exact path="/client/dashboard" component={Dashboard} />
         <Route exact path="/client/bookings" component={Bookings} />
+        <Route exact path="/client/bookings/new" component={BookingNew} />
         <Route exact path="/client/pets" component={Pets} />
         <Route exact path="/client/pets/new" component={PetForm} />
         <Route path="/client/pets/:id/edit" component={PetForm} />

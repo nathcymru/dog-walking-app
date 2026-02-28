@@ -1,6 +1,6 @@
 import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
 import { Route, Redirect } from 'react-router-dom';
-import { home, people, paw, calendar, warning, gift, personCircleOutline, time } from 'ionicons/icons';
+import { home, people, paw, calendar, warning, gift, personCircleOutline, time, calendarClear, briefcase } from 'ionicons/icons';
 
 import Dashboard from './Dashboard';
 import Clients from './Clients';
@@ -13,6 +13,7 @@ import AdminAccount from './Account';
 import ClientForm from './ClientForm';
 import PetForm from './PetForm';
 import BookingForm from './BookingForm';
+import BookingRequests from './BookingRequests';
 import IncidentForm from './IncidentForm';
 import InvoiceForm from './InvoiceForm';
 import Walkers from './Walkers';
@@ -21,6 +22,8 @@ import WalkerDetail from './WalkerDetail';
 import Slots from './Slots';
 import SlotForm from './SlotForm';
 import SlotDetail from './SlotDetail';
+import Calendar from './Calendar';
+import Leave from './Leave';
 
 export default function AdminTabs() {
   return (
@@ -35,6 +38,7 @@ export default function AdminTabs() {
         <Route exact path="/admin/pets/new" component={PetForm} />
         <Route path="/admin/pets/:id/edit" component={PetForm} />
         <Route exact path="/admin/bookings" component={Bookings} />
+        <Route exact path="/admin/bookings/requests" component={BookingRequests} />
         <Route exact path="/admin/bookings/new" component={BookingForm} />
         <Route path="/admin/bookings/:id/edit" component={BookingForm} />
         <Route exact path="/admin/incidents" component={Incidents} />
@@ -50,6 +54,8 @@ export default function AdminTabs() {
         <Route exact path="/admin/slots/new" component={SlotForm} />
         <Route exact path="/admin/slots/:slotId" component={SlotDetail} />
         <Route path="/admin/slots/:slotId/edit" component={SlotForm} />
+        <Route exact path="/admin/calendar" component={Calendar} />
+        <Route exact path="/admin/leave" component={Leave} />
         <Route exact path="/admin/rewards" component={Rewards} />
         <Route path="/admin/rewards/:id" component={RewardForm} />
         <Route exact path="/admin/account" component={AdminAccount} />
@@ -59,6 +65,26 @@ export default function AdminTabs() {
           <IonIcon icon={home} />
           <IonLabel>Dashboard</IonLabel>
         </IonTabButton>
+        <IonTabButton tab="admin-bookings" href="/admin/bookings">
+          <IonIcon icon={calendar} />
+          <IonLabel>Bookings</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="admin-calendar" href="/admin/calendar">
+          <IonIcon icon={calendarClear} />
+          <IonLabel>Calendar</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="admin-slots" href="/admin/slots">
+          <IonIcon icon={time} />
+          <IonLabel>Slots</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="admin-walkers" href="/admin/walkers">
+          <IonIcon icon={people} />
+          <IonLabel>Walkers</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="admin-leave" href="/admin/leave">
+          <IonIcon icon={briefcase} />
+          <IonLabel>Leave</IonLabel>
+        </IonTabButton>
         <IonTabButton tab="admin-clients" href="/admin/clients">
           <IonIcon icon={people} />
           <IonLabel>Clients</IonLabel>
@@ -66,14 +92,6 @@ export default function AdminTabs() {
         <IonTabButton tab="admin-pets" href="/admin/pets">
           <IonIcon icon={paw} />
           <IonLabel>Pets</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="admin-bookings" href="/admin/bookings">
-          <IonIcon icon={calendar} />
-          <IonLabel>Bookings</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="admin-slots" href="/admin/slots">
-          <IonIcon icon={time} />
-          <IonLabel>Slots</IonLabel>
         </IonTabButton>
         <IonTabButton tab="admin-incidents" href="/admin/incidents">
           <IonIcon icon={warning} />
