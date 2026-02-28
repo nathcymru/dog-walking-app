@@ -1,4 +1,4 @@
-import { requireAdmin, parseBody, jsonResponse } from '../../../../../_helpers';
+import { requireAdmin, parseBody, jsonResponse } from '../../../../_helpers';
 
 // PUT /api/admin/bookings/:id/reject
 export async function onRequestPut({ request, env, params }) {

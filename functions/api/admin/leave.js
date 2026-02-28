@@ -1,4 +1,4 @@
-import { requireAdmin, parseBody, jsonResponse } from '../../../_helpers';
+import { requireAdmin, parseBody, jsonResponse } from '../../_helpers';
 
 // GET /api/admin/leave - list all leave requests
 export async function onRequestGet({ request, env }) {

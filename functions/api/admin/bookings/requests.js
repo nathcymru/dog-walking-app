@@ -1,4 +1,4 @@
-import { requireAdmin, jsonResponse } from '../../../../_helpers';
+import { requireAdmin, jsonResponse } from '../../../_helpers';
 
 // GET /api/admin/bookings/requests - list bookings pending approval
 export async function onRequestGet({ request, env }) {
