@@ -208,3 +208,57 @@ VALUES (1, 2, 'INV-001', date('now'), date('now', '+14 days'), 'January 2026', '
 
 INSERT OR IGNORE INTO invoice_line_items (invoice_id, description, quantity, unit_price, total)
 VALUES (1, 'Solo Walk - Max', 4, 15.00, 60.00);
+
+-- Walker Compliance Tracking (Phase 4)
+CREATE TABLE IF NOT EXISTS walker_compliance (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    walker_id TEXT NOT NULL,
+    item_type TEXT NOT NULL CHECK(item_type IN (
+        'DBS Check',
+        'First Aid Certificate',
+        'Public Liability Insurance',
+        'Pet First Aid',
+        'Driving Licence',
+        'Vehicle Insurance',
+        'Dog Walking Licence',
+        'Other'
+    )),
+    status TEXT NOT NULL DEFAULT 'valid' CHECK(status IN ('valid', 'expired', 'pending', 'not_required')),
+    issued_at TEXT,
+    expires_at TEXT,
+    reference_number TEXT,
+    notes TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (walker_id) REFERENCES walkers(walker_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_compliance_walker ON walker_compliance(walker_id);
+CREATE INDEX IF NOT EXISTS idx_compliance_expires ON walker_compliance(expires_at);
+
+-- Walker Leave Management (Phase 5)
+CREATE TABLE IF NOT EXISTS walker_leave (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    walker_id TEXT NOT NULL,
+    leave_type TEXT NOT NULL CHECK(leave_type IN (
+        'Annual Leave',
+        'Sick Leave',
+        'Maternity/Paternity',
+        'Compassionate',
+        'Unpaid',
+        'Training',
+        'Other'
+    )),
+    start_date TEXT NOT NULL,
+    end_date TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'approved' CHECK(status IN ('pending', 'approved', 'rejected')),
+    notes TEXT,
+    created_by_user_id TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (walker_id) REFERENCES walkers(walker_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_leave_walker ON walker_leave(walker_id);
+CREATE INDEX IF NOT EXISTS idx_leave_dates ON walker_leave(start_date, end_date);
+CREATE INDEX IF NOT EXISTS idx_leave_status ON walker_leave(status);

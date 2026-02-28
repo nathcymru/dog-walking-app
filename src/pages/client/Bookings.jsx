@@ -14,9 +14,13 @@ import {
   IonSpinner,
   IonToast,
   IonItem,
+  IonButton,
+  IonIcon,
 } from '@ionic/react';
+import { add } from 'ionicons/icons';
 import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { useHistory } from 'react-router-dom';
 
 const DEMO_BOOKINGS = [
   {
@@ -42,6 +46,7 @@ const DEMO_BOOKINGS = [
 ];
 
 export default function ClientBookings() {
+  const history = useHistory();
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -147,6 +152,12 @@ export default function ClientBookings() {
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
+            <IonButton onClick={() => history.push('/client/bookings/new')}>
+              <IonIcon icon={add} slot="start" />
+              Book a Walk
+            </IonButton>
+          </div>
           <IonSegment value={selectedStatus} onIonChange={(e) => setSelectedStatus(e.detail.value)}>
             <IonSegmentButton value="all">
               <IonLabel>All</IonLabel>

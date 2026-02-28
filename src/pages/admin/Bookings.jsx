@@ -25,7 +25,7 @@ import {
   IonTitle,
   IonFooter,
 } from '@ionic/react';
-import { add, create, trash, close } from 'ionicons/icons';
+import { add, create, trash, close, listOutline } from 'ionicons/icons';
 import { AppHeader } from '../../components/AppHeader';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import { useHistory } from 'react-router-dom';
@@ -141,10 +141,16 @@ export default function AdminBookings() {
       <IonContent>
         <Breadcrumbs items={breadcrumbItems} />
         <div className="ion-padding">
-          <IonButton color="primary" onClick={openCreateForm}>
-            <IonIcon icon={add} slot="start" />
-            New Booking
-          </IonButton>
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+            <IonButton color="primary" onClick={openCreateForm}>
+              <IonIcon icon={add} slot="start" />
+              New Booking
+            </IonButton>
+            <IonButton fill="outline" color="warning" onClick={() => history.push('/admin/bookings/requests')}>
+              <IonIcon icon={listOutline} slot="start" />
+              Requests
+            </IonButton>
+          </div>
           
           {bookings.length === 0 ? (
             <IonCard>
