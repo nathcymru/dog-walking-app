@@ -81,13 +81,17 @@ export async function onRequestPost({ request, env }) {
       return jsonResponse({ error: 'This slot is fully booked' }, 400);
     }
 
-    // Validate pets belong to this client
-    const petPlaceholders = body.pet_ids.map(() => '?').join(', ');
+    // Validate pets belong to this client (ensure IDs are integers to prevent injection)
+    const petIds = body.pet_ids.map((id) => parseInt(id, 10)).filter((id) => !isNaN(id));
+    if (petIds.length !== body.pet_ids.length) {
+      return jsonResponse({ error: 'Invalid pet IDs' }, 400);
+    }
+    const petPlaceholders = petIds.map(() => '?').join(', ');
     const { results: petResults } = await db.prepare(
       `SELECT id FROM pets WHERE id IN (${petPlaceholders}) AND client_id = ?`
-    ).bind(...body.pet_ids, user.id).all();
+    ).bind(...petIds, user.id).all();
 
-    if (petResults.length !== body.pet_ids.length) {
+    if (petResults.length !== petIds.length) {
       return jsonResponse({ error: 'One or more pets not found' }, 400);
     }
 
@@ -109,7 +113,7 @@ export async function onRequestPost({ request, env }) {
 
     const bookingId = bookingResults[0].id;
 
-    for (const petId of body.pet_ids) {
+    for (const petId of petIds) {
       await db.prepare(
         'INSERT INTO booking_pets (booking_id, pet_id) VALUES (?, ?)'
       ).bind(bookingId, petId).run();

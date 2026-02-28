@@ -170,7 +170,8 @@ export default function Leave() {
 
   const calcDays = (start, end) => {
     if (!start || !end) return null;
-    const diff = (new Date(end) - new Date(start)) / 86400000;
+    const MS_PER_DAY = 86400000;
+    const diff = (new Date(end) - new Date(start)) / MS_PER_DAY;
     return Math.round(diff) + 1;
   };
 

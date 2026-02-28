@@ -128,8 +128,9 @@ export default function WalkerDetail() {
 
   const isExpiringSoon = (expiresAt) => {
     if (!expiresAt) return false;
+    const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
     const diff = new Date(expiresAt) - new Date();
-    return diff > 0 && diff < 30 * 24 * 60 * 60 * 1000; // 30 days
+    return diff > 0 && diff < THIRTY_DAYS_MS;
   };
 
   const getDisplayName = (walker) => {
