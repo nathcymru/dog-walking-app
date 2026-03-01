@@ -1,3 +1,5 @@
+import 'package:dog_walking_app/shared/platform_helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {
@@ -12,26 +14,42 @@ class ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isIOS = isCupertinoPlatform;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            Icon(
+              isIOS ? CupertinoIcons.exclamationmark_circle : Icons.error_outline,
+              size: 48,
+            ),
             const SizedBox(height: 16),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
             ),
             if (onRetry != null) ...[
               const SizedBox(height: 16),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
-                onPressed: onRetry,
-              ),
+              if (isIOS)
+                CupertinoButton(
+                  onPressed: onRetry,
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(CupertinoIcons.refresh),
+                      SizedBox(width: 8),
+                      Text('Retry'),
+                    ],
+                  ),
+                )
+              else
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Retry'),
+                  onPressed: onRetry,
+                ),
             ],
           ],
         ),

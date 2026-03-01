@@ -1,5 +1,7 @@
 import 'package:dog_walking_app/core/errors/failures.dart';
 import 'package:dog_walking_app/features/auth/presentation/auth_controller.dart';
+import 'package:dog_walking_app/shared/platform_helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -41,9 +43,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           Failure() => 'Login failed. Please try again.',
           _ => err.toString(),
         };
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg)),
-        );
+        if (isCupertinoPlatform) {
+          showCupertinoDialog(
+            context: context,
+            builder: (ctx) => CupertinoAlertDialog(
+              title: const Text('Error'),
+              content: Text(msg),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(msg)),
+          );
+        }
       },
     );
   }
@@ -63,6 +81,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
     });
 
+    if (isCupertinoPlatform) {
+      return _buildCupertinoLogin(isLoading);
+    }
+    return _buildMaterialLogin(isLoading);
+  }
+
+  Widget _buildMaterialLogin(bool isLoading) {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -74,7 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(Icons.pets, size: 72, color: Colors.brown),
+                  const Icon(Icons.pets, size: 72),
                   const SizedBox(height: 16),
                   Text(
                     'PawWalkers',
@@ -136,7 +161,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onFieldSubmitted: (_) => _submit(),
                   ),
                   const SizedBox(height: 24),
-                  FilledButton(
+                  ElevatedButton(
                     onPressed: isLoading ? null : _submit,
                     child: isLoading
                         ? const SizedBox(
@@ -154,4 +179,79 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
     );
   }
+
+  Widget _buildCupertinoLogin(bool isLoading) {
+    return CupertinoPageScaffold(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Icon(CupertinoIcons.paw, size: 72),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'PawWalkers',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Sign in to continue',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  CupertinoFormSection.insetGrouped(
+                    children: [
+                      CupertinoTextFormFieldRow(
+                        controller: _emailController,
+                        placeholder: 'Email',
+                        prefix: const Icon(CupertinoIcons.mail),
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) {
+                            return 'Email is required';
+                          }
+                          if (!v.contains('@')) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      CupertinoTextFormFieldRow(
+                        controller: _passwordController,
+                        placeholder: 'Password',
+                        prefix: const Icon(CupertinoIcons.lock),
+                        obscureText: _obscurePassword,
+                        textInputAction: TextInputAction.done,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) {
+                            return 'Password is required';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  CupertinoButton.filled(
+                    onPressed: isLoading ? null : _submit,
+                    child: isLoading
+                        ? const CupertinoActivityIndicator()
+                        : const Text('Sign In'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
+
