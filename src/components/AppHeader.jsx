@@ -45,7 +45,7 @@ export const AppHeader = ({ title }) => {
 
   return (
     <IonHeader>
-      <IonToolbar color="primary">
+      <IonToolbar>
         <IonTitle>{title}</IonTitle>
 
         <IonButtons slot="end">

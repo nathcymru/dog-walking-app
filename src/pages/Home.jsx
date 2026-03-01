@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="primary">
+        <IonToolbar>
           <IonTitle>PawWalkers</IonTitle>
         </IonToolbar>
       </IonHeader>

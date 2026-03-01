@@ -10,7 +10,7 @@ import ClientTabs from './pages/client/Tabs';
 import AdminTabs from './pages/admin/Tabs';
 import { AuthProvider, useAuth } from './utils/auth';
 
-setupIonicReact({ mode: 'ios' });
+setupIonicReact({ mode: 'md' });
 
 function ProtectedRoute({ children, requiredRole }) {
   const { user, loading } = useAuth();

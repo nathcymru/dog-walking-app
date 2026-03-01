@@ -90,7 +90,7 @@ export const AccountPage = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="primary">
+        <IonToolbar>
           <IonTitle>My Account</IonTitle>
         </IonToolbar>
       </IonHeader>

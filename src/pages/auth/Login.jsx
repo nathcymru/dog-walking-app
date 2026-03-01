@@ -50,7 +50,7 @@ export default function Login() {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="primary">
+        <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/" />
           </IonButtons>
