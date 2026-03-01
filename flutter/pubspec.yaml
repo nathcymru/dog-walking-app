@@ -1,0 +1,71 @@
+name: dog_walking_app
+description: Dog walking app rebuilt in Flutter (Cloudflare Workers + D1 + R2 backend).
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Routing
+  go_router: ^14.0.0
+
+  # State management
+  flutter_riverpod: ^2.5.0
+
+  # Networking
+  dio: ^5.4.0
+
+  # JSON serialization
+  json_annotation: ^4.9.0
+
+  # Secure token storage (ALL tokens/secrets)
+  flutter_secure_storage: ^9.2.0
+
+  # Local offline cache / queue
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Connectivity detection for SyncService
+  connectivity_plus: ^6.0.0
+
+  # Logging (dev only usage; secrets redacted in interceptor)
+  logger: ^2.2.0
+
+  # GPS tracking
+  geolocator: ^12.0.0
+
+  # Photo capture
+  image_picker: ^1.1.0
+
+  # Image compression before upload (R2 cost-control)
+  flutter_image_compress: ^2.3.0
+
+  # MIME type detection/validation (jpeg/png/webp)
+  mime: ^1.0.5
+
+  # UUID generation for X-Request-Id
+  uuid: ^4.4.0
+
+  # Non-sensitive preferences only
+  shared_preferences: ^2.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Linting
+  flutter_lints: ^4.0.0
+
+  # Code generation
+  build_runner: ^2.4.9
+  json_serializable: ^6.8.0
+
+  # Testing utilities
+  mocktail: ^1.0.3
+
+flutter:
+  uses-material-design: true
