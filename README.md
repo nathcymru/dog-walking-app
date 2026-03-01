@@ -1,3 +1,3 @@
-# PawWalkers - Ionic Framework
+# PawWalkers - Flutter App
 
-Upload all files to GitHub. Cloudflare will auto-deploy with Ionic UI and pastel theme.
+A Flutter dog walking app with a Cloudflare Workers backend. See `flutter/FLUTTER_README.md` for full setup and build instructions.

@@ -103,6 +103,6 @@ ALTER TABLE bookings ADD COLUMN decision_notes TEXT;
 4. **Cascade:** Cancelling slot marks bookings as CANCELLED_BY_ADMIN
 
 ## Implementation Notes
-- Use simple non-modal forms (IonPage)
-- Follow existing Ionic React patterns
+- Use simple non-modal forms
+- Follow existing Flutter patterns
 - Store UTC datetimes, display in Europe/London timezone
