@@ -34,7 +34,7 @@ export const InitialsAvatar = ({ fullName = '', photoUrl = '', sizePx = 40, aria
     justifyContent: 'center',
     fontSize: `${sizePx * 0.4}px`,
     fontWeight: 'bold',
-    color: '#fff',
+    color: 'var(--ion-color-primary-contrast, #fff)',
     backgroundColor: 'var(--ion-color-primary)',
     flexShrink: 0,
   };

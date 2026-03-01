@@ -199,19 +199,19 @@ export default function ClientBilling() {
                         </IonButton>
 
                         {expandedInvoices.has(invoice.id) && (
-                          <div style={{ marginTop: '10px', background: '#f9fafb', padding: '15px', borderRadius: '8px' }}>
+                          <div style={{ marginTop: '10px', background: 'var(--ion-color-light)', padding: '15px', borderRadius: '8px' }}>
                             <h4 style={{ marginBottom: '10px', fontSize: '0.9rem', fontWeight: '600' }}>Line Items:</h4>
                             {invoice.line_items.map((item, index) => (
                               <div key={index} style={{ 
                                 display: 'flex', 
                                 justifyContent: 'space-between', 
                                 padding: '8px 0',
-                                borderBottom: index < invoice.line_items.length - 1 ? '1px solid #e5e7eb' : 'none'
+                                borderBottom: index < invoice.line_items.length - 1 ? '1px solid var(--ion-color-light-shade)' : 'none'
                               }}>
                                 <div style={{ flex: 1 }}>
                                   <p style={{ margin: 0, fontSize: '0.9rem' }}>{item.description}</p>
                                   {item.quantity > 1 && (
-                                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#6b7280' }}>
+                                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--ion-color-medium)' }}>
                                       {item.quantity} × {formatCurrency(item.unit_price)}
                                     </p>
                                   )}

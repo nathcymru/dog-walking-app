@@ -122,9 +122,9 @@ export default function Calendar() {
     slots.filter((s) => isSameDay(new Date(s.start_at), day));
 
   const getSlotColor = (slot) => {
-    if (slot.status === 'CANCELLED') return '#ef4444';
-    if (slot.walk_type === 'GROUP') return '#6366f1';
-    return '#10b981';
+    if (slot.status === 'CANCELLED') return 'var(--ion-color-danger)';
+    if (slot.walk_type === 'GROUP') return 'var(--ion-color-primary)';
+    return 'var(--ion-color-success)';
   };
 
   const getSlotTop = (slot) => {
@@ -202,15 +202,15 @@ export default function Calendar() {
           {/* Legend */}
           <div style={{ display: 'flex', gap: '16px', marginBottom: '12px', fontSize: '0.8rem', flexWrap: 'wrap' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: '#6366f1', display: 'inline-block' }} />
+              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--ion-color-primary)', display: 'inline-block' }} />
               Group Walk
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: '#10b981', display: 'inline-block' }} />
+              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--ion-color-success)', display: 'inline-block' }} />
               Private Walk
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: '#ef4444', display: 'inline-block' }} />
+              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--ion-color-danger)', display: 'inline-block' }} />
               Cancelled
             </span>
           </div>

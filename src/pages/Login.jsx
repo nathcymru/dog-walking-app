@@ -83,10 +83,10 @@ export default function LoginPage() {
             <Link to="/" className="text-gray-600 hover:text-gray-900">← Back to home</Link>
           </div>
 
-          <div className="card mt-6" style={{ backgroundColor: '#dbeafe', border: '1px solid #93c5fd' }}>
-            <p className="text-sm font-medium mb-2" style={{ color: '#1e40af' }}>Demo Credentials:</p>
-            <p className="text-xs" style={{ color: '#1e3a8a' }}>Admin: admin@pawwalkers.com / admin123</p>
-            <p className="text-xs" style={{ color: '#1e3a8a' }}>Client: client@example.com / client123</p>
+          <div className="card mt-6" style={{ backgroundColor: 'var(--ion-color-primary-tint)', border: '1px solid var(--ion-color-primary-shade)' }}>
+            <p className="text-sm font-medium mb-2" style={{ color: 'var(--ion-color-primary)' }}>Demo Credentials:</p>
+            <p className="text-xs" style={{ color: 'var(--ion-color-primary-shade)' }}>Admin: admin@pawwalkers.com / admin123</p>
+            <p className="text-xs" style={{ color: 'var(--ion-color-primary-shade)' }}>Client: client@example.com / client123</p>
           </div>
         </div>
       </div>

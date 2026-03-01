@@ -12,16 +12,16 @@ export default function ClientLayout() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--gray-50)', paddingBottom: '5rem' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--ion-background-color)', paddingBottom: '5rem' }}>
       {/* Header */}
       <header style={{
-        background: 'white',
-        borderBottom: '1px solid var(--gray-200)',
-        padding: 'var(--space-md) var(--space-lg)',
+        background: 'var(--ion-toolbar-background, var(--ion-background-color))',
+        borderBottom: '1px solid var(--ion-border-color, #c8c7cc)',
+        padding: '12px 16px',
         position: 'sticky',
         top: 0,
         zIndex: 10,
-        boxShadow: 'var(--shadow-sm)'
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12)'
       }}>
         <div className="container">
           <div className="flex justify-between items-center">
@@ -29,7 +29,7 @@ export default function ClientLayout() {
               <span style={{fontSize: '1.5rem'}}>🐕</span>
               <div>
                 <h1 style={{fontSize: '1.25rem', fontWeight: 700}}>PawWalkers</h1>
-                <p style={{fontSize: '0.875rem', color: 'var(--gray-600)'}}>Welcome back, {user?.full_name}</p>
+                <p style={{fontSize: '0.875rem', color: 'var(--ion-color-medium)'}}>Welcome back, {user?.full_name}</p>
               </div>
             </div>
             <button onClick={handleLogout} className="btn btn-secondary btn-sm">
