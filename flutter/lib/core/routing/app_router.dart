@@ -6,6 +6,8 @@ import 'package:dog_walking_app/features/profile/presentation/profile_screen.dar
 import 'package:dog_walking_app/features/walks/presentation/active_walk_screen.dart';
 import 'package:dog_walking_app/features/walks/presentation/walk_detail_screen.dart';
 import 'package:dog_walking_app/features/walks/presentation/walk_list_screen.dart';
+import 'package:dog_walking_app/shared/platform_helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -92,6 +94,12 @@ class _PlaceholderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (isCupertinoPlatform) {
+      return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(middle: Text(title)),
+        child: Center(child: Text('$title — coming soon')),
+      );
+    }
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: Center(child: Text('$title — coming soon')),

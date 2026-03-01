@@ -1,3 +1,5 @@
+import 'package:dog_walking_app/shared/platform_helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppScaffold extends StatelessWidget {
@@ -18,6 +20,23 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (isCupertinoPlatform) {
+      return CupertinoPageScaffold(
+        navigationBar: title != null
+            ? CupertinoNavigationBar(
+                middle: Text(title!),
+                trailing: actions != null && actions!.isNotEmpty
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: actions!,
+                      )
+                    : null,
+              )
+            : null,
+        child: SafeArea(child: child),
+      );
+    }
+
     return Scaffold(
       appBar: title != null
           ? AppBar(title: Text(title!), actions: actions)

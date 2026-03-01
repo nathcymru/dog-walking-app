@@ -3,8 +3,10 @@ import 'package:dog_walking_app/features/walks/data/walk_api.dart';
 import 'package:dog_walking_app/features/walks/data/walk_repository_impl.dart';
 import 'package:dog_walking_app/features/walks/domain/walk_entity.dart';
 import 'package:dog_walking_app/features/walks/domain/walk_repository.dart';
+import 'package:dog_walking_app/shared/platform_helpers.dart';
 import 'package:dog_walking_app/shared/widgets/error_view.dart';
 import 'package:dog_walking_app/shared/widgets/loading_indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,57 +28,82 @@ class WalkDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final walkState = ref.watch(_walkDetailProvider(walkId));
+    final isIOS = isCupertinoPlatform;
+
+    if (isIOS) {
+      return CupertinoPageScaffold(
+        navigationBar: const CupertinoNavigationBar(
+          middle: Text('Walk Details'),
+        ),
+        child: SafeArea(
+          child: _buildBody(context, ref, walkState, true),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Walk Details')),
-      body: walkState.when(
-        loading: () => const LoadingIndicator(),
-        error: (err, _) => ErrorView(
-          message: err.toString(),
-          onRetry: () => ref.invalidate(_walkDetailProvider(walkId)),
-        ),
-        data: (walk) => ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _DetailCard(
-              title: 'Status',
-              value: walk.status.toUpperCase(),
-              icon: walk.status == 'active'
-                  ? Icons.directions_walk
-                  : Icons.check_circle,
-            ),
+      body: _buildBody(context, ref, walkState, false),
+    );
+  }
+
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<WalkEntity> walkState,
+    bool isIOS,
+  ) {
+    return walkState.when(
+      loading: () => const LoadingIndicator(),
+      error: (err, _) => ErrorView(
+        message: err.toString(),
+        onRetry: () => ref.invalidate(_walkDetailProvider(walkId)),
+      ),
+      data: (walk) => ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _DetailCard(
+            title: 'Status',
+            value: walk.status.toUpperCase(),
+            icon: walk.status == 'active'
+                ? (isIOS ? CupertinoIcons.walk : Icons.directions_walk)
+                : (isIOS
+                    ? CupertinoIcons.check_mark_circled
+                    : Icons.check_circle),
+          ),
+          const SizedBox(height: 12),
+          _DetailCard(
+            title: 'Started At',
+            value: walk.startedAt.toLocal().toString(),
+            icon: isIOS
+                ? CupertinoIcons.play_arrow_solid
+                : Icons.play_arrow,
+          ),
+          if (walk.endedAt != null) ...[
             const SizedBox(height: 12),
             _DetailCard(
-              title: 'Started At',
-              value: walk.startedAt.toLocal().toString(),
-              icon: Icons.play_arrow,
-            ),
-            if (walk.endedAt != null) ...[
-              const SizedBox(height: 12),
-              _DetailCard(
-                title: 'Ended At',
-                value: walk.endedAt!.toLocal().toString(),
-                icon: Icons.stop,
-              ),
-            ],
-            if (walk.durationSeconds != null) ...[
-              const SizedBox(height: 12),
-              _DetailCard(
-                title: 'Duration',
-                value: _formatDuration(
-                  Duration(seconds: walk.durationSeconds!),
-                ),
-                icon: Icons.timer,
-              ),
-            ],
-            const SizedBox(height: 12),
-            _DetailCard(
-              title: 'GPS Points',
-              value: walk.points.length.toString(),
-              icon: Icons.location_on,
+              title: 'Ended At',
+              value: walk.endedAt!.toLocal().toString(),
+              icon: isIOS ? CupertinoIcons.stop_fill : Icons.stop,
             ),
           ],
-        ),
+          if (walk.durationSeconds != null) ...[
+            const SizedBox(height: 12),
+            _DetailCard(
+              title: 'Duration',
+              value: _formatDuration(
+                Duration(seconds: walk.durationSeconds!),
+              ),
+              icon: isIOS ? CupertinoIcons.timer : Icons.timer,
+            ),
+          ],
+          const SizedBox(height: 12),
+          _DetailCard(
+            title: 'GPS Points',
+            value: walk.points.length.toString(),
+            icon: isIOS ? CupertinoIcons.location_solid : Icons.location_on,
+          ),
+        ],
       ),
     );
   }
@@ -105,13 +132,11 @@ class _DetailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(icon, color: Colors.brown),
-        title: Text(title, style: Theme.of(context).textTheme.bodySmall),
-        subtitle: Text(
-          value,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        leading: Icon(icon),
+        title: Text(title),
+        subtitle: Text(value),
       ),
     );
   }
 }
+

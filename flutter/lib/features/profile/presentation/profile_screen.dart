@@ -1,6 +1,8 @@
 import 'package:dog_walking_app/core/errors/failures.dart';
 import 'package:dog_walking_app/features/auth/presentation/auth_controller.dart';
 import 'package:dog_walking_app/features/profile/presentation/profile_controller.dart';
+import 'package:dog_walking_app/shared/platform_helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -47,11 +49,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
     if (!mounted) return;
     final profileState = ref.read(profileControllerProvider);
+    final isIOS = isCupertinoPlatform;
     profileState.whenOrNull(
       data: (_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
-        );
+        if (isIOS) {
+          showCupertinoDialog(
+            context: context,
+            builder: (ctx) => CupertinoAlertDialog(
+              title: const Text('Success'),
+              content: const Text('Profile updated successfully'),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Profile updated successfully')),
+          );
+        }
       },
       error: (err, _) {
         final msg = switch (err) {
@@ -60,15 +79,38 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Failure() => 'Failed to update profile.',
           _ => err.toString(),
         };
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg)),
-        );
+        if (isIOS) {
+          showCupertinoDialog(
+            context: context,
+            builder: (ctx) => CupertinoAlertDialog(
+              title: const Text('Error'),
+              content: Text(msg),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(msg)),
+          );
+        }
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isCupertinoPlatform) {
+      return _buildCupertino();
+    }
+    return _buildMaterial();
+  }
+
+  Widget _buildMaterial() {
     final user = ref.watch(authControllerProvider).valueOrNull;
     final profileState = ref.watch(profileControllerProvider);
     final isLoading = profileState.isLoading;
@@ -144,7 +186,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ],
               const SizedBox(height: 24),
-              FilledButton(
+              ElevatedButton(
                 onPressed: isLoading ? null : _save,
                 child: isLoading
                     ? const SizedBox(
@@ -155,12 +197,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     : const Text('Save Changes'),
               ),
               const SizedBox(height: 12),
-              OutlinedButton.icon(
+              TextButton.icon(
                 icon: const Icon(Icons.logout),
                 label: const Text('Logout'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                ),
                 onPressed: () {
                   ref.read(authControllerProvider.notifier).logout();
                   context.go('/login');
@@ -172,4 +211,121 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       ),
     );
   }
+
+  Widget _buildCupertino() {
+    final user = ref.watch(authControllerProvider).valueOrNull;
+    final profileState = ref.watch(profileControllerProvider);
+    final isLoading = profileState.isLoading;
+    final isClient = user?.role == 'client';
+
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('Profile'),
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => context.go('/dashboard'),
+          child: const Icon(CupertinoIcons.back),
+        ),
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: 96,
+                    height: 96,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: CupertinoColors.systemGrey5,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      user?.fullName.isNotEmpty == true
+                          ? user!.fullName[0].toUpperCase()
+                          : '?',
+                      style: const TextStyle(fontSize: 36),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (user != null)
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: CupertinoColors.systemGrey5,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Text(user.role.toUpperCase()),
+                    ),
+                  ),
+                const SizedBox(height: 24),
+                CupertinoFormSection.insetGrouped(
+                  children: [
+                    CupertinoTextFormFieldRow(
+                      controller: _nameController,
+                      placeholder: 'Full Name',
+                      prefix: const Icon(CupertinoIcons.person),
+                      validator: (v) => v == null || v.trim().isEmpty
+                          ? 'Name is required'
+                          : null,
+                    ),
+                    CupertinoTextFormFieldRow(
+                      controller: _emailController,
+                      placeholder: 'Email',
+                      prefix: const Icon(CupertinoIcons.mail),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return 'Email is required';
+                        }
+                        if (!v.contains('@')) return 'Enter a valid email';
+                        return null;
+                      },
+                    ),
+                    if (isClient)
+                      CupertinoTextFormFieldRow(
+                        controller: _phoneController,
+                        placeholder: 'Phone (optional)',
+                        prefix: const Icon(CupertinoIcons.phone),
+                        keyboardType: TextInputType.phone,
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                CupertinoButton.filled(
+                  onPressed: isLoading ? null : _save,
+                  child: isLoading
+                      ? const CupertinoActivityIndicator()
+                      : const Text('Save Changes'),
+                ),
+                const SizedBox(height: 12),
+                CupertinoButton(
+                  onPressed: () {
+                    ref.read(authControllerProvider.notifier).logout();
+                    context.go('/login');
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(CupertinoIcons.square_arrow_right),
+                      SizedBox(width: 8),
+                      Text('Logout'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
+

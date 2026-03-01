@@ -2,6 +2,8 @@ import 'package:dog_walking_app/core/config/app_env.dart';
 import 'package:dog_walking_app/core/routing/app_router.dart';
 import 'package:dog_walking_app/core/services/sync_service.dart';
 import 'package:dog_walking_app/core/theme/app_theme.dart';
+import 'package:dog_walking_app/shared/platform_helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,6 +55,15 @@ class _PawWalkersAppState extends ConsumerState<PawWalkersApp> {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
+
+    if (isCupertinoPlatform) {
+      return CupertinoApp.router(
+        title: 'PawWalkers',
+        routerConfig: router,
+        debugShowCheckedModeBanner: false,
+      );
+    }
+
     return MaterialApp.router(
       title: 'PawWalkers',
       theme: AppTheme.light,
@@ -62,3 +73,4 @@ class _PawWalkersAppState extends ConsumerState<PawWalkersApp> {
     );
   }
 }
+
